@@ -1,0 +1,52 @@
+.profile-card {
+  margin: 12px;
+}
+
+.profile-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.avatar {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: #1890ff;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.profile-header .info h3 {
+  font-size: 18px;
+  margin-bottom: 4px;
+}
+
+.profile-header .info p {
+  color: #666;
+  font-size: 14px;
+  margin-bottom: 4px;
+}
+
+.role-tag {
+  display: inline-block;
+  padding: 2px 8px;
+  background: #e6f7ff;
+  color: #1890ff;
+  border-radius: 4px;
+  font-size: 12px;
+}
+
+.profile-list {
+  margin: 12px;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.logout-btn {
+  margin: 24px 12px;
+}

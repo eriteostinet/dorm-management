@@ -1,0 +1,259 @@
+.analytics-page {
+  background: #f5f7fa;
+  min-height: 100vh;
+}
+
+/* 同步状态栏 */
+.sync-status-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 16px;
+  background: #fff;
+  margin: 12px;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+
+.sync-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.sync-text {
+  font-size: 13px;
+  color: #666;
+}
+
+.sync-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* 导入进度 */
+.import-progress {
+  margin: 0 12px 12px;
+  padding: 12px 16px;
+  background: #e6f7ff;
+  border-radius: 8px;
+}
+
+.progress-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 8px;
+  font-size: 14px;
+  color: #1677ff;
+}
+
+/* 快捷操作 */
+.quick-actions {
+  margin: 0 12px 12px;
+}
+
+.action-card {
+  text-align: center;
+  padding: 16px;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.action-card:active {
+  transform: scale(0.98);
+}
+
+.action-text {
+  margin-top: 8px;
+  font-size: 15px;
+  font-weight: 500;
+  color: #333;
+}
+
+.action-desc {
+  margin-top: 4px;
+  font-size: 12px;
+  color: #999;
+}
+
+/* 统计卡片 */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  padding: 0 12px 12px;
+}
+
+.stat-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px;
+}
+
+.stat-card.primary .stat-icon-wrapper {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.stat-card.success .stat-icon-wrapper {
+  background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+}
+
+.stat-card.warning .stat-icon-wrapper {
+  background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+}
+
+.stat-card.danger .stat-icon-wrapper {
+  background: linear-gradient(135deg, #ff416c 0%, #ff4b2b 100%);
+}
+
+.stat-icon-wrapper {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  flex-shrink: 0;
+}
+
+.stat-content {
+  flex: 1;
+}
+
+.stat-value {
+  font-size: 24px;
+  font-weight: 700;
+  color: #333;
+  line-height: 1.2;
+}
+
+.stat-label {
+  font-size: 13px;
+  color: #999;
+  margin-top: 2px;
+}
+
+/* 仪表盘 */
+.gauge-card {
+  margin: 0 12px 12px;
+}
+
+.gauge-wrapper {
+  display: flex;
+  justify-content: center;
+  padding: 20px 0;
+}
+
+.gauge-circle {
+  width: 160px;
+  height: 160px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.gauge-inner {
+  width: 120px;
+  height: 120px;
+  background: white;
+  border-radius: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.gauge-value {
+  font-size: 36px;
+  font-weight: 700;
+  color: #1677ff;
+}
+
+.gauge-label {
+  font-size: 13px;
+  color: #999;
+}
+
+.gauge-legend {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  padding-bottom: 16px;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  color: #666;
+}
+
+.legend-item .dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+/* 图表卡片 */
+.chart-card {
+  margin: 0 12px 12px;
+}
+
+/* 维修统计 */
+.repair-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  padding: 0 12px;
+}
+
+.repair-stat-card {
+  text-align: center;
+  padding: 16px 8px;
+}
+
+.repair-stat-value {
+  font-size: 28px;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+
+.repair-stat-label {
+  font-size: 12px;
+  color: #999;
+}
+
+/* 底部 */
+.analytics-footer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 16px;
+  color: #999;
+  font-size: 12px;
+}
+
+/* Tabs 样式覆盖 */
+.analytics-tabs .adm-tabs-header {
+  background: #fff;
+  margin: 0 12px 12px;
+  border-radius: 8px;
+}
+
+.analytics-tabs .adm-tabs-content {
+  padding: 0;
+}
+
+/* 响应式 */
+@media (min-width: 768px) {
+  .stats-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}

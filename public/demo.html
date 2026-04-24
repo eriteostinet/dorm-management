@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>宿舍管理系统 - 多端数据互通演示</title>
+  <script src="https://imgcache.qq.com/qcloud/tcbjs/1.10.8/tcb.js"></script>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: -apple-system, BlinkMacSystemFont, sans-serif; background: #f0f2f5; }
+    .header { background: #1677ff; color: white; padding: 20px; text-align: center; }
+    .header h1 { font-size: 24px; margin-bottom: 8px; }
+    .header p { opacity: 0.9; font-size: 14px; }
+    .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
+    .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+    @media (max-width: 768px) { .grid { grid-template-columns: 1fr; } }
+    .card { background: white; border-radius: 12px; padding: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+    .card h2 { font-size: 18px; margin-bottom: 16px; color: #333; display: flex; align-items: center; gap: 8px; }
+    .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 20px; }
+    .stat-box { background: #f5f5f5; border-radius: 8px; padding: 16px; text-align: center; }
+    .stat-box h3 { font-size: 28px; color: #1677ff; margin-bottom: 4px; }
+    .stat-box p { font-size: 12px; color: #666; }
+    .form-group { margin-bottom: 16px; }
+    .form-group label { display: block; margin-bottom: 6px; font-size: 14px; color: #333; font-weight: 500; }
+    .form-group input, .form-group select, .form-group textarea {
+      width: 100%; padding: 10px 12px; border: 1px solid #d9d9d9; border-radius: 6px; font-size: 14px;
+    }
+    .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+      outline: none; border-color: #1677ff;
+    }
+    .form-group textarea { min-height: 80px; resize: vertical; }
+    .btn {
+      background: #1677ff; color: white; border: none; padding: 12px 24px; border-radius: 6px;
+      font-size: 14px; cursor: pointer; width: 100%; font-weight: 500;
+    }
+    .btn:hover { background: #4096ff; }
+    .btn-success { background: #52c41a; }
+    .btn-success:hover { background: #73d13d; }
+    .btn-warning { background: #faad14; }
+    .btn-danger { background: #ff4d4f; }
+    .ticket-list { max-height: 500px; overflow-y: auto; }
+    .ticket-item {
+      background: #f8f9fa; border-radius: 8px; padding: 16px; margin-bottom: 12px;
+      border-left: 4px solid #1677ff;
+    }
+    .ticket-item.urgent { border-left-color: #ff4d4f; }
+    .ticket-item.processing { border-left-color: #faad14; }
+    .ticket-item.done { border-left-color: #52c41a; }
+    .ticket-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+    .ticket-id { font-weight: bold; color: #333; font-size: 14px; }
+    .ticket-status {
+      padding: 2px 8px; border-radius: 4px; font-size: 12px; font-weight: 500;
+    }
+    .status-reported { background: #e6f7ff; color: #1890ff; }
+    .status-processing { background: #fff7e6; color: #fa8c16; }
+    .status-done { background: #f6ffed; color: #52c41a; }
+    .status-confirmed { background: #f9f0ff; color: #722ed1; }
+    .ticket-info { font-size: 13px; color: #666; line-height: 1.6; }
+    .ticket-info strong { color: #333; }
+    .ticket-actions { display: flex; gap: 8px; margin-top: 12px; }
+    .ticket-actions button { flex: 1; padding: 6px 12px; font-size: 12px; }
+    .empty { text-align: center; padding: 40px; color: #999; }
+    .alert {
+      padding: 12px 16px; border-radius: 6px; margin-bottom: 16px; font-size: 14px;
+    }
+    .alert-success { background: #f6ffed; border: 1px solid #b7eb8f; color: #389e0d; }
+    .alert-error { background: #fff2f0; border: 1px solid #ffccc7; color: #cf1322; }
+    .log {
+      background: #1e1e1e; color: #d4d4d4; border-radius: 8px; padding: 12px;
+      font-family: monospace; font-size: 12px; max-height: 200px; overflow-y: auto; margin-top: 16px;
+    }
+    .log .success { color: #7ee787; }
+    .log .error { color: #f85149; }
+    .refresh-bar {
+      display: flex; justify-content: space-between; align-items: center;
+      margin-bottom: 16px; padding-bottom: 16px; border-bottom: 1px solid #f0f0f0;
+    }
+    .auto-refresh { display: flex; align-items: center; gap: 8px; font-size: 14px; color: #666; }
+    .switch {
+      position: relative; width: 44px; height: 22px; background: #d9d9d9; border-radius: 11px; cursor: pointer; transition: 0.3s;
+    }
+    .switch.active { background: #1677ff; }
+    .switch::after {
+      content: ''; position: absolute; width: 18px; height: 18px; background: white;
+      border-radius: 50%; top: 2px; left: 2px; transition: 0.3s;
+    }
+    .switch.active::after { left: 24px; }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>🏠 宿舍管理系统</h1>
+    <p>多端数据互通演示 - 任何设备提交的报修单，管理员都能实时查看</p>
+  </div>
+
+  <div class="container">
+    <!-- 统计卡片 -->
+    <div class="stats">
+      <div class="stat-box">
+        <h3 id="stat-total">0</h3>
+        <p>总工单</p>
+      </div>
+      <div class="stat-box">
+        <h3 id="stat-urgent">0</h3>
+        <p style="color: #ff4d4f;">🔴 紧急</p>
+      </div>
+      <div class="stat-box">
+        <h3 id="stat-processing">0</h3>
+        <p style="color: #fa8c16;">🟡 处理中</p>
+      </div>
+      <div class="stat-box">
+        <h3 id="stat-reported">0</h3>
+        <p style="color: #1890ff;">🔵 待处理</p>
+      </div>
+    </div>
+
+    <div class="grid">
+      <!-- 左侧：提交报修（模拟用户端）-->
+      <div class="card">
+        <h2>📱 用户端 - 提交报修</h2>
+        <div id="submitAlert"></div>
+        
+        <div class="form-group">
+          <label>报修人姓名</label>
+          <input type="text" id="reporterName" placeholder="请输入您的姓名" value="测试用户">
+        </div>
+
+        <div class="form-group">
+          <label>宿舍位置</label>
+          <select id="communityId">
+            <option value="JW">金湾花园</option>
+            <option value="TY">天悦小区</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>宿舍号</label>
+          <input type="text" id="dormId" placeholder="例如：A101" value="A101">
+        </div>
+
+        <div class="form-group">
+          <label>维修类型</label>
+          <select id="category">
+            <option value="水电">水电</option>
+            <option value="电器">电器</option>
+            <option value="家具">家具</option>
+            <option value="门窗">门窗</option>
+            <option value="其他">其他</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>紧急程度</label>
+          <select id="urgency">
+            <option value="normal">一般</option>
+            <option value="urgent">🔴 紧急</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>问题描述</label>
+          <textarea id="description" placeholder="请详细描述问题...">水龙头漏水</textarea>
+        </div>
+
+        <button class="btn btn-success" onclick="submitTicket()">✅ 提交报修单</button>
+        
+        <div class="log" id="submitLog">
+          <div class="info">点击"提交报修单"后，右侧会立即显示新工单</div>
+        </div>
+      </div>
+
+      <!-- 右侧：工单管理（模拟管理员端）-->
+      <div class="card">
+        <h2>⚙️ 管理员端 - 工单管理</h2>
+        
+        <div class="refresh-bar">
+          <span style="font-size: 14px; color: #666;">📋 实时工单列表</span>
+          <div class="auto-refresh">
+            <span>自动刷新</span>
+            <div class="switch active" id="autoRefreshSwitch" onclick="toggleAutoRefresh()"></div>
+          </div>
+        </div>
+
+        <div id="ticketList" class="ticket-list">
+          <div class="empty">⏳ 正在加载工单数据...</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 底部说明 -->
+    <div class="card" style="margin-top: 20px;">
+      <h2>💡 多端互通原理说明</h2>
+      <div style="font-size: 14px; color: #666; line-height: 1.8;">
+        <p><strong>传统方式（已放弃）：</strong> 前端直接访问数据库 → 需要开启匿名登录 + 设置数据库权限 → 配置复杂且容易出错</p>
+        <p><strong>当前方案（云函数中转）：</strong> 前端 → 云函数 → 数据库 → 云函数有最高权限，不受前端权限限制 → 无需任何配置，立即可用</p>
+        <p style="margin-top: 12px; color: #1677ff;">✅ 你现在可以：在手机、平板、电脑等不同设备上打开此页面，在一台设备提交报修，其他设备立即能看到！</p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const ENV_ID = 'dorm-system-5g5k2k8k-1byd118ff42';
+    let cloudApp = null;
+    let tickets = [];
+    let autoRefreshInterval = null;
+    let isAutoRefresh = true;
+
+    // 初始化
+    function init() {
+      cloudApp = tcb.init({ env: ENV_ID });
+      loadTickets();
+      startAutoRefresh();
+    }
+
+    // 调用云函数
+    async function callFunction(name, data) {
+      return await cloudApp.callFunction({ name, data });
+    }
+
+    // 提交报修单
+    async function submitTicket() {
+      const btn = document.querySelector('.btn-success');
+      btn.disabled = true;
+      btn.textContent = '提交中...';
+
+      const logEl = document.getElementById('submitLog');
+      logEl.innerHTML = '';
+
+      const data = {
+        ticketType: 'facility',
+        communityId: document.getElementById('communityId').value,
+        dormId: document.getElementById('communityId').value + '-' + document.getElementById('dormId').value,
+        roomId: document.getElementById('dormId').value,
+        reporterId: 'user_' + Date.now(),
+        reporterName: document.getElementById('reporterName').value,
+        category: document.getElementById('category').value,
+        subCategory: '一般维修',
+        description: document.getElementById('description').value,
+        urgency: document.getElementById('urgency').value
+      };
+
+      try {
+        log('submitLog', '📤 正在提交工单...', 'info');
+        const result = await callFunction('repairdb', { action: 'create', data });
+        
+        if (result.result.success) {
+          log('submitLog', '✅ 工单提交成功！', 'success');
+          log('submitLog', '📝 工单号：' + result.result.ticketId, 'info');
+          showAlert('submitAlert', '✅ 报修单提交成功！管理员端已实时显示', 'success');
+          
+          // 立即刷新列表
+          setTimeout(loadTickets, 500);
+          
+          // 清空表单
+          document.getElementById('description').value = '';
+        } else {
+          throw new Error(result.result.error);
+        }
+      } catch (e) {
+        log('submitLog', '❌ 提交失败：' + e.message, 'error');
+        showAlert('submitAlert', '❌ 提交失败：' + e.message, 'error');
+      }
+
+      btn.disabled = false;
+      btn.textContent = '✅ 提交报修单';
+    }
+
+    // 加载工单列表
+    async function loadTickets() {
+      try {
+        const result = await callFunction('repairdb', { action: 'getAll' });
+        
+        if (result.result.success) {
+          tickets = result.result.data || [];
+          renderTickets();
+          updateStats();
+        }
+      } catch (e) {
+        console.error('加载失败:', e);
+      }
+    }
+
+    // 渲染工单列表
+    function renderTickets() {
+      const container = document.getElementById('ticketList');
+      
+      if (tickets.length === 0) {
+        container.innerHTML = '<div class="empty">暂无工单数据<br>在左侧提交一个报修单试试吧！</div>';
+        return;
+      }
+
+      container.innerHTML = tickets.map(ticket => {
+        const statusText = {
+          reported: '待处理',
+          processing: '处理中',
+          done: '待验收',
+          confirmed: '已完成'
+        }[ticket.status] || ticket.status;
+
+        const itemClass = ticket.urgency === 'urgent' ? 'urgent' : ticket.status;
+        
+        return `
+          <div class="ticket-item ${itemClass}">
+            <div class="ticket-header">
+              <span class="ticket-id">${ticket._id}</span>
+              <span class="ticket-status status-${ticket.status}">${statusText}</span>
+            </div>
+            <div class="ticket-info">
+              <strong>${ticket.category}</strong> - ${ticket.description}<br>
+              📍 ${ticket.communityId === 'JW' ? '金湾花园' : '天悦小区'} ${ticket.roomId}<br>
+              👤 ${ticket.reporterName} | 
+              ${ticket.urgency === 'urgent' ? '🔴 紧急' : '🟢 一般'} | 
+              🕐 ${new Date(ticket.reportedAt).toLocaleString()}
+            </div>
+            ${getActionButtons(ticket)}
+          </div>
+        `;
+      }).join('');
+    }
+
+    // 获取操作按钮
+    function getActionButtons(ticket) {
+      if (ticket.status === 'reported') {
+        return `
+          <div class="ticket-actions">
+            <button class="btn btn-warning" onclick="updateStatus('${ticket._id}', 'approve')">同意处理</button>
+          </div>
+        `;
+      } else if (ticket.status === 'processing') {
+        return `
+          <div class="ticket-actions">
+            <button class="btn btn-success" onclick="updateStatus('${ticket._id}', 'complete')">完成维修</button>
+          </div>
+        `;
+      }
+      return '';
+    }
+
+    // 更新工单状态
+    async function updateStatus(ticketId, action) {
+      try {
+        let result;
+        if (action === 'approve') {
+          result = await callFunction('repairdb', { action: 'approve', ticketId });
+        } else if (action === 'complete') {
+          result = await callFunction('repairdb', { 
+            action: 'complete', 
+            ticketId,
+            data: { solution: '已修复', materials: [], laborCost: 0, totalCost: 0 }
+          });
+        }
+        
+        if (result.result.success) {
+          loadTickets();
+        }
+      } catch (e) {
+        alert('操作失败：' + e.message);
+      }
+    }
+
+    // 更新统计
+    function updateStats() {
+      document.getElementById('stat-total').textContent = tickets.length;
+      document.getElementById('stat-urgent').textContent = tickets.filter(t => t.urgency === 'urgent').length;
+      document.getElementById('stat-processing').textContent = tickets.filter(t => t.status === 'processing').length;
+      document.getElementById('stat-reported').textContent = tickets.filter(t => t.status === 'reported').length;
+    }
+
+    // 自动刷新
+    function startAutoRefresh() {
+      if (autoRefreshInterval) clearInterval(autoRefreshInterval);
+      autoRefreshInterval = setInterval(loadTickets, 5000);
+    }
+
+    function stopAutoRefresh() {
+      if (autoRefreshInterval) {
+        clearInterval(autoRefreshInterval);
+        autoRefreshInterval = null;
+      }
+    }
+
+    function toggleAutoRefresh() {
+      isAutoRefresh = !isAutoRefresh;
+      document.getElementById('autoRefreshSwitch').classList.toggle('active');
+      if (isAutoRefresh) {
+        startAutoRefresh();
+      } else {
+        stopAutoRefresh();
+      }
+    }
+
+    // 日志
+    function log(elementId, message, type) {
+      const el = document.getElementById(elementId);
+      const line = document.createElement('div');
+      line.className = type || '';
+      line.textContent = new Date().toLocaleTimeString() + ' ' + message;
+      el.appendChild(line);
+      el.scrollTop = el.scrollHeight;
+    }
+
+    // 提示
+    function showAlert(elementId, message, type) {
+      const el = document.getElementById(elementId);
+      el.innerHTML = `<div class="alert alert-${type}">${message}</div>`;
+      setTimeout(() => { el.innerHTML = ''; }, 3000);
+    }
+
+    // 页面加载
+    window.onload = init;
+  </script>
+</body>
+</html>

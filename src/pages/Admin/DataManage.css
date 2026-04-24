@@ -1,0 +1,50 @@
+.data-manage-page {
+  padding-bottom: 20px;
+}
+
+/* 同步状态卡片 */
+.sync-status-card {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  margin: 12px;
+}
+
+.sync-status-card .adm-card-body {
+  padding: 16px;
+}
+
+.sync-status {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.sync-icon {
+  flex-shrink: 0;
+}
+
+.sync-info {
+  flex: 1;
+  color: white;
+}
+
+.sync-title {
+  font-weight: 600;
+  font-size: 16px;
+}
+
+.sync-time {
+  font-size: 12px;
+  opacity: 0.9;
+  margin-top: 4px;
+}
+
+.sync-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.sync-actions .adm-button {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}

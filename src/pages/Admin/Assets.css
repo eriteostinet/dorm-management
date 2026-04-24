@@ -1,0 +1,227 @@
+.assets-page {
+  min-height: 100vh;
+  background-color: #f5f5f5;
+}
+
+/* 统计概览 */
+.assets-stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  padding: 12px;
+  background: #fff;
+  margin-bottom: 8px;
+}
+
+.stat-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 12px 8px;
+  background: #f6ffed;
+  border-radius: 8px;
+}
+
+.stat-item.warning {
+  background: #e6f7ff;
+}
+
+.stat-value {
+  font-size: 24px;
+  font-weight: bold;
+  color: #52c41a;
+}
+
+.stat-item.warning .stat-value {
+  color: #1890ff;
+}
+
+.stat-label {
+  font-size: 12px;
+  color: #666;
+  margin-top: 4px;
+}
+
+/* 宿舍资材卡片列表 */
+.dorm-assets-list {
+  padding: 12px;
+}
+
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 60px 20px;
+  color: #999;
+}
+
+.empty-state p {
+  margin: 16px 0;
+}
+
+.dorm-stats {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  align-items: flex-end;
+}
+
+/* 住宿人员信息 */
+.dorm-occupants {
+  padding: 12px 16px;
+  background: #f6ffed;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.occupants-header {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: #52c41a;
+  margin-bottom: 8px;
+  font-weight: 500;
+}
+
+.occupants-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.occupant-tag {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 10px;
+  background: #fff;
+  border: 1px solid #b7eb8f;
+  border-radius: 12px;
+  font-size: 12px;
+}
+
+.occupant-name {
+  font-weight: 500;
+  color: #333;
+}
+
+.occupant-dept {
+  color: #666;
+  font-size: 11px;
+}
+
+/* 宿舍资材卡片 */
+.dorm-asset-card {
+  margin-bottom: 12px;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.dorm-asset-card .adm-card-body {
+  padding: 0;
+}
+
+.dorm-asset-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px;
+  background: linear-gradient(135deg, #1890ff 0%, #096dd9 100%);
+  color: #fff;
+}
+
+.dorm-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.dorm-location,
+.dorm-building {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+}
+
+.dorm-location svg,
+.dorm-building svg {
+  opacity: 0.8;
+}
+
+/* 资材列表 */
+.asset-list {
+  --adm-list-item-padding-left: 16px;
+  --adm-list-item-padding-right: 16px;
+}
+
+.asset-list .adm-list-body {
+  border: none;
+}
+
+.asset-item {
+  padding: 12px 16px !important;
+}
+
+.asset-item:not(:last-child) {
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.asset-content {
+  flex: 1;
+}
+
+.asset-main {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 4px;
+}
+
+.asset-category {
+  font-size: 16px;
+  font-weight: 500;
+  color: #333;
+}
+
+.asset-status {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 12px;
+}
+
+.asset-detail {
+  display: flex;
+  gap: 8px;
+  font-size: 12px;
+  color: #666;
+  margin-bottom: 4px;
+}
+
+.asset-meta {
+  display: flex;
+  gap: 16px;
+  font-size: 11px;
+  color: #999;
+}
+
+.asset-meta span {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/* 表单样式 */
+.adm-form-item-label {
+  font-size: 14px;
+  color: #666;
+}
+
+.adm-selector {
+  --adm-selector-item-border-radius: 8px;
+}
+
+.adm-selector-item {
+  font-size: 13px;
+}

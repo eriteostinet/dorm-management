@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>云函数测试 - 宿舍管理系统</title>
+  <script src="https://imgcache.qq.com/qcloud/tcbjs/1.10.8/tcb.js"></script>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: -apple-system, BlinkMacSystemFont, sans-serif; background: #f0f2f5; padding: 20px; }
+    .container { max-width: 800px; margin: 0 auto; }
+    h1 { color: #333; margin-bottom: 10px; }
+    .subtitle { color: #666; font-size: 14px; margin-bottom: 20px; }
+    .card { background: white; border-radius: 12px; padding: 20px; margin-bottom: 16px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+    .card h2 { font-size: 18px; margin-bottom: 15px; color: #1677ff; }
+    .btn { background: #1677ff; color: white; border: none; padding: 12px 24px; border-radius: 8px; font-size: 15px; cursor: pointer; width: 100%; margin-bottom: 10px; }
+    .btn:hover { background: #4096ff; }
+    .btn.success { background: #52c41a; }
+    .btn.danger { background: #ff4d4f; }
+    .btn:disabled { background: #d9d9d9; cursor: not-allowed; }
+    .grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin: 15px 0; }
+    .grid-3 { grid-template-columns: repeat(3, 1fr); }
+    .stat-box { background: #f5f5f5; border-radius: 8px; padding: 16px; text-align: center; }
+    .stat-box h3 { font-size: 28px; color: #1677ff; margin-bottom: 4px; }
+    .stat-box p { font-size: 13px; color: #666; }
+    .ticket-list { margin-top: 15px; }
+    .ticket-item { background: #f8f9fa; border-radius: 8px; padding: 12px; margin-bottom: 10px; border-left: 4px solid #1677ff; }
+    .ticket-item.urgent { border-left-color: #ff4d4f; }
+    .ticket-item.processing { border-left-color: #faad14; }
+    .ticket-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+    .ticket-id { font-weight: bold; color: #333; }
+    .ticket-status { padding: 2px 8px; border-radius: 4px; font-size: 12px; }
+    .status-reported { background: #e6f7ff; color: #1890ff; }
+    .status-processing { background: #fff7e6; color: #fa8c16; }
+    .status-done { background: #f6ffed; color: #52c41a; }
+    .ticket-info { font-size: 13px; color: #666; line-height: 1.6; }
+    .ticket-info strong { color: #333; }
+    .log { background: #1e1e1e; color: #d4d4d4; border-radius: 8px; padding: 16px; margin-top: 15px; font-family: monospace; font-size: 13px; max-height: 300px; overflow-y: auto; }
+    .log .success { color: #7ee787; }
+    .log .error { color: #f85149; }
+    .log .info { color: #79c0ff; }
+    .alert { background: #e6f7ff; border: 1px solid #91d5ff; border-radius: 8px; padding: 12px; margin: 12px 0; font-size: 14px; color: #0958d9; }
+    .alert.success { background: #f6ffed; border-color: #b7eb8f; color: #389e0d; }
+    .alert.error { background: #fff2f0; border-color: #ffccc7; color: #cf1322; }
+    .empty { text-align: center; padding: 40px; color: #999; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>☁️ 云函数数据测试</h1>
+    <p class="subtitle">通过云函数访问数据库（绕过前端权限限制）</p>
+
+    <div class="card">
+      <h2>📊 数据库状态</h2>
+      <div class="grid grid-3">
+        <div class="stat-box">
+          <h3 id="ticketCount">-</h3>
+          <p>工单总数</p>
+        </div>
+        <div class="stat-box">
+          <h3 id="urgentCount">-</h3>
+          <p>紧急工单</p>
+        </div>
+        <div class="stat-box">
+          <h3 id="processingCount">-</h3>
+          <p>处理中</p>
+        </div>
+      </div>
+      <div class="grid">
+        <button onclick="loadTickets()">🔄 刷新数据</button>
+        <button class="success" onclick="insertTestData()">➕ 插入测试数据</button>
+      </div>
+      <div id="statusMsg" class="alert" style="display: none;"></div>
+    </div>
+
+    <div class="card">
+      <h2>📋 工单列表</h2>
+      <div id="ticketList" class="ticket-list">
+        <div class="empty">点击"刷新数据"加载工单</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>⚙️ 高级操作</h2>
+      <div class="grid">
+        <button onclick="checkDatabase()">🔍 检查数据库连接</button>
+        <button class="danger" onclick="clearAllData()">🗑️ 清空所有数据</button>
+      </div>
+      <div id="log" class="log" style="display: none;"></div>
+    </div>
+
+    <div class="card">
+      <h2>💡 问题说明</h2>
+      <div class="alert">
+        <strong>为什么前端直接访问数据库会失败？</strong><br><br>
+        前端直接访问 CloudBase 数据库需要：<br>
+        1. 启用匿名登录（用户未登录时）<br>
+        2. 设置正确的数据库权限<br><br>
+        这个页面通过<strong>云函数</strong>中转访问数据库，可以绕过这些限制。
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const ENV_ID = 'dorm-system-5g5k2k8k-1byd118ff42';
+    let cloudApp = null;
+    let tickets = [];
+
+    function showMsg(msg, type) {
+      const el = document.getElementById('statusMsg');
+      el.textContent = msg;
+      el.className = 'alert ' + (type || '');
+      el.style.display = 'block';
+      setTimeout(() => { el.style.display = 'none'; }, 5000);
+    }
+
+    function log(msg, type) {
+      const el = document.getElementById('log');
+      el.style.display = 'block';
+      const line = document.createElement('div');
+      line.className = type || '';
+      line.textContent = new Date().toLocaleTimeString() + ' ' + msg;
+      el.appendChild(line);
+      el.scrollTop = el.scrollHeight;
+    }
+
+    function initCloud() {
+      if (!cloudApp) {
+        cloudApp = tcb.init({ env: ENV_ID });
+      }
+      return cloudApp;
+    }
+
+    // 调用云函数
+    async function callFunction(name, data) {
+      const app = initCloud();
+      return await app.callFunction({
+        name: name,
+        data: data
+      });
+    }
+
+    // 加载工单列表
+    async function loadTickets() {
+      showMsg('正在加载数据...', '');
+      
+      try {
+        const result = await callFunction('repairdb', { action: 'getAll' });
+        
+        if (result.result.success) {
+          tickets = result.result.data || [];
+          
+          // 更新统计
+          document.getElementById('ticketCount').textContent = tickets.length;
+          document.getElementById('urgentCount').textContent = tickets.filter(t => t.urgency === 'urgent').length;
+          document.getElementById('processingCount').textContent = tickets.filter(t => t.status === 'processing').length;
+          
+          // 渲染列表
+          renderTickets();
+          showMsg(`✅ 成功加载 ${tickets.length} 条工单`, 'success');
+        } else {
+          showMsg('❌ 加载失败: ' + result.result.error, 'error');
+        }
+      } catch (e) {
+        showMsg('❌ 调用失败: ' + e.message, 'error');
+      }
+    }
+
+    // 渲染工单列表
+    function renderTickets() {
+      const container = document.getElementById('ticketList');
+      
+      if (tickets.length === 0) {
+        container.innerHTML = '<div class="empty">暂无工单数据</div>';
+        return;
+      }
+      
+      container.innerHTML = tickets.map(ticket => {
+        const statusClass = 'status-' + ticket.status;
+        const itemClass = ticket.urgency === 'urgent' ? 'urgent' : ticket.status;
+        const statusText = {
+          reported: '待处理',
+          assigned: '已派单',
+          processing: '处理中',
+          done: '待验收',
+          confirmed: '已完成',
+          cancelled: '已取消'
+        }[ticket.status] || ticket.status;
+        
+        return `
+          <div class="ticket-item ${itemClass}">
+            <div class="ticket-header">
+              <span class="ticket-id">${ticket._id}</span>
+              <span class="ticket-status ${statusClass}">${statusText}</span>
+            </div>
+            <div class="ticket-info">
+              <strong>${ticket.category} - ${ticket.subCategory}</strong><br>
+              ${ticket.description}<br>
+              报修人: ${ticket.reporterName || '-'} | 
+              紧急度: ${ticket.urgency === 'urgent' ? '🔴紧急' : '🟢一般'} | 
+              时间: ${new Date(ticket.reportedAt).toLocaleString()}
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    // 插入测试数据
+    async function insertTestData() {
+      showMsg('正在插入测试数据...', '');
+      
+      const testData = [
+        {
+          _id: 'TKT_' + Date.now() + '_1',
+          ticketType: 'facility',
+          communityId: 'JW',
+          dormId: 'JW-A101',
+          roomId: '101',
+          reporterId: 'test',
+          reporterName: '测试用户A',
+          category: '水电',
+          subCategory: '水管漏水',
+          description: '卫生间水龙头漏水，需要维修',
+          images: [],
+          urgency: 'urgent',
+          status: 'reported',
+          reportedAt: new Date()
+        },
+        {
+          _id: 'TKT_' + Date.now() + '_2',
+          ticketType: 'facility',
+          communityId: 'TY',
+          dormId: 'TY-B202',
+          roomId: '202',
+          reporterId: 'test',
+          reporterName: '测试用户B',
+          category: '电器',
+          subCategory: '空调不冷',
+          description: '房间空调制冷效果不好',
+          images: [],
+          urgency: 'normal',
+          status: 'processing',
+          reportedAt: new Date(Date.now() - 3600000),
+          startedAt: new Date()
+        }
+      ];
+      
+      try {
+        const result = await callFunction('repairdb', { 
+          action: 'insertCustom', 
+          data: testData 
+        });
+        
+        if (result.result.success) {
+          showMsg(`✅ 成功插入 ${result.result.inserted} 条测试数据`, 'success');
+          loadTickets();
+        } else {
+          showMsg('❌ 插入失败: ' + result.result.error, 'error');
+        }
+      } catch (e) {
+        showMsg('❌ 调用失败: ' + e.message, 'error');
+      }
+    }
+
+    // 检查数据库连接
+    async function checkDatabase() {
+      const logId = 'log';
+      document.getElementById(logId).innerHTML = '';
+      
+      log('检查数据库连接...', 'info');
+      
+      try {
+        const result = await callFunction('repairdb', { action: 'status' });
+        
+        if (result.result.success) {
+          log('✅ 数据库连接正常', 'success');
+          log('📊 当前工单数: ' + result.result.count, 'info');
+        } else {
+          log('❌ 连接失败: ' + result.result.error, 'error');
+        }
+      } catch (e) {
+        log('❌ 调用失败: ' + e.message, 'error');
+      }
+    }
+
+    // 清空所有数据
+    async function clearAllData() {
+      if (!confirm('⚠️ 确定要清空所有工单数据吗？此操作不可恢复！')) return;
+      
+      showMsg('正在清空数据...', '');
+      
+      try {
+        const result = await callFunction('repairdb', { action: 'clear' });
+        
+        if (result.result.success) {
+          showMsg(`✅ 已删除 ${result.result.deleted} 条数据`, 'success');
+          loadTickets();
+        } else {
+          showMsg('❌ 清空失败: ' + result.result.error, 'error');
+        }
+      } catch (e) {
+        showMsg('❌ 调用失败: ' + e.message, 'error');
+      }
+    }
+
+    // 页面加载时自动加载
+    window.onload = function() {
+      loadTickets();
+    };
+  </script>
+</body>
+</html>

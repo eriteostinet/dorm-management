@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>数据库初始化 - 宿舍管理系统</title>
+  <script src="https://imgcache.qq.com/qcloud/tcbjs/1.10.8/tcb.js"></script>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: -apple-system, BlinkMacSystemFont, sans-serif; background: #f0f2f5; padding: 20px; }
+    .container { max-width: 700px; margin: 0 auto; }
+    h1 { color: #333; margin-bottom: 10px; }
+    .card { background: white; border-radius: 12px; padding: 24px; margin-bottom: 16px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+    .step { display: flex; gap: 16px; margin: 16px 0; padding: 16px; background: #f8f9fa; border-radius: 8px; }
+    .step-num { width: 32px; height: 32px; background: #1677ff; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; flex-shrink: 0; }
+    .step-content { flex: 1; }
+    .step h3 { margin-bottom: 8px; color: #333; }
+    .step p { color: #666; font-size: 14px; line-height: 1.6; }
+    code { background: #f0f0f0; padding: 2px 6px; border-radius: 4px; font-family: monospace; font-size: 13px; }
+    .btn { background: #1677ff; color: white; border: none; padding: 12px 24px; border-radius: 8px; font-size: 15px; cursor: pointer; margin-top: 10px; }
+    .btn:hover { background: #4096ff; }
+    .btn:disabled { background: #d9d9d9; cursor: not-allowed; }
+    .log { background: #1e1e1e; color: #d4d4d4; border-radius: 8px; padding: 16px; margin-top: 15px; font-family: monospace; font-size: 13px; max-height: 300px; overflow-y: auto; }
+    .log .success { color: #7ee787; }
+    .log .error { color: #f85149; }
+    .alert { background: #fff2f0; border: 1px solid #ffccc7; border-radius: 8px; padding: 16px; color: #cf1322; margin: 16px 0; }
+    .alert.success { background: #f6ffed; border-color: #b7eb8f; color: #389e0d; }
+    a { color: #1677ff; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🔧 数据库初始化</h1>
+    
+    <div class="card">
+      <h2>问题诊断</h2>
+      <div id="diagnosis">
+        <p>检测到云数据库中缺少 <code>repairTickets</code> 集合。</p>
+        <p>有两种方式可以修复这个问题：</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>方案一：自动修复（推荐）</h2>
+      <p style="color: #666; margin-bottom: 16px;">点击下方按钮，系统会尝试自动创建集合并初始化数据。</p>
+      <button class="btn" id="autoFixBtn" onclick="autoFix()">🚀 一键修复</button>
+      <div id="fixLog" class="log" style="display: none;"></div>
+    </div>
+
+    <div class="card">
+      <h2>方案二：手动修复</h2>
+      
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-content">
+          <h3>登录腾讯云控制台</h3>
+          <p>打开 <a href="https://console.cloud.tencent.com/tcb/database/collections?envId=dorm-system-5g5k2k8k-1byd118ff42" target="_blank">云开发控制台 - 数据库</a></p>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-content">
+          <h3>创建集合</h3>
+          <p>点击「添加集合」，名称填写：<code>repairTickets</code></p>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-content">
+          <h3>设置权限</h3>
+          <p>进入集合详情，点击「权限设置」，选择「<strong>所有用户可读，仅创建者可写</strong>」</p>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-num">4</div>
+        <div class="step-content">
+          <h3>完成</h3>
+          <p>刷新本页面，测试同步功能</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const ENV_ID = 'dorm-system-5g5k2k8k-1byd118ff42';
+    let cloudDB = null;
+
+    function log(elementId, message, type) {
+      const el = document.getElementById(elementId);
+      el.style.display = 'block';
+      const line = document.createElement('div');
+      line.className = type || '';
+      line.textContent = new Date().toLocaleTimeString() + ' ' + message;
+      el.appendChild(line);
+      el.scrollTop = el.scrollHeight;
+    }
+
+    function initCloud() {
+      try {
+        const app = tcb.init({ env: ENV_ID });
+        cloudDB = app.database();
+        return true;
+      } catch (e) {
+        console.error('CloudBase 初始化失败:', e);
+        return false;
+      }
+    }
+
+    async function autoFix() {
+      const btn = document.getElementById('autoFixBtn');
+      const logId = 'fixLog';
+      
+      btn.disabled = true;
+      btn.textContent = '修复中...';
+      document.getElementById(logId).innerHTML = '';
+      
+      log(logId, '开始自动修复...', 'info');
+      
+      if (!cloudDB && !initCloud()) {
+        log(logId, '❌ CloudBase 初始化失败', 'error');
+        btn.disabled = false;
+        btn.textContent = '🚀 一键修复';
+        return;
+      }
+
+      log(logId, 'CloudBase 连接成功', 'success');
+      
+      try {
+        // 尝试添加一条数据来自动创建集合
+        log(logId, '尝试创建 repairTickets 集合...', 'info');
+        
+        const testData = {
+          _id: 'INIT_' + Date.now(),
+          ticketType: 'facility',
+          communityId: 'INIT',
+          dormId: 'INIT',
+          roomId: null,
+          reporterId: 'system',
+          reporterName: '系统初始化',
+          category: '初始化',
+          subCategory: '数据库初始化',
+          description: '这是一条初始化记录，用于创建 repairTickets 集合',
+          images: [],
+          urgency: 'normal',
+          status: 'confirmed',
+          assignedTo: null,
+          assignedName: null,
+          assignedTime: null,
+          estimatedTime: null,
+          solution: '系统自动创建',
+          materials: [],
+          laborCost: 0,
+          totalCost: 0,
+          processImages: [],
+          completedDate: new Date(),
+          confirmStatus: 'passed',
+          confirmRemark: null,
+          rating: 5,
+          comment: '数据库初始化成功',
+          reportedAt: new Date(),
+          startedAt: new Date(),
+          confirmedAt: new Date(),
+          isRecurrent: false,
+          relatedTicketId: null,
+          updatedAt: new Date()
+        };
+        
+        await cloudDB.collection('repairTickets').add(testData);
+        log(logId, '✅ 集合创建成功！', 'success');
+        
+        // 验证
+        const result = await cloudDB.collection('repairTickets').get();
+        log(logId, `✅ 验证通过，集合中共有 ${result.data.length} 条记录`, 'success');
+        
+        // 删除初始化记录
+        await cloudDB.collection('repairTickets').doc(testData._id).remove();
+        log(logId, '✅ 已清理测试数据', 'success');
+        
+        log(logId, '', '');
+        log(logId, '🎉 修复完成！', 'success');
+        log(logId, '📋 现在你可以前往测试同步功能了', 'info');
+        
+        setTimeout(() => {
+          if (confirm('修复成功！是否跳转到同步测试页面？')) {
+            window.location.href = '/test-sync.html';
+          }
+        }, 500);
+        
+      } catch (e) {
+        log(logId, '❌ 修复失败: ' + e.message, 'error');
+        log(logId, '💡 请尝试方案二：手动在控制台创建集合', 'warning');
+        btn.disabled = false;
+        btn.textContent = '🚀 重试修复';
+      }
+    }
+
+    // 页面加载时检查
+    window.onload = function() {
+      initCloud();
+    };
+  </script>
+</body>
+</html>

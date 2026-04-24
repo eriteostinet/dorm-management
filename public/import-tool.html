@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>数据导入工具</title>
+</head>
+<body>
+  <h1>宿舍管理系统数据导入工具</h1>
+  <div id="status">准备就绪</div>
+  <button id="importBtn">开始导入</button>
+  <div id="result"></div>
+  
+  <script src="import-data-tianyue.js"></script>
+  <script>
+    // 从 JS 文件加载完整数据
+    async function loadFullData() {
+      if (window.importDataFull) {
+        return window.importDataFull;
+      }
+      throw new Error('数据文件未加载');
+    }
+    
+    document.getElementById('importBtn').onclick = async function() {
+      const status = document.getElementById('status');
+      const result = document.getElementById('result');
+      
+      try {
+        status.textContent = '正在导入...';
+        
+        const data = await loadFullData();
+        
+        const db = await new Promise((resolve, reject) => {
+          const req = indexedDB.open('DormManagementDB', 10);
+          req.onsuccess = () => resolve(req.result);
+          req.onerror = () => reject(req.error);
+        });
+        
+        const clearStore = (storeName) => {
+          return new Promise((resolve, reject) => {
+            const tx = db.transaction(storeName, 'readwrite');
+            const store = tx.objectStore(storeName);
+            const req = store.clear();
+            req.onsuccess = () => resolve();
+            req.onerror = () => reject(req.error);
+          });
+        };
+        
+        await clearStore('communities');
+        await clearStore('dorms');
+        await clearStore('rooms');
+        await clearStore('employees');
+        
+        const importStore = (storeName, items) => {
+          return new Promise((resolve, reject) => {
+            const tx = db.transaction(storeName, 'readwrite');
+            const store = tx.objectStore(storeName);
+            let count = 0;
+            items.forEach(item => {
+              const req = store.add(item);
+              req.onsuccess = () => { count++; };
+            });
+            tx.oncomplete = () => resolve(count);
+            tx.onerror = () => reject(tx.error);
+          });
+        };
+        
+        const cCount = await importStore('communities', data.communities || importData.communities);
+        const dCount = await importStore('dorms', data.dorms || importData.dorms);
+        const rCount = await importStore('rooms', data.rooms || []);
+        const eCount = await importStore('employees', data.employees || []);
+        
+        localStorage.setItem('dorm_backup', JSON.stringify(data));
+        localStorage.setItem('dorm_backup_time', new Date().toISOString());
+        
+        status.textContent = '导入完成!';
+        result.innerHTML = `
+          <p>✓ 小区: ${cCount} 个</p>
+          <p>✓ 宿舍: ${dCount} 个</p>
+          <p>✓ 房间: ${rCount} 间</p>
+          <p>✓ 员工: ${eCount} 名</p>
+        `;
+        
+        // 通知父窗口
+        if (window.parent && window.parent.postMessage) {
+          window.parent.postMessage({ type: 'import-complete', data: { cCount, dCount, rCount, eCount } }, '*');
+        }
+        
+      } catch (err) {
+        status.textContent = '导入失败';
+        result.innerHTML = '<p style="color:red">错误: ' + err.message + '</p>';
+        console.error(err);
+      }
+    };
+    
+    // 自动执行导入
+    setTimeout(() => {
+      document.getElementById('importBtn').click();
+    }, 500);
+  </script>
+</body>
+</html>

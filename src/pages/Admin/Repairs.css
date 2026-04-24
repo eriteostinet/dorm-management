@@ -1,0 +1,28 @@
+.repair-card {
+  margin: 12px;
+}
+
+.repair-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.repair-id {
+  font-family: monospace;
+  font-size: 14px;
+  color: #666;
+}
+
+.repair-info p {
+  margin: 4px 0;
+  font-size: 14px;
+}
+
+.repair-actions {
+  margin-top: 12px;
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+}

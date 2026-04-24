@@ -1,0 +1,29 @@
+.ticket-card {
+  margin: 12px;
+}
+
+.ticket-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.ticket-id {
+  font-family: monospace;
+  font-size: 14px;
+  color: #666;
+}
+
+.ticket-info p {
+  margin: 4px 0;
+  font-size: 14px;
+}
+
+.ticket-actions {
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid #f0f0f0;
+  display: flex;
+  justify-content: flex-end;
+}

@@ -1,0 +1,14 @@
+.repair-form {
+  padding: 12px;
+}
+
+.repair-form .adm-form-item {
+  background: white;
+  margin-bottom: 12px;
+  padding: 12px;
+  border-radius: 8px;
+}
+
+.repair-form .adm-form-item-label {
+  font-weight: 500;
+}

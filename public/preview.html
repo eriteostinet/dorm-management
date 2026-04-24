@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>宿舍管理系统 - 预览版</title>
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1d4ed8;
+            --primary-light: #dbeafe;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --bg: #f3f4f6;
+            --card: #ffffff;
+            --text: #1f2937;
+            --text-secondary: #6b7280;
+            --border: #e5e7eb;
+            --radius: 12px;
+            --shadow: 0 1px 3px rgba(0,0,0,0.08), 0 4px 12px rgba(0,0,0,0.05);
+            --shadow-hover: 0 4px 6px rgba(0,0,0,0.1), 0 10px 20px rgba(0,0,0,0.08);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; background: var(--bg); color: var(--text); line-height: 1.5; min-height: 100vh; }
+
+        /* 登录页 */
+        .login-page { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 20px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+        .login-box { width: 100%; max-width: 400px; background: var(--card); border-radius: var(--radius); padding: 40px 32px; box-shadow: var(--shadow-hover); }
+        .login-box .logo { text-align: center; margin-bottom: 32px; }
+        .login-box .logo-icon { width: 64px; height: 64px; background: linear-gradient(135deg, var(--primary), #7c3aed); border-radius: 16px; display: inline-flex; align-items: center; justify-content: center; font-size: 32px; margin-bottom: 16px; box-shadow: 0 4px 12px rgba(37,99,235,0.3); }
+        .login-box h1 { text-align: center; font-size: 24px; font-weight: 700; color: var(--text); margin-bottom: 8px; }
+        .login-box .subtitle { text-align: center; color: var(--text-secondary); font-size: 14px; margin-bottom: 28px; }
+
+        .form-group { margin-bottom: 20px; }
+        .form-group label { display: block; font-size: 14px; font-weight: 500; color: var(--text); margin-bottom: 6px; }
+        .form-group input { width: 100%; padding: 12px 16px; border: 1.5px solid var(--border); border-radius: 10px; font-size: 15px; transition: all 0.2s; background: #fafafa; }
+        .form-group input:focus { outline: none; border-color: var(--primary); background: #fff; box-shadow: 0 0 0 3px var(--primary-light); }
+        .btn { width: 100%; padding: 14px; background: var(--primary); color: #fff; border: none; border-radius: 10px; font-size: 16px; font-weight: 600; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; justify-content: center; gap: 8px; }
+        .btn:hover { background: var(--primary-dark); transform: translateY(-1px); box-shadow: var(--shadow-hover); }
+        .btn:active { transform: translateY(0); }
+        .btn-sm { width: auto; padding: 8px 20px; font-size: 14px; }
+        .btn-success { background: var(--success); }
+        .btn-success:hover { background: #059669; }
+        .btn-warning { background: var(--warning); }
+        .btn-warning:hover { background: #d97706; }
+
+        .login-tips { margin-top: 24px; padding: 16px; background: #f0f9ff; border-radius: 10px; border: 1px solid #bae6fd; }
+        .login-tips-title { font-size: 13px; font-weight: 600; color: #0369a1; margin-bottom: 8px; }
+        .login-tips-item { font-size: 13px; color: #0c4a6e; line-height: 1.8; display: flex; align-items: center; gap: 6px; }
+
+        /* 导航栏 */
+        .navbar { position: fixed; top: 0; left: 0; right: 0; z-index: 100; background: var(--card); border-bottom: 1px solid var(--border); padding: 0 16px; height: 56px; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
+        .nav-brand { display: flex; align-items: center; gap: 10px; font-weight: 700; font-size: 16px; color: var(--text); }
+        .nav-brand .icon { width: 32px; height: 32px; background: linear-gradient(135deg, var(--primary), #7c3aed); border-radius: 8px; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 16px; }
+        .nav-user { display: flex; align-items: center; gap: 12px; }
+        .nav-user .name { font-size: 14px; font-weight: 500; color: var(--text); }
+        .nav-user .role-tag { font-size: 11px; padding: 2px 8px; border-radius: 20px; background: var(--primary-light); color: var(--primary); font-weight: 600; }
+        .nav-tabs { display: flex; gap: 4px; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+        .nav-tab { padding: 8px 16px; border-radius: 8px; font-size: 14px; font-weight: 500; color: var(--text-secondary); background: transparent; border: none; cursor: pointer; transition: all 0.2s; white-space: nowrap; }
+        .nav-tab:hover { background: var(--bg); color: var(--text); }
+        .nav-tab.active { background: var(--primary-light); color: var(--primary); }
+        .logout-btn { padding: 6px 14px; border-radius: 8px; font-size: 13px; font-weight: 500; color: var(--danger); background: #fef2f2; border: none; cursor: pointer; transition: all 0.2s; }
+        .logout-btn:hover { background: #fee2e2; }
+
+        /* 页面内容 */
+        .page { padding: 72px 16px 24px; max-width: 900px; margin: 0 auto; }
+
+        /* 统计卡片 */
+        .stats-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-bottom: 24px; }
+        @media(min-width: 640px) { .stats-grid { grid-template-columns: repeat(4, 1fr); } }
+        .stat-card { background: var(--card); border-radius: var(--radius); padding: 20px 16px; box-shadow: var(--shadow); border: 1px solid var(--border); transition: all 0.2s; }
+        .stat-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-hover); }
+        .stat-card .stat-icon { width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 20px; margin-bottom: 12px; }
+        .stat-card .stat-icon.blue { background: var(--primary-light); }
+        .stat-card .stat-icon.green { background: #d1fae5; }
+        .stat-card .stat-icon.orange { background: #fef3c7; }
+        .stat-card .stat-icon.red { background: #fee2e2; }
+        .stat-card .stat-value { font-size: 24px; font-weight: 700; color: var(--text); margin-bottom: 4px; }
+        .stat-card .stat-label { font-size: 13px; color: var(--text-secondary); }
+
+        /* 通用卡片 */
+        .card { background: var(--card); border-radius: var(--radius); padding: 20px; box-shadow: var(--shadow); border: 1px solid var(--border); margin-bottom: 16px; }
+        .card-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
+        .card-title { font-size: 16px; font-weight: 700; color: var(--text); }
+        .card-subtitle { font-size: 13px; color: var(--text-secondary); margin-top: 2px; }
+
+        /* 列表项 */
+        .list-item { display: flex; align-items: center; justify-content: space-between; padding: 14px 0; border-bottom: 1px solid var(--border); }
+        .list-item:last-child { border-bottom: none; padding-bottom: 0; }
+        .list-item:first-child { padding-top: 0; }
+        .list-info .list-title { font-size: 15px; font-weight: 600; color: var(--text); margin-bottom: 4px; }
+        .list-info .list-desc { font-size: 13px; color: var(--text-secondary); line-height: 1.5; }
+        .list-meta { text-align: right; flex-shrink: 0; margin-left: 12px; }
+
+        /* 标签 */
+        .tag { display: inline-flex; align-items: center; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; }
+        .tag-vacant { background: #d1fae5; color: #065f46; }
+        .tag-occupied { background: #fee2e2; color: #991b1b; }
+        .tag-reported { background: #fef3c7; color: #92400e; }
+        .tag-processing { background: #dbeafe; color: #1e40af; }
+        .tag-done { background: #d1fae5; color: #065f46; }
+        .tag-pending { background: #fee2e2; color: #991b1b; }
+        .tag-paid { background: #d1fae5; color: #065f46; }
+
+        /* 空状态 */
+        .empty-state { text-align: center; padding: 48px 20px; color: var(--text-secondary); }
+        .empty-state .empty-icon { font-size: 48px; margin-bottom: 12px; opacity: 0.5; }
+        .empty-state .empty-text { font-size: 15px; }
+
+        /* 表单 */
+        .form-row { margin-bottom: 16px; }
+        .form-row label { display: block; font-size: 14px; font-weight: 500; color: var(--text); margin-bottom: 6px; }
+        .form-row input, .form-row select, .form-row textarea { width: 100%; padding: 12px 14px; border: 1.5px solid var(--border); border-radius: 10px; font-size: 15px; transition: all 0.2s; background: #fafafa; }
+        .form-row input:focus, .form-row select:focus, .form-row textarea:focus { outline: none; border-color: var(--primary); background: #fff; box-shadow: 0 0 0 3px var(--primary-light); }
+
+        /* 动画 */
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .fade-in { animation: fadeIn 0.3s ease-out; }
+
+        /* 响应式 */
+        @media(max-width: 480px) {
+            .login-box { padding: 28px 20px; }
+            .stats-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+    </style>
+</head>
+<body>
+    <div id="app"></div>
+    <script>
+        // Mock 数据
+        const MOCK_USERS = [
+            { id: '1', employeeId: 'admin', name: '管理员', role: 'ADMIN', department: '行政部' },
+            { id: '2', employeeId: 'E001', name: '测试员工', role: 'EMPLOYEE', department: '技术部' },
+            { id: '3', employeeId: 'M001', name: '张维修', role: 'MAINTAINER', department: '后勤部' }
+        ];
+
+        const MOCK_ROOMS = [
+            { id: '1', building: '4栋2单元', roomNo: '505', status: 'occupied', occupantName: '测试员工' },
+            { id: '2', building: '4栋2单元', roomNo: '506', status: 'vacant' },
+            { id: '3', building: '4栋2单元', roomNo: '507', status: 'vacant' },
+            { id: '4', building: '4栋2单元', roomNo: '508', status: 'occupied', occupantName: '张三' },
+            { id: '5', building: '4栋2单元', roomNo: '509', status: 'vacant' }
+        ];
+
+        const MOCK_TICKETS = [
+            { id: '1', title: '水管漏水', description: '卫生间洗手池下方水管接口处滴水', status: 'reported', reporterId: '2', reporterName: '测试员工', createdAt: '2025-04-20T10:30:00Z' },
+            { id: '2', title: '灯不亮', description: '客厅大灯无法开启，已更换灯泡无效', status: 'processing', reporterId: '2', reporterName: '测试员工', createdAt: '2025-04-19T14:20:00Z' },
+            { id: '3', title: '空调异响', description: '卧室空调运行时发出嘎嘎声', status: 'done', reporterId: '2', reporterName: '测试员工', createdAt: '2025-04-18T09:00:00Z' }
+        ];
+
+        const MOCK_PAYMENTS = [
+            { id: '1', type: '房租', period: '2025年4月', amount: 1200, status: 'pending', roomId: '505' },
+            { id: '2', type: '电费', period: '2025年3月', amount: 156.5, status: 'paid', roomId: '505' },
+            { id: '3', type: '水费', period: '2025年3月', amount: 45.2, status: 'paid', roomId: '505' },
+            { id: '4', type: '物业费', period: '2025年4月', amount: 80, status: 'pending', roomId: '505' }
+        ];
+
+        // 状态
+        let token = localStorage.getItem('preview_token');
+        let user = JSON.parse(localStorage.getItem('preview_user') || 'null');
+        let tickets = [...MOCK_TICKETS];
+        let payments = [...MOCK_PAYMENTS];
+
+        function render() {
+            const app = document.getElementById('app');
+            if (!token) {
+                app.innerHTML = `
+                    <div class="login-page fade-in">
+                        <div class="login-box">
+                            <div class="logo">
+                                <div class="logo-icon">🏠</div>
+                                <h1>宿舍管理系统</h1>
+                                <div class="subtitle">员工宿舍一站式管理平台</div>
+                            </div>
+                            <div class="form-group">
+                                <label>工号</label>
+                                <input type="text" id="empId" placeholder="请输入工号" value="admin">
+                            </div>
+                            <div class="form-group">
+                                <label>密码</label>
+                                <input type="password" id="pwd" placeholder="请输入密码" value="admin123">
+                            </div>
+                            <button class="btn" onclick="login()">
+                                <span>🔐</span> 登录
+                            </button>
+                            <div class="login-tips">
+                                <div class="login-tips-title">🎯 测试账号</div>
+                                <div class="login-tips-item">管理员：admin / admin123</div>
+                                <div class="login-tips-item">员工：E001 / 123456</div>
+                                <div class="login-tips-item">维修工：M001 / 123456</div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            } else {
+                app.innerHTML = `
+                    <div class="navbar">
+                        <div class="nav-brand">
+                            <div class="icon">🏠</div>
+                            <span>宿舍管理系统</span>
+                        </div>
+                        <div class="nav-tabs">
+                            <button class="nav-tab active" onclick="showPage('dashboard')">📊 首页</button>
+                            <button class="nav-tab" onclick="showPage('rooms')">🚪 房间</button>
+                            <button class="nav-tab" onclick="showPage('tickets')">🔧 报修</button>
+                            <button class="nav-tab" onclick="showPage('payments')">💰 缴费</button>
+                        </div>
+                        <div class="nav-user">
+                            <span class="name">${user?.name || ''}</span>
+                            <span class="role-tag">${user?.role === 'ADMIN' ? '管理员' : user?.role === 'MAINTAINER' ? '维修工' : '员工'}</span>
+                            <button class="logout-btn" onclick="logout()">退出</button>
+                        </div>
+                    </div>
+                    <div id="page"></div>
+                `;
+                showPage('dashboard');
+            }
+        }
+
+        function login() {
+            const empId = document.getElementById('empId').value;
+            const pwd = document.getElementById('pwd').value;
+
+            const mockUser = MOCK_USERS.find(u => u.employeeId === empId);
+            if (!mockUser) {
+                alert('账号或密码错误');
+                return;
+            }
+
+            // 简单密码验证
+            const validPwd = (empId === 'admin' && pwd === 'admin123') ||
+                            ((empId === 'E001' || empId === 'M001') && pwd === '123456');
+            if (!validPwd) {
+                alert('账号或密码错误');
+                return;
+            }
+
+            token = 'preview-token-' + Date.now();
+            user = mockUser;
+            localStorage.setItem('preview_token', token);
+            localStorage.setItem('preview_user', JSON.stringify(user));
+            render();
+        }
+
+        function logout() {
+            token = null;
+            user = null;
+            localStorage.removeItem('preview_token');
+            localStorage.removeItem('preview_user');
+            render();
+        }
+
+        function showPage(page) {
+            const p = document.getElementById('page');
+            if (event && event.target && event.target.classList.contains('nav-tab')) {
+                document.querySelectorAll('.nav-tab').forEach(b => b.classList.remove('active'));
+                event.target.classList.add('active');
+            }
+
+            if (page === 'dashboard') {
+                const vacant = MOCK_ROOMS.filter(r => r.status === 'vacant').length;
+                const occupied = MOCK_ROOMS.filter(r => r.status === 'occupied').length;
+                const pending = tickets.filter(t => t.status === 'reported').length;
+
+                p.innerHTML = `
+                    <div class="page fade-in">
+                        <div class="stats-grid">
+                            <div class="stat-card">
+                                <div class="stat-icon blue">🏢</div>
+                                <div class="stat-value">${MOCK_ROOMS.length}</div>
+                                <div class="stat-label">总房间</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-icon green">👤</div>
+                                <div class="stat-value">${occupied}</div>
+                                <div class="stat-label">已入住</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-icon orange">🛏️</div>
+                                <div class="stat-value">${vacant}</div>
+                                <div class="stat-label">空闲房间</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-icon red">🔧</div>
+                                <div class="stat-value">${pending}</div>
+                                <div class="stat-label">待处理报修</div>
+                            </div>
+                        </div>
+                        ${user?.role === 'EMPLOYEE' ? `
+                            <div class="card">
+                                <div class="card-header">
+                                    <div>
+                                        <div class="card-title">📝 快速报修</div>
+                                        <div class="card-subtitle">遇到问题？一键提交报修单</div>
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <label>问题标题</label>
+                                    <input type="text" id="ticketTitle" placeholder="例如：水管漏水、灯不亮...">
+                                </div>
+                                <div class="form-row">
+                                    <label>问题描述</label>
+                                    <input type="text" id="ticketDesc" placeholder="请详细描述问题情况">
+                                </div>
+                                <button class="btn btn-success" onclick="submitTicket()" style="width:auto; padding: 10px 28px;">
+                                    <span>📨</span> 提交报修
+                                </button>
+                            </div>
+                        ` : ''}
+                        ${user?.role === 'ADMIN' ? `
+                            <div class="card">
+                                <div class="card-header">
+                                    <div>
+                                        <div class="card-title">📋 最新报修</div>
+                                        <div class="card-subtitle">最近提交的报修单</div>
+                                    </div>
+                                </div>
+                                ${tickets.slice(0, 5).map(t => `
+                                    <div class="list-item">
+                                        <div class="list-info">
+                                            <div class="list-title">${t.title}</div>
+                                            <div class="list-desc">${t.description}</div>
+                                        </div>
+                                        <div class="list-meta">
+                                            <span class="tag tag-${t.status}">${t.status === 'reported' ? '⏳ 待处理' : t.status === 'done' ? '✅ 已完成' : '🔄 处理中'}</span>
+                                        </div>
+                                    </div>
+                                `).join('') || '<div class="empty-state"><div class="empty-icon">✅</div><div class="empty-text">暂无报修单</div></div>'}
+                            </div>
+                        ` : ''}
+                    </div>
+                `;
+            } else if (page === 'rooms') {
+                p.innerHTML = `
+                    <div class="page fade-in">
+                        <div class="card">
+                            <div class="card-header">
+                                <div>
+                                    <div class="card-title">🚪 房间管理</div>
+                                    <div class="card-subtitle">共 ${MOCK_ROOMS.length} 个房间</div>
+                                </div>
+                            </div>
+                            ${MOCK_ROOMS.map(r => `
+                                <div class="list-item">
+                                    <div class="list-info">
+                                        <div class="list-title">${r.building} · ${r.roomNo}室</div>
+                                        ${r.occupantName ? `<div class="list-desc">👤 入住人：${r.occupantName}</div>` : '<div class="list-desc" style="color:var(--text-secondary)">暂无入住</div>'}
+                                    </div>
+                                    <div class="list-meta">
+                                        <span class="tag tag-${r.status}">${r.status === 'vacant' ? '🟢 空闲' : '🔴 已入住'}</span>
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                `;
+            } else if (page === 'tickets') {
+                p.innerHTML = `
+                    <div class="page fade-in">
+                        <div class="card">
+                            <div class="card-header">
+                                <div>
+                                    <div class="card-title">🔧 报修管理</div>
+                                    <div class="card-subtitle">共 ${tickets.length} 条记录</div>
+                                </div>
+                            </div>
+                            ${tickets.length === 0 ? '<div class="empty-state"><div class="empty-icon">🔧</div><div class="empty-text">暂无报修记录</div></div>' : ''}
+                            ${tickets.map(t => `
+                                <div class="list-item">
+                                    <div class="list-info">
+                                        <div class="list-title">${t.title}</div>
+                                        <div class="list-desc">${t.description}</div>
+                                        <div class="list-desc" style="margin-top:4px; font-size:12px;">📅 ${new Date(t.createdAt).toLocaleDateString()} · 👤 ${t.reporterName}</div>
+                                    </div>
+                                    <div class="list-meta">
+                                        <span class="tag tag-${t.status}">${t.status === 'reported' ? '⏳ 待处理' : t.status === 'done' ? '✅ 已完成' : '🔄 处理中'}</span>
+                                        ${user?.role === 'ADMIN' && t.status === 'reported' ? `<button class="btn btn-sm btn-success" onclick="updateTicket('${t.id}', 'done')" style="margin-top:8px;">完成</button>` : ''}
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                `;
+            } else if (page === 'payments') {
+                const total = payments.reduce((s, p) => s + p.amount, 0);
+                const paid = payments.filter(p => p.status === 'paid').reduce((s, p) => s + p.amount, 0);
+
+                p.innerHTML = `
+                    <div class="page fade-in">
+                        <div class="stats-grid">
+                            <div class="stat-card">
+                                <div class="stat-icon blue">💰</div>
+                                <div class="stat-value">¥${total.toFixed(0)}</div>
+                                <div class="stat-label">账单总额</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-icon green">✅</div>
+                                <div class="stat-value">¥${paid.toFixed(0)}</div>
+                                <div class="stat-label">已缴金额</div>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-header">
+                                <div>
+                                    <div class="card-title">💳 缴费明细</div>
+                                    <div class="card-subtitle">共 ${payments.length} 笔账单</div>
+                                </div>
+                            </div>
+                            ${payments.length === 0 ? '<div class="empty-state"><div class="empty-icon">📋</div><div class="empty-text">暂无账单</div></div>' : ''}
+                            ${payments.map(p => `
+                                <div class="list-item">
+                                    <div class="list-info">
+                                        <div class="list-title">${p.type} · ${p.period}</div>
+                                        <div class="list-desc">房间：${p.roomId}</div>
+                                    </div>
+                                    <div class="list-meta">
+                                        <div style="font-size:18px; font-weight:700; color:${p.status === 'pending' ? 'var(--danger)' : 'var(--success)'}; margin-bottom:4px;">¥${p.amount}</div>
+                                        <span class="tag tag-${p.status}">${p.status === 'pending' ? '💳 待缴费' : '✅ 已缴'}</span>
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                `;
+            }
+        }
+
+        function submitTicket() {
+            const title = document.getElementById('ticketTitle').value;
+            const desc = document.getElementById('ticketDesc').value;
+            if (!title) return alert('请填写问题描述');
+            tickets.unshift({
+                id: 'new-' + Date.now(),
+                title,
+                description: desc,
+                status: 'reported',
+                reporterId: user.id,
+                reporterName: user.name,
+                createdAt: new Date().toISOString()
+            });
+            alert('✅ 报修提交成功！');
+            showPage('dashboard');
+        }
+
+        function updateTicket(id, status) {
+            const t = tickets.find(x => x.id === id);
+            if (t) t.status = status;
+            showPage('tickets');
+        }
+
+        render();
+    </script>
+</body>
+</html>

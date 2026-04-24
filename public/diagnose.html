@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>连接诊断 - 宿舍管理系统</title>
+  <script src="https://imgcache.qq.com/qcloud/tcbjs/1.10.8/tcb.js"></script>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: -apple-system, BlinkMacSystemFont, sans-serif; background: #f0f2f5; padding: 20px; }
+    .container { max-width: 800px; margin: 0 auto; }
+    h1 { color: #333; margin-bottom: 10px; }
+    .card { background: white; border-radius: 12px; padding: 24px; margin-bottom: 16px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+    .test-item { display: flex; align-items: center; gap: 12px; padding: 16px; border-bottom: 1px solid #f0f0f0; }
+    .test-item:last-child { border-bottom: none; }
+    .test-icon { width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 20px; }
+    .test-icon.pending { background: #f5f5f5; }
+    .test-icon.success { background: #f6ffed; color: #52c41a; }
+    .test-icon.error { background: #fff2f0; color: #ff4d4f; }
+    .test-content { flex: 1; }
+    .test-content h3 { margin-bottom: 4px; color: #333; font-size: 15px; }
+    .test-content p { color: #999; font-size: 13px; }
+    .test-status { font-size: 13px; font-weight: 500; }
+    .test-status.success { color: #52c41a; }
+    .test-status.error { color: #ff4d4f; }
+    .test-status.pending { color: #999; }
+    .btn { background: #1677ff; color: white; border: none; padding: 12px 24px; border-radius: 8px; font-size: 15px; cursor: pointer; width: 100%; margin-top: 16px; }
+    .btn:hover { background: #4096ff; }
+    .log { background: #1e1e1e; color: #d4d4d4; border-radius: 8px; padding: 16px; margin-top: 16px; font-family: monospace; font-size: 13px; max-height: 400px; overflow-y: auto; line-height: 1.6; }
+    .log .success { color: #7ee787; }
+    .log .error { color: #f85149; }
+    .log .info { color: #79c0ff; }
+    .alert { background: #fff7e6; border: 1px solid #ffd591; border-radius: 8px; padding: 16px; color: #d46b08; margin: 16px 0; font-size: 14px; }
+    .alert.error { background: #fff2f0; border-color: #ffccc7; color: #cf1322; }
+    .alert.success { background: #f6ffed; border-color: #b7eb8f; color: #389e0d; }
+    code { background: #f0f0f0; padding: 2px 6px; border-radius: 4px; font-family: monospace; font-size: 13px; }
+    .solution { background: #f6ffed; border: 1px solid #b7eb8f; border-radius: 8px; padding: 16px; margin-top: 16px; }
+    .solution h3 { color: #389e0d; margin-bottom: 12px; }
+    .solution ol { margin-left: 20px; line-height: 2; }
+    .solution li { color: #333; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🔍 连接诊断工具</h1>
+    
+    <div class="card">
+      <h2>诊断测试</h2>
+      
+      <div class="test-item">
+        <div class="test-icon pending" id="icon-init">⏳</div>
+        <div class="test-content">
+          <h3>CloudBase 初始化</h3>
+          <p id="desc-init">检查 SDK 是否能正常加载</p>
+        </div>
+        <div class="test-status pending" id="status-init">等待测试</div>
+      </div>
+
+      <div class="test-item">
+        <div class="test-icon pending" id="icon-auth">⏳</div>
+        <div class="test-content">
+          <h3>匿名登录</h3>
+          <p id="desc-auth">检查是否能匿名登录（数据库访问需要）</p>
+        </div>
+        <div class="test-status pending" id="status-auth">等待测试</div>
+      </div>
+
+      <div class="test-item">
+        <div class="test-icon pending" id="icon-db">⏳</div>
+        <div class="test-content">
+          <h3>数据库连接</h3>
+          <p id="desc-db">检查是否能连接到 repairTickets 集合</p>
+        </div>
+        <div class="test-status pending" id="status-db">等待测试</div>
+      </div>
+
+      <div class="test-item">
+        <div class="test-icon pending" id="icon-read">⏳</div>
+        <div class="test-content">
+          <h3>数据读取</h3>
+          <p id="desc-read">检查是否能读取集合中的数据</p>
+        </div>
+        <div class="test-status pending" id="status-read">等待测试</div>
+      </div>
+
+      <div class="test-item">
+        <div class="test-icon pending" id="icon-write">⏳</div>
+        <div class="test-content">
+          <h3>数据写入</h3>
+          <p id="desc-write">检查是否能向集合写入数据</p>
+        </div>
+        <div class="test-status pending" id="status-write">等待测试</div>
+      </div>
+
+      <button class="btn" onclick="runDiagnostics()">🔍 开始诊断</button>
+    </div>
+
+    <div id="solution-box" style="display: none;"></div>
+
+    <div class="card">
+      <h2>详细日志</h2>
+      <div id="log" class="log">点击"开始诊断"查看详细信息...</div>
+    </div>
+  </div>
+
+  <script>
+    const ENV_ID = 'dorm-system-5g5k2k8k-1byd118ff42';
+    let cloudApp = null;
+    let cloudDB = null;
+    let auth = null;
+
+    function log(message, type) {
+      const el = document.getElementById('log');
+      const line = document.createElement('div');
+      line.className = type || '';
+      line.textContent = new Date().toLocaleTimeString() + ' ' + message;
+      el.appendChild(line);
+      el.scrollTop = el.scrollHeight;
+      console.log(message);
+    }
+
+    function setStatus(id, status, message, detail) {
+      const icon = document.getElementById('icon-' + id);
+      const statusEl = document.getElementById('status-' + id);
+      const desc = document.getElementById('desc-' + id);
+      
+      icon.className = 'test-icon ' + status;
+      statusEl.className = 'test-status ' + status;
+      statusEl.textContent = status === 'success' ? '通过' : status === 'error' ? '失败' : '等待测试';
+      
+      if (detail) {
+        desc.textContent = detail;
+        desc.style.color = status === 'error' ? '#ff4d4f' : '#666';
+      }
+      
+      icon.textContent = status === 'success' ? '✓' : status === 'error' ? '✗' : '⏳';
+    }
+
+    function showSolution(html) {
+      const box = document.getElementById('solution-box');
+      box.innerHTML = html;
+      box.style.display = 'block';
+    }
+
+    async function runDiagnostics() {
+      document.getElementById('log').innerHTML = '';
+      document.getElementById('solution-box').style.display = 'none';
+      
+      // 重置所有状态
+      ['init', 'auth', 'db', 'read', 'write'].forEach(id => {
+        setStatus(id, 'pending', '', '等待测试');
+      });
+
+      log('=== 开始诊断 ===', 'info');
+
+      // 测试 1: CloudBase 初始化
+      log('', '');
+      log('测试 1: CloudBase 初始化...', 'info');
+      try {
+        if (typeof tcb === 'undefined') {
+          throw new Error('CloudBase SDK 未加载');
+        }
+        cloudApp = tcb.init({ env: ENV_ID });
+        cloudDB = cloudApp.database();
+        auth = cloudApp.auth();
+        log('✅ CloudBase 初始化成功', 'success');
+        setStatus('init', 'success', '', 'SDK 加载正常');
+      } catch (e) {
+        log('❌ CloudBase 初始化失败: ' + e.message, 'error');
+        setStatus('init', 'error', '', e.message);
+        showSolution(`
+          <div class="alert error">
+            <strong>CloudBase SDK 加载失败</strong><br>
+            请检查网络连接，或刷新页面重试。
+          </div>
+        `);
+        return;
+      }
+
+      // 测试 2: 匿名登录
+      log('', '');
+      log('测试 2: 匿名登录...', 'info');
+      try {
+        await auth.signInAnonymously();
+        const loginState = await auth.getLoginState();
+        if (loginState) {
+          log('✅ 匿名登录成功', 'success');
+          setStatus('auth', 'success', '', '登录状态正常');
+        } else {
+          throw new Error('登录状态无效');
+        }
+      } catch (e) {
+        log('❌ 匿名登录失败: ' + e.message, 'error');
+        setStatus('auth', 'error', '', e.message);
+        showSolution(`
+          <div class="alert error">
+            <strong>匿名登录失败</strong><br>
+            请在腾讯云控制台开启匿名登录：<br>
+            <a href="https://console.cloud.tencent.com/tcb/auth?envId=${ENV_ID}" target="_blank">点击前往控制台 → 登录授权 → 启用匿名登录</a>
+          </div>
+        `);
+        return;
+      }
+
+      // 测试 3: 数据库连接
+      log('', '');
+      log('测试 3: 数据库连接...', 'info');
+      try {
+        const collections = await cloudDB.collections();
+        log('✅ 数据库连接成功', 'success');
+        log('📋 可用集合: ' + (collections.data || []).map(c => c.name).join(', '), 'info');
+        setStatus('db', 'success', '', '连接正常');
+      } catch (e) {
+        log('❌ 数据库连接失败: ' + e.message, 'error');
+        setStatus('db', 'error', '', e.message);
+        return;
+      }
+
+      // 测试 4: 读取 repairTickets
+      log('', '');
+      log('测试 4: 读取 repairTickets 集合...', 'info');
+      try {
+        const result = await cloudDB.collection('repairTickets').limit(1).get();
+        log('✅ 读取成功，找到 ' + (result.data?.length || 0) + ' 条记录', 'success');
+        setStatus('read', 'success', '', '读取权限正常');
+      } catch (e) {
+        log('❌ 读取失败: ' + e.message, 'error');
+        setStatus('read', 'error', '', e.message);
+        showSolution(`
+          <div class="alert error">
+            <strong>数据库读取失败</strong><br>
+            可能原因：<br>
+            1. 集合权限设置不正确（应为"所有用户可读，仅创建者可写"）<br>
+            2. 集合名称拼写错误（应为 repairTickets）<br><br>
+            <a href="https://console.cloud.tencent.com/tcb/database/collections?envId=${ENV_ID}" target="_blank">点击前往控制台检查</a>
+          </div>
+        `);
+        return;
+      }
+
+      // 测试 5: 写入测试
+      log('', '');
+      log('测试 5: 写入数据测试...', 'info');
+      try {
+        const testId = 'TEST_DIAG_' + Date.now();
+        await cloudDB.collection('repairTickets').add({
+          _id: testId,
+          ticketType: 'facility',
+          communityId: 'TEST',
+          dormId: 'TEST',
+          reporterId: 'diagnostic',
+          reporterName: '诊断测试',
+          category: '测试',
+          subCategory: '写入测试',
+          description: '自动诊断测试',
+          images: [],
+          urgency: 'normal',
+          status: 'reported',
+          reportedAt: new Date()
+        });
+        log('✅ 写入成功', 'success');
+        
+        // 清理测试数据
+        await cloudDB.collection('repairTickets').doc(testId).remove();
+        log('✅ 测试数据已清理', 'success');
+        setStatus('write', 'success', '', '写入权限正常');
+      } catch (e) {
+        log('❌ 写入失败: ' + e.message, 'error');
+        setStatus('write', 'error', '', e.message);
+        showSolution(`
+          <div class="alert error">
+            <strong>数据库写入失败</strong><br>
+            可能原因：<br>
+            1. 集合权限未设置为"所有用户可读，仅创建者可写"<br>
+            2. 安全规则限制了写入操作<br><br>
+            <a href="https://console.cloud.tencent.com/tcb/database/collections?envId=${ENV_ID}" target="_blank">点击前往控制台 → repairTickets → 权限设置</a>
+          </div>
+        `);
+        return;
+      }
+
+      // 全部通过
+      log('', '');
+      log('🎉 所有测试通过！数据库连接正常', 'success');
+      showSolution(`
+        <div class="solution">
+          <h3>✅ 诊断完成，一切正常！</h3>
+          <p>您的数据库配置正确，多端同步功能应该可以正常工作。</p>
+          <p><a href="/test-sync.html">→ 前往同步测试页面</a></p>
+        </div>
+      `);
+    }
+
+    // 页面加载时自动开始诊断
+    window.onload = function() {
+      log('点击"开始诊断"按钮开始测试...', 'info');
+    };
+  </script>
+</body>
+</html>

@@ -1,0 +1,27 @@
+{
+  "collectionName": "repairTickets",
+  "description": "维修工单表",
+  "createTime": "2026-03-17T11:30:00.000Z",
+  "updateTime": "2026-03-17T11:30:00.000Z",
+  "fields": [
+    { "name": "_id", "type": "String", "required": true },
+    { "name": "ticketType", "type": "String", "required": true },
+    { "name": "communityId", "type": "String", "required": true },
+    { "name": "dormId", "type": "String", "required": true },
+    { "name": "roomId", "type": "String" },
+    { "name": "reporterId", "type": "String", "required": true },
+    { "name": "reporterName", "type": "String", "required": true },
+    { "name": "category", "type": "String", "required": true },
+    { "name": "subCategory", "type": "String", "required": true },
+    { "name": "description", "type": "String", "required": true },
+    { "name": "images", "type": "Array" },
+    { "name": "urgency", "type": "String", "required": true },
+    { "name": "status", "type": "String", "required": true },
+    { "name": "assignedTo", "type": "String" },
+    { "name": "assignedName", "type": "String" },
+    { "name": "solution", "type": "String" },
+    { "name": "reportedAt", "type": "Date", "required": true },
+    { "name": "startedAt", "type": "Date" },
+    { "name": "completedDate", "type": "Date" }
+  ]
+}

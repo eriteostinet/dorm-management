@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>宿舍数据导入工具</title>
+  <script src="https://imgcache.qq.com/qcloud/tcbjs/1.10.8/tcb.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: -apple-system, BlinkMacSystemFont, sans-serif; background: #f0f2f5; padding: 20px; }
+    .container { max-width: 1000px; margin: 0 auto; }
+    h1 { color: #333; margin-bottom: 10px; }
+    .subtitle { color: #666; margin-bottom: 20px; font-size: 14px; }
+    .card { background: white; border-radius: 12px; padding: 24px; margin-bottom: 16px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+    .card h2 { font-size: 18px; margin-bottom: 16px; color: #1677ff; }
+    .upload-area {
+      border: 2px dashed #d9d9d9; border-radius: 8px; padding: 40px; text-align: center;
+      cursor: pointer; transition: all 0.3s;
+    }
+    .upload-area:hover { border-color: #1677ff; background: #f6ffed; }
+    .upload-area.dragover { border-color: #1677ff; background: #e6f7ff; }
+    .btn {
+      background: #1677ff; color: white; border: none; padding: 12px 24px; border-radius: 6px;
+      font-size: 14px; cursor: pointer; margin-right: 10px; margin-bottom: 10px;
+    }
+    .btn:hover { background: #4096ff; }
+    .btn-success { background: #52c41a; }
+    .btn-success:hover { background: #73d13d; }
+    .btn:disabled { background: #d9d9d9; cursor: not-allowed; }
+    table { width: 100%; border-collapse: collapse; margin-top: 16px; }
+    th, td { padding: 12px; text-align: left; border-bottom: 1px solid #f0f0f0; font-size: 14px; }
+    th { background: #f5f5f5; font-weight: 600; color: #333; }
+    tr:hover { background: #f8f9fa; }
+    .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin: 16px 0; }
+    .stat-box { background: #f5f5f5; border-radius: 8px; padding: 16px; text-align: center; }
+    .stat-box h3 { font-size: 24px; color: #1677ff; margin-bottom: 4px; }
+    .stat-box p { font-size: 12px; color: #666; }
+    .log {
+      background: #1e1e1e; color: #d4d4d4; border-radius: 8px; padding: 16px;
+      font-family: monospace; font-size: 13px; max-height: 300px; overflow-y: auto; margin-top: 16px;
+    }
+    .log .success { color: #7ee787; }
+    .log .error { color: #f85149; }
+    .log .info { color: #79c0ff; }
+    .alert { padding: 12px 16px; border-radius: 6px; margin-bottom: 16px; font-size: 14px; }
+    .alert-success { background: #f6ffed; border: 1px solid #b7eb8f; color: #389e0d; }
+    .alert-error { background: #fff2f0; border: 1px solid #ffccc7; color: #cf1322; }
+    .progress { width: 100%; height: 8px; background: #f0f0f0; border-radius: 4px; overflow: hidden; margin: 16px 0; }
+    .progress-bar { height: 100%; background: #1677ff; width: 0%; transition: width 0.3s; }
+    .preview-table { max-height: 400px; overflow-y: auto; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>📥 宿舍数据导入工具</h1>
+    <p class="subtitle">支持 Excel (.xlsx) 文件导入宿舍数据</p>
+
+    <!-- 文件上传 -->
+    <div class="card">
+      <h2>1. 上传 Excel 文件</h2>
+      <div class="upload-area" id="uploadArea" onclick="document.getElementById('fileInput').click()">
+        <p style="font-size: 48px; margin-bottom: 16px;">📁</p>
+        <p>点击或拖拽上传 Excel 文件</p>
+        <p style="color: #999; font-size: 13px; margin-top: 8px;">支持 .xlsx 格式，文件大小不超过 10MB</p>
+      </div>
+      <input type="file" id="fileInput" accept=".xlsx,.xls" style="display: none;">
+    </div>
+
+    <!-- 数据预览 -->
+    <div class="card" id="previewCard" style="display: none;">
+      <h2>2. 数据预览</h2>
+      <div class="stats">
+        <div class="stat-box">
+          <h3 id="previewTotal">0</h3>
+          <p>总记录数</p>
+        </div>
+        <div class="stat-box">
+          <h3 id="previewCommunities">0</h3>
+          <p>小区数量</p>
+        </div>
+        <div class="stat-box">
+          <h3 id="previewBuildings">0</h3>
+          <p>楼栋数量</p>
+        </div>
+        <div class="stat-box">
+          <h3 id="previewRooms">0</h3>
+          <p>房间数量</p>
+        </div>
+      </div>
+      
+      <div class="preview-table">
+        <table id="previewTable">
+          <thead></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+      
+      <div style="margin-top: 16px;">
+        <button class="btn btn-success" id="importBtn" onclick="importData()">🚀 开始导入</button>
+        <button class="btn" onclick="clearData()">🗑️ 清空</button>
+      </div>
+    </div>
+
+    <!-- 导入进度 -->
+    <div class="card" id="progressCard" style="display: none;">
+      <h2>3. 导入进度</h2>
+      <div id="progressAlert"></div>
+      <div class="progress">
+        <div class="progress-bar" id="progressBar"></div>
+      </div>
+      <p id="progressText">准备导入...</p>
+      <div class="log" id="importLog"></div>
+    </div>
+
+    <!-- 模板下载 -->
+    <div class="card">
+      <h2>📋 导入模板</h2>
+      <p style="color: #666; font-size: 14px; margin-bottom: 12px;">Excel 文件需要包含以下列：</p>
+      <table>
+        <thead>
+          <tr>
+            <th>列名</th>
+            <th>说明</th>
+            <th>示例</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>小区ID</td><td>小区唯一标识</td><td>C001, C002, C003</td></tr>
+          <tr><td>楼栋</td><td>楼栋名称</td><td>4栋2单元, 8栋</td></tr>
+          <tr><td>楼层</td><td>楼层数字</td><td>5, 12, 18</td></tr>
+          <tr><td>房间号</td><td>房间编号</td><td>505, 1204</td></tr>
+          <tr><td>户型(人间数)</td><td>房间容纳人数</td><td>1, 2, 3, 4</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <script>
+    const ENV_ID = 'dorm-system-5g5k2k8k-1byd118ff42';
+    let app = null;
+    let parsedData = [];
+
+    function init() {
+      app = tcb.init({ env: ENV_ID });
+      
+      // 匿名登录
+      app.auth().anonymousAuthProvider().signIn()
+        .then(() => {
+          console.log('匿名登录成功');
+        })
+        .catch(err => {
+          console.error('匿名登录失败:', err);
+        });
+      
+      setupDragDrop();
+      document.getElementById('fileInput').addEventListener('change', handleFileSelect);
+    }
+
+    function setupDragDrop() {
+      const uploadArea = document.getElementById('uploadArea');
+      
+      uploadArea.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        uploadArea.classList.add('dragover');
+      });
+      
+      uploadArea.addEventListener('dragleave', () => {
+        uploadArea.classList.remove('dragover');
+      });
+      
+      uploadArea.addEventListener('drop', (e) => {
+        e.preventDefault();
+        uploadArea.classList.remove('dragover');
+        const files = e.dataTransfer.files;
+        if (files.length > 0) {
+          processFile(files[0]);
+        }
+      });
+    }
+
+    function handleFileSelect(e) {
+      const file = e.target.files[0];
+      if (file) processFile(file);
+    }
+
+    function processFile(file) {
+      if (!file.name.endsWith('.xlsx') && !file.name.endsWith('.xls')) {
+        alert('请选择 Excel 文件 (.xlsx 或 .xls)');
+        return;
+      }
+
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        try {
+          const data = new Uint8Array(e.target.result);
+          const workbook = XLSX.read(data, { type: 'array' });
+          const firstSheet = workbook.Sheets[workbook.SheetNames[0]];
+          const jsonData = XLSX.utils.sheet_to_json(firstSheet, { header: 1 });
+          
+          // 解析数据（第一行是表头）
+          const headers = jsonData[0];
+          parsedData = jsonData.slice(1).map(row => {
+            const obj = {};
+            headers.forEach((header, index) => {
+              obj[header] = row[index];
+            });
+            return obj;
+          }).filter(row => row['小区ID']); // 过滤空行
+
+          showPreview();
+        } catch (err) {
+          alert('解析文件失败: ' + err.message);
+        }
+      };
+      reader.readAsArrayBuffer(file);
+    }
+
+    function showPreview() {
+      document.getElementById('previewCard').style.display = 'block';
+      
+      // 更新统计
+      const communities = [...new Set(parsedData.map(d => d['小区ID']))];
+      const buildings = [...new Set(parsedData.map(d => d['楼栋']))];
+      
+      document.getElementById('previewTotal').textContent = parsedData.length;
+      document.getElementById('previewCommunities').textContent = communities.length;
+      document.getElementById('previewBuildings').textContent = buildings.length;
+      document.getElementById('previewRooms').textContent = parsedData.length;
+
+      // 显示预览表格
+      const thead = document.querySelector('#previewTable thead');
+      const tbody = document.querySelector('#previewTable tbody');
+      
+      // 表头
+      if (parsedData.length > 0) {
+        const headers = Object.keys(parsedData[0]);
+        thead.innerHTML = '<tr>' + headers.map(h => `<th>${h}</th>`).join('') + '</tr>';
+        
+        // 前20行数据
+        tbody.innerHTML = parsedData.slice(0, 20).map(row => {
+          return '<tr>' + headers.map(h => `<td>${row[h] || ''}</td>`).join('') + '</tr>';
+        }).join('');
+        
+        if (parsedData.length > 20) {
+          tbody.innerHTML += `<tr><td colspan="${headers.length}" style="text-align: center; color: #999;">... 还有 ${parsedData.length - 20} 行数据 ...</td></tr>`;
+        }
+      }
+
+      // 滚动到预览区域
+      document.getElementById('previewCard').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    async function importData() {
+      if (parsedData.length === 0) {
+        alert('请先上传文件');
+        return;
+      }
+
+      const btn = document.getElementById('importBtn');
+      btn.disabled = true;
+      
+      document.getElementById('progressCard').style.display = 'block';
+      const logEl = document.getElementById('importLog');
+      logEl.innerHTML = '';
+      
+      function log(msg, type) {
+        const line = document.createElement('div');
+        line.className = type || '';
+        line.textContent = new Date().toLocaleTimeString() + ' ' + msg;
+        logEl.appendChild(line);
+        logEl.scrollTop = logEl.scrollHeight;
+      }
+
+      log(`开始导入 ${parsedData.length} 条宿舍数据...`, 'info');
+
+      // 转换数据格式
+      const importData = parsedData.map((row, index) => ({
+        _id: `DORM_${row['小区ID']}_${row['楼栋']}_${row['房间号']}`.replace(/[^a-zA-Z0-9_-]/g, '_'),
+        communityId: row['小区ID'],
+        building: row['楼栋'],
+        floor: parseInt(row['楼层']) || 1,
+        roomNumber: String(row['房间号']),
+        layout: parseInt(row['户型(人间数)']) || 4,
+        status: 'normal',
+        currentOccupants: 0,
+        createdAt: new Date()
+      }));
+
+      // 获取数据库引用
+      const db = app.database();
+      let success = 0;
+      let failed = 0;
+      let updated = 0;
+      
+      log('正在连接数据库...', 'info');
+      
+      for (let i = 0; i < importData.length; i++) {
+        const item = importData[i];
+        const progress = Math.round((i / importData.length) * 100);
+        
+        document.getElementById('progressBar').style.width = progress + '%';
+        document.getElementById('progressText').textContent = `导入中... ${i + 1}/${importData.length}`;
+        
+        try {
+          // 先尝试添加
+          await db.collection('dorms').add(item);
+          success++;
+          if (i < 5 || i % 20 === 0) {
+            log(`✓ ${item.building} ${item.roomNumber}`, 'success');
+          }
+        } catch (err) {
+          // 如果已存在，尝试更新
+          const errMsg = err.message || String(err);
+          if (errMsg.includes('duplicate') || errMsg.includes('已存在') || err.code === 'DATABASE_DUPLICATE_KEY') {
+            try {
+              const { _id, ...updateData } = item;
+              await db.collection('dorms').doc(_id).update(updateData);
+              updated++;
+              if (i < 5 || i % 20 === 0) {
+                log(`↻ ${item.building} ${item.roomNumber} (更新)`, 'info');
+              }
+            } catch (e) {
+              failed++;
+              log(`✗ ${item.building} ${item.roomNumber}: ${e.message || String(e)}`, 'error');
+            }
+          } else {
+            failed++;
+            log(`✗ ${item.building} ${item.roomNumber}: ${errMsg}`, 'error');
+            // 如果连续失败超过5次，可能是权限问题，停止导入
+            if (failed > 5 && i < 10) {
+              log('', '');
+              log('检测到连续失败，可能是数据库权限问题', 'error');
+              log('请前往腾讯云 CloudBase 控制台开启匿名登录', 'info');
+              break;
+            }
+          }
+        }
+        
+        // 每10条延迟一下避免请求过快
+        if (i % 10 === 0) {
+          await new Promise(r => setTimeout(r, 100));
+        }
+      }
+
+      document.getElementById('progressBar').style.width = '100%';
+      document.getElementById('progressText').textContent = `导入完成！新增: ${success}, 更新: ${updated}, 失败: ${failed}`;
+      
+      log('', '');
+      log('========== 导入完成 ==========', 'info');
+      log(`总计: ${importData.length} 条`, 'info');
+      log(`新增: ${success} 条`, 'success');
+      log(`更新: ${updated} 条`, 'info');
+      if (failed > 0) log(`失败: ${failed} 条`, 'error');
+      
+      const alertType = failed > 0 ? 'error' : 'success';
+      showAlert('progressAlert', `导入完成！新增: ${success}, 更新: ${updated}, 失败: ${failed}`, alertType);
+      
+      btn.disabled = false;
+    }
+
+    function clearData() {
+      parsedData = [];
+      document.getElementById('previewCard').style.display = 'none';
+      document.getElementById('progressCard').style.display = 'none';
+      document.getElementById('fileInput').value = '';
+    }
+
+    function showAlert(elementId, message, type) {
+      const el = document.getElementById(elementId);
+      el.innerHTML = `<div class="alert alert-${type}">${message}</div>`;
+    }
+
+    window.onload = init;
+  </script>
+</body>
+</html>

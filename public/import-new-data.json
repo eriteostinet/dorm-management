@@ -1,0 +1,4685 @@
+{
+  "communities": [
+    {
+      "_id": "C001",
+      "name": "天悦龙庭",
+      "address": "天悦龙庭",
+      "manager": "管理员",
+      "managerPhone": "",
+      "status": "active"
+    },
+    {
+      "_id": "C002",
+      "name": "黄鱼涌",
+      "address": "黄鱼涌",
+      "manager": "管理员",
+      "managerPhone": "",
+      "status": "active"
+    },
+    {
+      "_id": "C003",
+      "name": "金湾花园",
+      "address": "金湾花园",
+      "manager": "管理员",
+      "managerPhone": "",
+      "status": "active"
+    }
+  ],
+  "dorms": [
+    {
+      "_id": "D001",
+      "communityId": "C001",
+      "building": "4栋2单元",
+      "floor": 0,
+      "layout": 4,
+      "status": "active"
+    },
+    {
+      "_id": "D002",
+      "communityId": "C001",
+      "building": "8栋",
+      "floor": 0,
+      "layout": 4,
+      "status": "active"
+    },
+    {
+      "_id": "D003",
+      "communityId": "C002",
+      "floor": 0,
+      "layout": 4,
+      "status": "active"
+    },
+    {
+      "_id": "D004",
+      "communityId": "C003",
+      "building": "5栋2单元",
+      "floor": 0,
+      "layout": 4,
+      "status": "active"
+    }
+  ],
+  "rooms": [
+    {
+      "_id": "R001",
+      "dormId": "D001",
+      "communityId": "C001",
+      "roomNo": "505",
+      "status": "vacant",
+      "occupantName": "",
+      "occupantId": "",
+      "occupantDept": ""
+    },
+    {
+      "_id": "R002",
+      "dormId": "D001",
+      "communityId": "C001",
+      "roomNo": "506",
+      "status": "vacant",
+      "occupantName": "",
+      "occupantId": "",
+      "occupantDept": ""
+    },
+    {
+      "_id": "R003",
+      "dormId": "D001",
+      "communityId": "C001",
+      "roomNo": "605",
+      "status": "vacant",
+      "occupantName": "",
+      "occupantId": "",
+      "occupantDept": ""
+    },
+    {
+      "_id": "R004",
+      "dormId": "D001",
+      "communityId": "C001",
+      "roomNo": "606",
+      "status": "vacant",
+      "occupantName": "",
+      "occupantId": "",
+      "occupantDept": ""
+    },
+    {
+      "_id": "R005",
+      "dormId": "D001",
+      "communityId": "C001",
+      "roomNo": "706",
+      "status": "vacant",
+      "occupantName": "",
+      "occupantId": "",
+      "occupantDept": ""
+    },
+    {
+      "_id": "R006",
+      "dormId": "D001",
+      "communityId": "C001",
+      "roomNo": "804",
+      "status": "vacant",
+      "occupantName": "",
+      "occupantId": "",
+      "occupantDept": ""
+    },
+    {
+      "_id": "R007",
+      "dormId": "D001",
+      "communityId": "C001",
+      "roomNo": "904",
+      "status": "vacant",
+      "occupantName": "",
+      "occupantId": "",
+      "occupantDept": ""
+    },
+    {
+      "_id": "R008",
+      "dormId": "D001",
+      "communityId": "C001",
+      "roomNo": "906",
+      "status": "vacant",
+      "occupantName": "",
+      "occupantId": "",
+      "occupantDept": ""
+    },
+    {
+      "_id": "R009",
+      "dormId": "D001",
+      "communityId": "C001",
+      "roomNo": "1004",
+      "status": "vacant",
+      "occupantName": "",
+      "occupantId": "",
+      "occupantDept": ""
+    },
+    {
+      "_id": "R010",
+      "dormId": "D001",
+      "communityId": "C001",
+      "roomNo": "1104",
+      "status": "vacant",
+      "occupantName": "",
+      "occupantId": "",
+      "occupantDept": ""
+    },
+    {
+      "_id": "R011",
+      "dormId": "D001",
+      "communityId": "C001",
+      "roomNo": "1106",
+      "status": "vacant",
+      "occupantName": "",
+      "occupantId": "",
+      "occupantDept": ""
+    },
+    {
+      "_id": "R012",
+      "dormId": "D001",
+      "communityId": "C001",
+      "roomNo": "1204",
+      "status": "vacant",
+      "occupantName": "",
+      "occupantId": "",
+      "occupantDept": ""
+    },
+    {
+      "_id": "R013",
+      "dormId": "D001",
+      "communityId": "C001",
+      "roomNo": "1205",
+      "status": "vacant",
+      "occupantName": "",
+      "occupantId": "",
+      "occupantDept": ""
+    },
+    {
+      "_id": "R014",
+      "dormId": "D001",
+      "communityId": "C001",
+      "roomNo": "1206",
+      "status": "vacant",
+      "occupantName": "",
+      "occupantId": "",
+      "occupantDept": ""
+    },
+    {
+      "_id": "R015",
+      "dormId": "D001",
+      "communityId": "C001",
+      "roomNo": "1304",
+      "status": "vacant",
+      "occupantName": "",
+      "occupantId": "",
+      "occupantDept": ""
+    },
+    {
+      "_id": "R016",
+      "dormId": "D001",
+      "communityId": "C001",
+      "roomNo": "1305",
+      "status": "vacant",
+      "occupantName": "",
+      "occupantId": "",
+      "occupantDept": ""
+    },
+    {
+      "_id": "R017",
+      "dormId": "D001",
+      "communityId": "C001",
+      "roomNo": "1306",
+      "status": "vacant",
+      "occupantName": "",
+      "occupantId": "",
+      "occupantDept": ""
+    },
+    {
+      "_id": "R018",
+      "dormId": "D001",
+      "communityId": "C001",
+      "roomNo": "1404",
+      "status": "vacant",
+      "occupantName": "",
+      "occupantId": "",
+      "occupantDept": ""
+    },
+    {
+      "_id": "R019",
+      "dormId": "D001",
+      "communityId": "C001",
+      "roomNo": "1405",
+      "status": "vacant",
+      "occupantName": "",
+      "occupantId": "",
+      "occupantDept": ""
+    },
+    {
+      "_id": "R020",
+      "dormId": "D001",
+      "communityId": "C001",
+      "roomNo": "1406",
+      "status": "vacant",
+      "occupantName": "",
+      "occupantId": "",
+      "occupantDept": ""
+    },
+    {
+      "_id": "R021",
+      "dormId": "D001",
+      "communityId": "C001",
+      "roomNo": "1506",
+      "status": "vacant",
+      "occupantName": "",
+      "occupantId": "",
+      "occupantDept": ""
+    },
+    {
+      "_id": "R022",
+      "dormId": "D001",
+      "communityId": "C001",
+      "roomNo": "1606",
+      "status": "vacant",
+      "occupantName": "",
+      "occupantId": "",
+      "occupantDept": ""
+    },
+    {
+      "_id": "R023",
+      "dormId": "D001",
+      "communityId": "C001",
+      "roomNo": "1706",
+      "status": "vacant",
+      "occupantName": "",
+      "occupantId": "",
+      "occupantDept": ""
+    },
+    {
+      "_id": "R024",
+      "dormId": "D001",
+      "communityId": "C001",
+      "roomNo": "1805",
+      "status": "vacant",
+      "occupantName": "",
+      "occupantId": "",
+      "occupantDept": ""
+    },
+    {
+      "_id": "R025",
+      "dormId": "D001",
+      "communityId": "C001",
+      "roomNo": "1806",
+      "status": "vacant",
+      "occupantName": "",
+      "occupantId": "",
+      "occupantDept": ""
+    },
+    {
+      "_id": "R026",
+      "dormId": "D001",
+      "communityId": "C001",
+      "roomNo": "1905",
+      "status": "vacant",
+      "occupantName": "",
+      "occupantId": "",
+      "occupantDept": ""
+    },
+    {
+      "_id": "R027",
+      "dormId": "D001",
+      "communityId": "C001",
+      "roomNo": "1906",
+      "status": "vacant",
+      "occupantName": "",
+      "occupantId": "",
+      "occupantDept": ""
+    },
+    {
+      "_id": "R028",
+      "dormId": "D001",
+      "communityId": "C001",
+      "roomNo": "2005",
+      "status": "vacant",
+      "occupantName": "",
+      "occupantId": "",
+      "occupantDept": ""
+    },
+    {
+      "_id": "R029",
+      "dormId": "D001",
+      "communityId": "C001",
+      "roomNo": "2006",
+      "status": "vacant",
+      "occupantName": "",
+      "occupantId": "",
+      "occupantDept": ""
+    },
+    {
+      "_id": "R030",
+      "dormId": "D001",
+      "communityId": "C001",
+      "roomNo": "2106",
+      "status": "vacant",
+      "occupantName": "",
+      "occupantId": "",
+      "occupantDept": ""
+    },
+    {
+      "_id": "R031",
+      "dormId": "D001",
+      "communityId": "C001",
+      "roomNo": "2306",
+      "status": "vacant",
+      "occupantName": "",
+      "occupantId": "",
+      "occupantDept": ""
+    },
+    {
+      "_id": "R032",
+      "dormId": "D001",
+      "communityId": "C001",
+      "roomNo": "2405",
+      "status": "vacant",
+      "occupantName": "",
+      "occupantId": "",
+      "occupantDept": ""
+    },
+    {
+      "_id": "R033",
+      "dormId": "D001",
+      "communityId": "C001",
+      "roomNo": "2406",
+      "status": "vacant",
+      "occupantName": "",
+      "occupantId": "",
+      "occupantDept": ""
+    },
+    {
+      "_id": "R034",
+      "dormId": "D001",
+      "communityId": "C001",
+      "roomNo": "2606",
+      "status": "vacant",
+      "occupantName": "",
+      "occupantId": "",
+      "occupantDept": ""
+    },
+    {
+      "_id": "R035",
+      "dormId": "D001",
+      "communityId": "C001",
+      "roomNo": "2706",
+      "status": "vacant",
+      "occupantName": "",
+      "occupantId": "",
+      "occupantDept": ""
+    },
+    {
+      "_id": "R036",
+      "dormId": "D001",
+      "communityId": "C001",
+      "roomNo": "2806",
+      "status": "vacant",
+      "occupantName": "",
+      "occupantId": "",
+      "occupantDept": ""
+    },
+    {
+      "_id": "R037",
+      "dormId": "D001",
+      "communityId": "C001",
+      "roomNo": "2905",
+      "status": "vacant",
+      "occupantName": "",
+      "occupantId": "",
+      "occupantDept": ""
+    },
+    {
+      "_id": "R038",
+      "dormId": "D001",
+      "communityId": "C001",
+      "roomNo": "3005",
+      "status": "vacant",
+      "occupantName": "",
+      "occupantId": "",
+      "occupantDept": ""
+    },
+    {
+      "_id": "R039",
+      "dormId": "D001",
+      "communityId": "C001",
+      "roomNo": "3006",
+      "status": "vacant",
+      "occupantName": "",
+      "occupantId": "",
+      "occupantDept": ""
+    },
+    {
+      "_id": "R040",
+      "dormId": "D002",
+      "communityId": "C001",
+      "roomNo": "1204",
+      "status": "vacant",
+      "occupantName": "",
+      "occupantId": "",
+      "occupantDept": ""
+    },
+    {
+      "_id": "R041",
+      "dormId": "D002",
+      "communityId": "C001",
+      "roomNo": "1304",
+      "status": "vacant",
+      "occupantName": "",
+      "occupantId": "",
+      "occupantDept": ""
+    },
+    {
+      "_id": "R042",
+      "dormId": "D002",
+      "communityId": "C001",
+      "roomNo": "1604",
+      "status": "vacant",
+      "occupantName": "",
+      "occupantId": "",
+      "occupantDept": ""
+    },
+    {
+      "_id": "R043",
+      "dormId": "D003",
+      "communityId": "C002",
+      "roomNo": "201",
+      "status": "occupied",
+      "occupantName": "邱芊潭",
+      "occupantId": "",
+      "occupantDept": ""
+    },
+    {
+      "_id": "R044",
+      "dormId": "D003",
+      "communityId": "C002",
+      "roomNo": "202",
+      "status": "vacant",
+      "occupantName": "",
+      "occupantId": "",
+      "occupantDept": ""
+    },
+    {
+      "_id": "R045",
+      "dormId": "D003",
+      "communityId": "C002",
+      "roomNo": "203",
+      "status": "vacant",
+      "occupantName": "",
+      "occupantId": "",
+      "occupantDept": ""
+    },
+    {
+      "_id": "R046",
+      "dormId": "D003",
+      "communityId": "C002",
+      "roomNo": "204",
+      "status": "vacant",
+      "occupantName": "",
+      "occupantId": "",
+      "occupantDept": ""
+    },
+    {
+      "_id": "R047",
+      "dormId": "D003",
+      "communityId": "C002",
+      "roomNo": "205",
+      "status": "occupied",
+      "occupantName": "刘耀章",
+      "occupantId": "",
+      "occupantDept": ""
+    },
+    {
+      "_id": "R048",
+      "dormId": "D003",
+      "communityId": "C002",
+      "roomNo": "206",
+      "status": "vacant",
+      "occupantName": "",
+      "occupantId": "",
+      "occupantDept": ""
+    },
+    {
+      "_id": "R049",
+      "dormId": "D003",
+      "communityId": "C002",
+      "roomNo": "207",
+      "status": "occupied",
+      "occupantName": "王立新",
+      "occupantId": "",
+      "occupantDept": ""
+    },
+    {
+      "_id": "R050",
+      "dormId": "D003",
+      "communityId": "C002",
+      "roomNo": "208",
+      "status": "occupied",
+      "occupantName": "赵艺霖",
+      "occupantId": "",
+      "occupantDept": ""
+    },
+    {
+      "_id": "R051",
+      "dormId": "D003",
+      "communityId": "C002",
+      "roomNo": "209",
+      "status": "vacant",
+      "occupantName": "",
+      "occupantId": "",
+      "occupantDept": ""
+    },
+    {
+      "_id": "R052",
+      "dormId": "D003",
+      "communityId": "C002",
+      "roomNo": "210",
+      "status": "vacant",
+      "occupantName": "",
+      "occupantId": "",
+      "occupantDept": ""
+    },
+    {
+      "_id": "R053",
+      "dormId": "D003",
+      "communityId": "C002",
+      "roomNo": "211",
+      "status": "occupied",
+      "occupantName": "陈金应",
+      "occupantId": "",
+      "occupantDept": ""
+    },
+    {
+      "_id": "R054",
+      "dormId": "D003",
+      "communityId": "C002",
+      "roomNo": "212",
+      "status": "occupied",
+      "occupantName": "严昌理",
+      "occupantId": "",
+      "occupantDept": ""
+    },
+    {
+      "_id": "R055",
+      "dormId": "D003",
+      "communityId": "C002",
+      "roomNo": "301",
+      "status": "occupied",
+      "occupantName": "谭剑锋",
+      "occupantId": "",
+      "occupantDept": ""
+    },
+    {
+      "_id": "R056",
+      "dormId": "D003",
+      "communityId": "C002",
+      "roomNo": "302",
+      "status": "occupied",
+      "occupantName": "李军",
+      "occupantId": "",
+      "occupantDept": ""
+    },
+    {
+      "_id": "R057",
+      "dormId": "D003",
+      "communityId": "C002",
+      "roomNo": "303",
+      "status": "vacant",
+      "occupantName": "",
+      "occupantId": "",
+      "occupantDept": ""
+    },
+    {
+      "_id": "R058",
+      "dormId": "D003",
+      "communityId": "C002",
+      "roomNo": "304",
+      "status": "vacant",
+      "occupantName": "",
+      "occupantId": "",
+      "occupantDept": ""
+    },
+    {
+      "_id": "R059",
+      "dormId": "D003",
+      "communityId": "C002",
+      "roomNo": "305",
+      "status": "occupied",
+      "occupantName": "黄森",
+      "occupantId": "",
+      "occupantDept": ""
+    },
+    {
+      "_id": "R060",
+      "dormId": "D003",
+      "communityId": "C002",
+      "roomNo": "306",
+      "status": "vacant",
+      "occupantName": "",
+      "occupantId": "",
+      "occupantDept": ""
+    },
+    {
+      "_id": "R061",
+      "dormId": "D003",
+      "communityId": "C002",
+      "roomNo": "307",
+      "status": "occupied",
+      "occupantName": "范劲松",
+      "occupantId": "",
+      "occupantDept": ""
+    },
+    {
+      "_id": "R062",
+      "dormId": "D003",
+      "communityId": "C002",
+      "roomNo": "308",
+      "status": "occupied",
+      "occupantName": "宋恩明",
+      "occupantId": "",
+      "occupantDept": ""
+    },
+    {
+      "_id": "R063",
+      "dormId": "D003",
+      "communityId": "C002",
+      "roomNo": "309",
+      "status": "vacant",
+      "occupantName": "",
+      "occupantId": "",
+      "occupantDept": ""
+    },
+    {
+      "_id": "R064",
+      "dormId": "D003",
+      "communityId": "C002",
+      "roomNo": "310",
+      "status": "vacant",
+      "occupantName": "",
+      "occupantId": "",
+      "occupantDept": ""
+    },
+    {
+      "_id": "R065",
+      "dormId": "D003",
+      "communityId": "C002",
+      "roomNo": "311",
+      "status": "occupied",
+      "occupantName": "阳飞云",
+      "occupantId": "",
+      "occupantDept": ""
+    },
+    {
+      "_id": "R066",
+      "dormId": "D003",
+      "communityId": "C002",
+      "roomNo": "312",
+      "status": "occupied",
+      "occupantName": "黄基耀",
+      "occupantId": "",
+      "occupantDept": ""
+    },
+    {
+      "_id": "R067",
+      "dormId": "D003",
+      "communityId": "C002",
+      "roomNo": "401",
+      "status": "occupied",
+      "occupantName": "胡孝东",
+      "occupantId": "",
+      "occupantDept": ""
+    },
+    {
+      "_id": "R068",
+      "dormId": "D003",
+      "communityId": "C002",
+      "roomNo": "402",
+      "status": "occupied",
+      "occupantName": "王德生",
+      "occupantId": "",
+      "occupantDept": ""
+    },
+    {
+      "_id": "R069",
+      "dormId": "D003",
+      "communityId": "C002",
+      "roomNo": "403",
+      "status": "vacant",
+      "occupantName": "",
+      "occupantId": "",
+      "occupantDept": ""
+    },
+    {
+      "_id": "R070",
+      "dormId": "D003",
+      "communityId": "C002",
+      "roomNo": "404",
+      "status": "vacant",
+      "occupantName": "",
+      "occupantId": "",
+      "occupantDept": ""
+    },
+    {
+      "_id": "R071",
+      "dormId": "D003",
+      "communityId": "C002",
+      "roomNo": "405",
+      "status": "occupied",
+      "occupantName": "陈正威",
+      "occupantId": "",
+      "occupantDept": ""
+    },
+    {
+      "_id": "R072",
+      "dormId": "D003",
+      "communityId": "C002",
+      "roomNo": "406",
+      "status": "vacant",
+      "occupantName": "",
+      "occupantId": "",
+      "occupantDept": ""
+    },
+    {
+      "_id": "R073",
+      "dormId": "D003",
+      "communityId": "C002",
+      "roomNo": "407",
+      "status": "occupied",
+      "occupantName": "汤景超",
+      "occupantId": "",
+      "occupantDept": ""
+    },
+    {
+      "_id": "R074",
+      "dormId": "D003",
+      "communityId": "C002",
+      "roomNo": "408",
+      "status": "occupied",
+      "occupantName": "肖杰传",
+      "occupantId": "",
+      "occupantDept": ""
+    },
+    {
+      "_id": "R075",
+      "dormId": "D003",
+      "communityId": "C002",
+      "roomNo": "409",
+      "status": "vacant",
+      "occupantName": "",
+      "occupantId": "",
+      "occupantDept": ""
+    },
+    {
+      "_id": "R076",
+      "dormId": "D003",
+      "communityId": "C002",
+      "roomNo": "410",
+      "status": "vacant",
+      "occupantName": "",
+      "occupantId": "",
+      "occupantDept": ""
+    },
+    {
+      "_id": "R077",
+      "dormId": "D003",
+      "communityId": "C002",
+      "roomNo": "411",
+      "status": "occupied",
+      "occupantName": "张进军",
+      "occupantId": "",
+      "occupantDept": ""
+    },
+    {
+      "_id": "R078",
+      "dormId": "D003",
+      "communityId": "C002",
+      "roomNo": "412",
+      "status": "occupied",
+      "occupantName": "李秋彦",
+      "occupantId": "",
+      "occupantDept": ""
+    },
+    {
+      "_id": "R079",
+      "dormId": "D003",
+      "communityId": "C002",
+      "roomNo": "501",
+      "status": "occupied",
+      "occupantName": "徐武军",
+      "occupantId": "",
+      "occupantDept": ""
+    },
+    {
+      "_id": "R080",
+      "dormId": "D003",
+      "communityId": "C002",
+      "roomNo": "502",
+      "status": "occupied",
+      "occupantName": "刘望春",
+      "occupantId": "",
+      "occupantDept": ""
+    },
+    {
+      "_id": "R081",
+      "dormId": "D003",
+      "communityId": "C002",
+      "roomNo": "503",
+      "status": "vacant",
+      "occupantName": "",
+      "occupantId": "",
+      "occupantDept": ""
+    },
+    {
+      "_id": "R082",
+      "dormId": "D003",
+      "communityId": "C002",
+      "roomNo": "504",
+      "status": "vacant",
+      "occupantName": "",
+      "occupantId": "",
+      "occupantDept": ""
+    },
+    {
+      "_id": "R083",
+      "dormId": "D003",
+      "communityId": "C002",
+      "roomNo": "505",
+      "status": "occupied",
+      "occupantName": "陈春林",
+      "occupantId": "",
+      "occupantDept": ""
+    },
+    {
+      "_id": "R084",
+      "dormId": "D003",
+      "communityId": "C002",
+      "roomNo": "506",
+      "status": "vacant",
+      "occupantName": "",
+      "occupantId": "",
+      "occupantDept": ""
+    },
+    {
+      "_id": "R085",
+      "dormId": "D003",
+      "communityId": "C002",
+      "roomNo": "507",
+      "status": "occupied",
+      "occupantName": "刘东",
+      "occupantId": "",
+      "occupantDept": ""
+    },
+    {
+      "_id": "R086",
+      "dormId": "D003",
+      "communityId": "C002",
+      "roomNo": "508",
+      "status": "occupied",
+      "occupantName": "王建军",
+      "occupantId": "",
+      "occupantDept": ""
+    },
+    {
+      "_id": "R087",
+      "dormId": "D003",
+      "communityId": "C002",
+      "roomNo": "509",
+      "status": "vacant",
+      "occupantName": "",
+      "occupantId": "",
+      "occupantDept": ""
+    },
+    {
+      "_id": "R088",
+      "dormId": "D003",
+      "communityId": "C002",
+      "roomNo": "510",
+      "status": "vacant",
+      "occupantName": "",
+      "occupantId": "",
+      "occupantDept": ""
+    },
+    {
+      "_id": "R089",
+      "dormId": "D003",
+      "communityId": "C002",
+      "roomNo": "511",
+      "status": "occupied",
+      "occupantName": "张波",
+      "occupantId": "",
+      "occupantDept": ""
+    },
+    {
+      "_id": "R090",
+      "dormId": "D003",
+      "communityId": "C002",
+      "roomNo": "512",
+      "status": "occupied",
+      "occupantName": "计文杰",
+      "occupantId": "",
+      "occupantDept": ""
+    },
+    {
+      "_id": "R091",
+      "dormId": "D003",
+      "communityId": "C002",
+      "roomNo": "601",
+      "status": "occupied",
+      "occupantName": "骆建宏",
+      "occupantId": "",
+      "occupantDept": ""
+    },
+    {
+      "_id": "R092",
+      "dormId": "D003",
+      "communityId": "C002",
+      "roomNo": "602",
+      "status": "occupied",
+      "occupantName": "代华琼",
+      "occupantId": "",
+      "occupantDept": ""
+    },
+    {
+      "_id": "R093",
+      "dormId": "D003",
+      "communityId": "C002",
+      "roomNo": "603",
+      "status": "vacant",
+      "occupantName": "",
+      "occupantId": "",
+      "occupantDept": ""
+    },
+    {
+      "_id": "R094",
+      "dormId": "D003",
+      "communityId": "C002",
+      "roomNo": "604",
+      "status": "vacant",
+      "occupantName": "",
+      "occupantId": "",
+      "occupantDept": ""
+    },
+    {
+      "_id": "R095",
+      "dormId": "D003",
+      "communityId": "C002",
+      "roomNo": "605",
+      "status": "occupied",
+      "occupantName": "李小红",
+      "occupantId": "",
+      "occupantDept": ""
+    },
+    {
+      "_id": "R096",
+      "dormId": "D003",
+      "communityId": "C002",
+      "roomNo": "606",
+      "status": "vacant",
+      "occupantName": "",
+      "occupantId": "",
+      "occupantDept": ""
+    },
+    {
+      "_id": "R097",
+      "dormId": "D003",
+      "communityId": "C002",
+      "roomNo": "607",
+      "status": "occupied",
+      "occupantName": "戴红娟",
+      "occupantId": "",
+      "occupantDept": ""
+    },
+    {
+      "_id": "R098",
+      "dormId": "D003",
+      "communityId": "C002",
+      "roomNo": "608",
+      "status": "occupied",
+      "occupantName": "王春林",
+      "occupantId": "",
+      "occupantDept": ""
+    },
+    {
+      "_id": "R099",
+      "dormId": "D003",
+      "communityId": "C002",
+      "roomNo": "609",
+      "status": "vacant",
+      "occupantName": "",
+      "occupantId": "",
+      "occupantDept": ""
+    },
+    {
+      "_id": "R100",
+      "dormId": "D003",
+      "communityId": "C002",
+      "roomNo": "610",
+      "status": "vacant",
+      "occupantName": "",
+      "occupantId": "",
+      "occupantDept": ""
+    },
+    {
+      "_id": "R101",
+      "dormId": "D003",
+      "communityId": "C002",
+      "roomNo": "611",
+      "status": "occupied",
+      "occupantName": "胡波",
+      "occupantId": "",
+      "occupantDept": ""
+    },
+    {
+      "_id": "R102",
+      "dormId": "D003",
+      "communityId": "C002",
+      "roomNo": "612",
+      "status": "occupied",
+      "occupantName": "莫再仁",
+      "occupantId": "",
+      "occupantDept": ""
+    },
+    {
+      "_id": "R103",
+      "dormId": "D004",
+      "communityId": "C003",
+      "roomNo": "502",
+      "status": "vacant",
+      "occupantName": "",
+      "occupantId": "",
+      "occupantDept": ""
+    },
+    {
+      "_id": "R104",
+      "dormId": "D004",
+      "communityId": "C003",
+      "roomNo": "505",
+      "status": "vacant",
+      "occupantName": "",
+      "occupantId": "",
+      "occupantDept": ""
+    },
+    {
+      "_id": "R105",
+      "dormId": "D004",
+      "communityId": "C003",
+      "roomNo": "602",
+      "status": "vacant",
+      "occupantName": "",
+      "occupantId": "",
+      "occupantDept": ""
+    },
+    {
+      "_id": "R106",
+      "dormId": "D004",
+      "communityId": "C003",
+      "roomNo": "604",
+      "status": "vacant",
+      "occupantName": "",
+      "occupantId": "",
+      "occupantDept": ""
+    },
+    {
+      "_id": "R107",
+      "dormId": "D004",
+      "communityId": "C003",
+      "roomNo": "605",
+      "status": "vacant",
+      "occupantName": "",
+      "occupantId": "",
+      "occupantDept": ""
+    },
+    {
+      "_id": "R108",
+      "dormId": "D004",
+      "communityId": "C003",
+      "roomNo": "606",
+      "status": "vacant",
+      "occupantName": "",
+      "occupantId": "",
+      "occupantDept": ""
+    },
+    {
+      "_id": "R109",
+      "dormId": "D004",
+      "communityId": "C003",
+      "roomNo": "701",
+      "status": "vacant",
+      "occupantName": "",
+      "occupantId": "",
+      "occupantDept": ""
+    },
+    {
+      "_id": "R110",
+      "dormId": "D004",
+      "communityId": "C003",
+      "roomNo": "702",
+      "status": "vacant",
+      "occupantName": "",
+      "occupantId": "",
+      "occupantDept": ""
+    },
+    {
+      "_id": "R111",
+      "dormId": "D004",
+      "communityId": "C003",
+      "roomNo": "703",
+      "status": "vacant",
+      "occupantName": "",
+      "occupantId": "",
+      "occupantDept": ""
+    },
+    {
+      "_id": "R112",
+      "dormId": "D004",
+      "communityId": "C003",
+      "roomNo": "704",
+      "status": "vacant",
+      "occupantName": "",
+      "occupantId": "",
+      "occupantDept": ""
+    },
+    {
+      "_id": "R113",
+      "dormId": "D004",
+      "communityId": "C003",
+      "roomNo": "705",
+      "status": "vacant",
+      "occupantName": "",
+      "occupantId": "",
+      "occupantDept": ""
+    },
+    {
+      "_id": "R114",
+      "dormId": "D004",
+      "communityId": "C003",
+      "roomNo": "706",
+      "status": "vacant",
+      "occupantName": "",
+      "occupantId": "",
+      "occupantDept": ""
+    },
+    {
+      "_id": "R115",
+      "dormId": "D004",
+      "communityId": "C003",
+      "roomNo": "801",
+      "status": "vacant",
+      "occupantName": "",
+      "occupantId": "",
+      "occupantDept": ""
+    },
+    {
+      "_id": "R116",
+      "dormId": "D004",
+      "communityId": "C003",
+      "roomNo": "802",
+      "status": "vacant",
+      "occupantName": "",
+      "occupantId": "",
+      "occupantDept": ""
+    },
+    {
+      "_id": "R117",
+      "dormId": "D004",
+      "communityId": "C003",
+      "roomNo": "803",
+      "status": "vacant",
+      "occupantName": "",
+      "occupantId": "",
+      "occupantDept": ""
+    },
+    {
+      "_id": "R118",
+      "dormId": "D004",
+      "communityId": "C003",
+      "roomNo": "804",
+      "status": "vacant",
+      "occupantName": "",
+      "occupantId": "",
+      "occupantDept": ""
+    },
+    {
+      "_id": "R119",
+      "dormId": "D004",
+      "communityId": "C003",
+      "roomNo": "805",
+      "status": "vacant",
+      "occupantName": "",
+      "occupantId": "",
+      "occupantDept": ""
+    },
+    {
+      "_id": "R120",
+      "dormId": "D004",
+      "communityId": "C003",
+      "roomNo": "806",
+      "status": "vacant",
+      "occupantName": "",
+      "occupantId": "",
+      "occupantDept": ""
+    },
+    {
+      "_id": "R121",
+      "dormId": "D004",
+      "communityId": "C003",
+      "roomNo": "901",
+      "status": "vacant",
+      "occupantName": "",
+      "occupantId": "",
+      "occupantDept": ""
+    },
+    {
+      "_id": "R122",
+      "dormId": "D004",
+      "communityId": "C003",
+      "roomNo": "902",
+      "status": "vacant",
+      "occupantName": "",
+      "occupantId": "",
+      "occupantDept": ""
+    },
+    {
+      "_id": "R123",
+      "dormId": "D004",
+      "communityId": "C003",
+      "roomNo": "903",
+      "status": "vacant",
+      "occupantName": "",
+      "occupantId": "",
+      "occupantDept": ""
+    },
+    {
+      "_id": "R124",
+      "dormId": "D004",
+      "communityId": "C003",
+      "roomNo": "904",
+      "status": "vacant",
+      "occupantName": "",
+      "occupantId": "",
+      "occupantDept": ""
+    },
+    {
+      "_id": "R125",
+      "dormId": "D004",
+      "communityId": "C003",
+      "roomNo": "905",
+      "status": "vacant",
+      "occupantName": "",
+      "occupantId": "",
+      "occupantDept": ""
+    },
+    {
+      "_id": "R126",
+      "dormId": "D004",
+      "communityId": "C003",
+      "roomNo": "906",
+      "status": "vacant",
+      "occupantName": "",
+      "occupantId": "",
+      "occupantDept": ""
+    },
+    {
+      "_id": "R127",
+      "dormId": "D004",
+      "communityId": "C003",
+      "roomNo": "1002",
+      "status": "vacant",
+      "occupantName": "",
+      "occupantId": "",
+      "occupantDept": ""
+    },
+    {
+      "_id": "R128",
+      "dormId": "D004",
+      "communityId": "C003",
+      "roomNo": "1003",
+      "status": "vacant",
+      "occupantName": "",
+      "occupantId": "",
+      "occupantDept": ""
+    },
+    {
+      "_id": "R129",
+      "dormId": "D004",
+      "communityId": "C003",
+      "roomNo": "1004",
+      "status": "vacant",
+      "occupantName": "",
+      "occupantId": "",
+      "occupantDept": ""
+    },
+    {
+      "_id": "R130",
+      "dormId": "D004",
+      "communityId": "C003",
+      "roomNo": "1005",
+      "status": "vacant",
+      "occupantName": "",
+      "occupantId": "",
+      "occupantDept": ""
+    },
+    {
+      "_id": "R131",
+      "dormId": "D004",
+      "communityId": "C003",
+      "roomNo": "1006",
+      "status": "vacant",
+      "occupantName": "",
+      "occupantId": "",
+      "occupantDept": ""
+    },
+    {
+      "_id": "R132",
+      "dormId": "D004",
+      "communityId": "C003",
+      "roomNo": "1101",
+      "status": "vacant",
+      "occupantName": "",
+      "occupantId": "",
+      "occupantDept": ""
+    },
+    {
+      "_id": "R133",
+      "dormId": "D004",
+      "communityId": "C003",
+      "roomNo": "1102",
+      "status": "vacant",
+      "occupantName": "",
+      "occupantId": "",
+      "occupantDept": ""
+    },
+    {
+      "_id": "R134",
+      "dormId": "D004",
+      "communityId": "C003",
+      "roomNo": "1103",
+      "status": "vacant",
+      "occupantName": "",
+      "occupantId": "",
+      "occupantDept": ""
+    },
+    {
+      "_id": "R135",
+      "dormId": "D004",
+      "communityId": "C003",
+      "roomNo": "1104",
+      "status": "vacant",
+      "occupantName": "",
+      "occupantId": "",
+      "occupantDept": ""
+    },
+    {
+      "_id": "R136",
+      "dormId": "D004",
+      "communityId": "C003",
+      "roomNo": "1105",
+      "status": "vacant",
+      "occupantName": "",
+      "occupantId": "",
+      "occupantDept": ""
+    },
+    {
+      "_id": "R137",
+      "dormId": "D004",
+      "communityId": "C003",
+      "roomNo": "1106",
+      "status": "vacant",
+      "occupantName": "",
+      "occupantId": "",
+      "occupantDept": ""
+    },
+    {
+      "_id": "R138",
+      "dormId": "D004",
+      "communityId": "C003",
+      "roomNo": "1201",
+      "status": "vacant",
+      "occupantName": "",
+      "occupantId": "",
+      "occupantDept": ""
+    },
+    {
+      "_id": "R139",
+      "dormId": "D004",
+      "communityId": "C003",
+      "roomNo": "1202",
+      "status": "vacant",
+      "occupantName": "",
+      "occupantId": "",
+      "occupantDept": ""
+    },
+    {
+      "_id": "R140",
+      "dormId": "D004",
+      "communityId": "C003",
+      "roomNo": "1203",
+      "status": "vacant",
+      "occupantName": "",
+      "occupantId": "",
+      "occupantDept": ""
+    },
+    {
+      "_id": "R141",
+      "dormId": "D004",
+      "communityId": "C003",
+      "roomNo": "1204",
+      "status": "vacant",
+      "occupantName": "",
+      "occupantId": "",
+      "occupantDept": ""
+    },
+    {
+      "_id": "R142",
+      "dormId": "D004",
+      "communityId": "C003",
+      "roomNo": "1205",
+      "status": "vacant",
+      "occupantName": "",
+      "occupantId": "",
+      "occupantDept": ""
+    },
+    {
+      "_id": "R143",
+      "dormId": "D004",
+      "communityId": "C003",
+      "roomNo": "1206",
+      "status": "vacant",
+      "occupantName": "",
+      "occupantId": "",
+      "occupantDept": ""
+    },
+    {
+      "_id": "R144",
+      "dormId": "D004",
+      "communityId": "C003",
+      "roomNo": "1301",
+      "status": "vacant",
+      "occupantName": "",
+      "occupantId": "",
+      "occupantDept": ""
+    },
+    {
+      "_id": "R145",
+      "dormId": "D004",
+      "communityId": "C003",
+      "roomNo": "1302",
+      "status": "vacant",
+      "occupantName": "",
+      "occupantId": "",
+      "occupantDept": ""
+    },
+    {
+      "_id": "R146",
+      "dormId": "D004",
+      "communityId": "C003",
+      "roomNo": "1303",
+      "status": "vacant",
+      "occupantName": "",
+      "occupantId": "",
+      "occupantDept": ""
+    },
+    {
+      "_id": "R147",
+      "dormId": "D004",
+      "communityId": "C003",
+      "roomNo": "1304",
+      "status": "vacant",
+      "occupantName": "",
+      "occupantId": "",
+      "occupantDept": ""
+    },
+    {
+      "_id": "R148",
+      "dormId": "D004",
+      "communityId": "C003",
+      "roomNo": "1305",
+      "status": "vacant",
+      "occupantName": "",
+      "occupantId": "",
+      "occupantDept": ""
+    },
+    {
+      "_id": "R149",
+      "dormId": "D004",
+      "communityId": "C003",
+      "roomNo": "1306",
+      "status": "vacant",
+      "occupantName": "",
+      "occupantId": "",
+      "occupantDept": ""
+    },
+    {
+      "_id": "R150",
+      "dormId": "D004",
+      "communityId": "C003",
+      "roomNo": "1401",
+      "status": "vacant",
+      "occupantName": "",
+      "occupantId": "",
+      "occupantDept": ""
+    },
+    {
+      "_id": "R151",
+      "dormId": "D004",
+      "communityId": "C003",
+      "roomNo": "1402",
+      "status": "vacant",
+      "occupantName": "",
+      "occupantId": "",
+      "occupantDept": ""
+    },
+    {
+      "_id": "R152",
+      "dormId": "D004",
+      "communityId": "C003",
+      "roomNo": "1404",
+      "status": "vacant",
+      "occupantName": "",
+      "occupantId": "",
+      "occupantDept": ""
+    },
+    {
+      "_id": "R153",
+      "dormId": "D004",
+      "communityId": "C003",
+      "roomNo": "1405",
+      "status": "vacant",
+      "occupantName": "",
+      "occupantId": "",
+      "occupantDept": ""
+    },
+    {
+      "_id": "R154",
+      "dormId": "D004",
+      "communityId": "C003",
+      "roomNo": "1406",
+      "status": "vacant",
+      "occupantName": "",
+      "occupantId": "",
+      "occupantDept": ""
+    },
+    {
+      "_id": "R155",
+      "dormId": "D004",
+      "communityId": "C003",
+      "roomNo": "1502",
+      "status": "vacant",
+      "occupantName": "",
+      "occupantId": "",
+      "occupantDept": ""
+    },
+    {
+      "_id": "R156",
+      "dormId": "D004",
+      "communityId": "C003",
+      "roomNo": "1503",
+      "status": "vacant",
+      "occupantName": "",
+      "occupantId": "",
+      "occupantDept": ""
+    },
+    {
+      "_id": "R157",
+      "dormId": "D004",
+      "communityId": "C003",
+      "roomNo": "1504",
+      "status": "vacant",
+      "occupantName": "",
+      "occupantId": "",
+      "occupantDept": ""
+    },
+    {
+      "_id": "R158",
+      "dormId": "D004",
+      "communityId": "C003",
+      "roomNo": "1505",
+      "status": "vacant",
+      "occupantName": "",
+      "occupantId": "",
+      "occupantDept": ""
+    },
+    {
+      "_id": "R159",
+      "dormId": "D004",
+      "communityId": "C003",
+      "roomNo": "1506",
+      "status": "vacant",
+      "occupantName": "",
+      "occupantId": "",
+      "occupantDept": ""
+    },
+    {
+      "_id": "R160",
+      "dormId": "D004",
+      "communityId": "C003",
+      "roomNo": "1601",
+      "status": "vacant",
+      "occupantName": "",
+      "occupantId": "",
+      "occupantDept": ""
+    },
+    {
+      "_id": "R161",
+      "dormId": "D004",
+      "communityId": "C003",
+      "roomNo": "1602",
+      "status": "vacant",
+      "occupantName": "",
+      "occupantId": "",
+      "occupantDept": ""
+    },
+    {
+      "_id": "R162",
+      "dormId": "D004",
+      "communityId": "C003",
+      "roomNo": "1603",
+      "status": "vacant",
+      "occupantName": "",
+      "occupantId": "",
+      "occupantDept": ""
+    },
+    {
+      "_id": "R163",
+      "dormId": "D004",
+      "communityId": "C003",
+      "roomNo": "1604",
+      "status": "vacant",
+      "occupantName": "",
+      "occupantId": "",
+      "occupantDept": ""
+    },
+    {
+      "_id": "R164",
+      "dormId": "D004",
+      "communityId": "C003",
+      "roomNo": "1605",
+      "status": "vacant",
+      "occupantName": "",
+      "occupantId": "",
+      "occupantDept": ""
+    },
+    {
+      "_id": "R165",
+      "dormId": "D004",
+      "communityId": "C003",
+      "roomNo": "1606",
+      "status": "vacant",
+      "occupantName": "",
+      "occupantId": "",
+      "occupantDept": ""
+    },
+    {
+      "_id": "R166",
+      "dormId": "D004",
+      "communityId": "C003",
+      "roomNo": "1702",
+      "status": "vacant",
+      "occupantName": "",
+      "occupantId": "",
+      "occupantDept": ""
+    },
+    {
+      "_id": "R167",
+      "dormId": "D004",
+      "communityId": "C003",
+      "roomNo": "1703",
+      "status": "vacant",
+      "occupantName": "",
+      "occupantId": "",
+      "occupantDept": ""
+    },
+    {
+      "_id": "R168",
+      "dormId": "D004",
+      "communityId": "C003",
+      "roomNo": "1704",
+      "status": "vacant",
+      "occupantName": "",
+      "occupantId": "",
+      "occupantDept": ""
+    },
+    {
+      "_id": "R169",
+      "dormId": "D004",
+      "communityId": "C003",
+      "roomNo": "1705",
+      "status": "vacant",
+      "occupantName": "",
+      "occupantId": "",
+      "occupantDept": ""
+    },
+    {
+      "_id": "R170",
+      "dormId": "D004",
+      "communityId": "C003",
+      "roomNo": "1706",
+      "status": "vacant",
+      "occupantName": "",
+      "occupantId": "",
+      "occupantDept": ""
+    },
+    {
+      "_id": "R171",
+      "dormId": "D004",
+      "communityId": "C003",
+      "roomNo": "1801",
+      "status": "vacant",
+      "occupantName": "",
+      "occupantId": "",
+      "occupantDept": ""
+    },
+    {
+      "_id": "R172",
+      "dormId": "D004",
+      "communityId": "C003",
+      "roomNo": "1802",
+      "status": "vacant",
+      "occupantName": "",
+      "occupantId": "",
+      "occupantDept": ""
+    },
+    {
+      "_id": "R173",
+      "dormId": "D004",
+      "communityId": "C003",
+      "roomNo": "1803",
+      "status": "vacant",
+      "occupantName": "",
+      "occupantId": "",
+      "occupantDept": ""
+    },
+    {
+      "_id": "R174",
+      "dormId": "D004",
+      "communityId": "C003",
+      "roomNo": "1804",
+      "status": "vacant",
+      "occupantName": "",
+      "occupantId": "",
+      "occupantDept": ""
+    },
+    {
+      "_id": "R175",
+      "dormId": "D004",
+      "communityId": "C003",
+      "roomNo": "1805",
+      "status": "vacant",
+      "occupantName": "",
+      "occupantId": "",
+      "occupantDept": ""
+    },
+    {
+      "_id": "R176",
+      "dormId": "D004",
+      "communityId": "C003",
+      "roomNo": "1806",
+      "status": "vacant",
+      "occupantName": "",
+      "occupantId": "",
+      "occupantDept": ""
+    }
+  ],
+  "employees": [
+    {
+      "_id": "E001",
+      "name": "冯子清",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R001",
+      "gender": "male",
+      "entryDate": ""
+    },
+    {
+      "_id": "E002",
+      "name": "肖德军",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R001",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E003",
+      "name": "陈建国",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R001",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E004",
+      "name": "张三",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R001",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E005",
+      "name": "何检明",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R002",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E006",
+      "name": "卢世华",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R002",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E007",
+      "name": "杨志恒",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R003",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E008",
+      "name": "卢捷",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R003",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E009",
+      "name": "邱世豪",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R003",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E010",
+      "name": "查文斌",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R004",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E011",
+      "name": "周志东",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R004",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E012",
+      "name": "周凤",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R005",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E013",
+      "name": "董苏",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R005",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E014",
+      "name": "付兴华",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R006",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E015",
+      "name": "周世鹏",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R007",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E016",
+      "name": "李沛霖",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R007",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E017",
+      "name": "周亮",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R008",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E018",
+      "name": "赖新添",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R008",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E019",
+      "name": "杨健",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R009",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E020",
+      "name": "刘慧峰",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R009",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E021",
+      "name": "伍宗洪",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R010",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E022",
+      "name": "盘英凤",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R011",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E023",
+      "name": "李晓艳",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R011",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E024",
+      "name": "朱洁",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R011",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E025",
+      "name": "公用娱乐室",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R013",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E026",
+      "name": "公用娱乐室",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R013",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E027",
+      "name": "公用娱乐室",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R013",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E028",
+      "name": "公用娱乐室",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R013",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E029",
+      "name": "李兴平",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R016",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E030",
+      "name": "李英锋",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R016",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E031",
+      "name": "卢院平",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R016",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E032",
+      "name": "袁强军",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R017",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E033",
+      "name": "胡锦永",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R017",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E034",
+      "name": "雷阳",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R017",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E035",
+      "name": "李宇辉",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R018",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E036",
+      "name": "张凯填",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R019",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E037",
+      "name": "周远宇",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R019",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E038",
+      "name": "张思权",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R019",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E039",
+      "name": "李刚",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R020",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E040",
+      "name": "刘奇",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R020",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E041",
+      "name": "姚文俊",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R020",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E042",
+      "name": "蓝永桥",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R021",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E043",
+      "name": "韦飞成",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R021",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E044",
+      "name": "李志明",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R022",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E045",
+      "name": "黎伟联",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R022",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E046",
+      "name": "何新宇",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R022",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E047",
+      "name": "张长辉",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R023",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E048",
+      "name": "谢维祥",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R023",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E049",
+      "name": "王加辉",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R024",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E050",
+      "name": "雷明午",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R024",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E051",
+      "name": "林豪焕",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R024",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E052",
+      "name": "杨倩",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R025",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E053",
+      "name": "郭玟仪",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R025",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E054",
+      "name": "龚瑞安",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R026",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E055",
+      "name": "胡翔俊",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R026",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E056",
+      "name": "蒋斌",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R027",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E057",
+      "name": "邓志宏",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R027",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E058",
+      "name": "张万年",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R027",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E059",
+      "name": "陈鹏",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R028",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E060",
+      "name": "刘群有",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R028",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E061",
+      "name": "向其照",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R029",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E062",
+      "name": "韩卫波",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R029",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E063",
+      "name": "易良林",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R029",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E064",
+      "name": "胡广财",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R030",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E065",
+      "name": "黄德容",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R030",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E066",
+      "name": "周纯",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R031",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E067",
+      "name": "刘柔",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R031",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E068",
+      "name": "战光燕",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R032",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E069",
+      "name": "周婷",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R032",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E070",
+      "name": "闵灿辉",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R033",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E071",
+      "name": "卿国旗",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R033",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E072",
+      "name": "阮颖",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R034",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E073",
+      "name": "韦泽敏",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R035",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E074",
+      "name": "何雅威",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R035",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E075",
+      "name": "龙宝华",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R036",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E076",
+      "name": "戴魁俊",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R036",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E077",
+      "name": "陈亚军",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R037",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E078",
+      "name": "陈莉芳",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R038",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E079",
+      "name": "周开",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R039",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E080",
+      "name": "周建新",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R041",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E081",
+      "name": "邱芊潭",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R043",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E082",
+      "name": "李聪",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R045",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E083",
+      "name": "褚四明",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R045",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E084",
+      "name": "余坤",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R046",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E085",
+      "name": "李军",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R046",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E086",
+      "name": "刘耀章",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R047",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E087",
+      "name": "陆开斌",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R048",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E088",
+      "name": "王立新",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R049",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E089",
+      "name": "赵艺霖",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R050",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E090",
+      "name": "邓健强",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R052",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E091",
+      "name": "杨天暘",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R052",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E092",
+      "name": "陈金应",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R053",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E093",
+      "name": "严昌理",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R054",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E094",
+      "name": "谭剑锋",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R055",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E095",
+      "name": "李军",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R056",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E096",
+      "name": "李雪维",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R058",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E097",
+      "name": "揭志恒",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R058",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E098",
+      "name": "黄森",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R059",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E099",
+      "name": "吴凯",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R060",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E100",
+      "name": "肖波",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R060",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E101",
+      "name": "范劲松",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R061",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E102",
+      "name": "宋恩明",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R062",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E103",
+      "name": "林杰",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R063",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E104",
+      "name": "蒙宝林",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R063",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E105",
+      "name": "侯明成",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R064",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E106",
+      "name": "卢庭儒",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R064",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E107",
+      "name": "阳飞云",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R065",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E108",
+      "name": "黄基耀",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R066",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E109",
+      "name": "胡孝东",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R067",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E110",
+      "name": "王德生",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R068",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E111",
+      "name": "籍永旭",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R069",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E112",
+      "name": "杨兵昌",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R069",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E113",
+      "name": "胡权",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R070",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E114",
+      "name": "陈正威",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R071",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E115",
+      "name": "卢金艺",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R072",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E116",
+      "name": "邱芊潮",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R072",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E117",
+      "name": "汤景超",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R073",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E118",
+      "name": "肖杰传",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R074",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E119",
+      "name": "赵万华",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R075",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E120",
+      "name": "叶海林",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R076",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E121",
+      "name": "夏长江",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R076",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E122",
+      "name": "张进军",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R077",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E123",
+      "name": "李秋彦",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R078",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E124",
+      "name": "徐武军",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R079",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E125",
+      "name": "刘望春",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R080",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E126",
+      "name": "王李红",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R081",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E127",
+      "name": "贺辉",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R082",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E128",
+      "name": "刘文生",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R082",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E129",
+      "name": "陈春林",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R083",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E130",
+      "name": "周丽霞",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R084",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E131",
+      "name": "李新刚",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R084",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E132",
+      "name": "刘东",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R085",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E133",
+      "name": "王建军",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R086",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E134",
+      "name": "唐果",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R087",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E135",
+      "name": "赵小梅",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R087",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E136",
+      "name": "董志军",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R088",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E137",
+      "name": "张波",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R089",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E138",
+      "name": "计文杰",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R090",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E139",
+      "name": "骆建宏",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R091",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E140",
+      "name": "代华琼",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R092",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E141",
+      "name": "粟孝顺",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R093",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E142",
+      "name": "李奇奇",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R094",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E143",
+      "name": "李小红",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R095",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E144",
+      "name": "陈关付",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R096",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E145",
+      "name": "戴红娟",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R097",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E146",
+      "name": "王春林",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R098",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E147",
+      "name": "胡波",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R101",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E148",
+      "name": "莫再仁",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R102",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E149",
+      "name": "余乐",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R103",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E150",
+      "name": "杨海强",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R104",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E151",
+      "name": "刘瑞金",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R104",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E152",
+      "name": "喻名录",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R107",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E153",
+      "name": "喻杨",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R107",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E154",
+      "name": "杨彩娥",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R107",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E155",
+      "name": "郑冬妮",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R108",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E156",
+      "name": "颜梓丹",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R109",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E157",
+      "name": "朱祝维",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R111",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E158",
+      "name": "柯豪",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R111",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E159",
+      "name": "胡俊",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R112",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E160",
+      "name": "郭启东",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R112",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E161",
+      "name": "霍焯斌",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R112",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E162",
+      "name": "万静耘",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R114",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E163",
+      "name": "陈丽格",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R114",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E164",
+      "name": "王锡兵",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R115",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E165",
+      "name": "甘明亮",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R115",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E166",
+      "name": "肖湘君",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R116",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E167",
+      "name": "余艺铭",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R116",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E168",
+      "name": "李俊",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R117",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E169",
+      "name": "何延发",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R117",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E170",
+      "name": "赖旭元",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R118",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E171",
+      "name": "刘天成",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R118",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E172",
+      "name": "黎宇彤",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R118",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E173",
+      "name": "潘光林",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R119",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E174",
+      "name": "王丹",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R119",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E175",
+      "name": "潘蕾",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R120",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E176",
+      "name": "夏嘉欣",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R120",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E177",
+      "name": "张家驹",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R121",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E178",
+      "name": "刘玮",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R122",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E179",
+      "name": "白洪波",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R122",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E180",
+      "name": "潘希龙",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R122",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E181",
+      "name": "王新乔",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R123",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E182",
+      "name": "王华兵",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R123",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E183",
+      "name": "韦远志",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R124",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E184",
+      "name": "石浩杰",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R124",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E185",
+      "name": "毛祖顺",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R125",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E186",
+      "name": "唐荣华",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R125",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E187",
+      "name": "余美娇",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R126",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E188",
+      "name": "刘银锋",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R126",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E189",
+      "name": "张博",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R127",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E190",
+      "name": "姚兆芝",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R127",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E191",
+      "name": "吴建刚",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R127",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E192",
+      "name": "万长江",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R128",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E193",
+      "name": "王国旭",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R128",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E194",
+      "name": "徐亮文",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R129",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E195",
+      "name": "梁康健",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R129",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E196",
+      "name": "张相仁",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R129",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E197",
+      "name": "刘海亮",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R130",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E198",
+      "name": "黄敏",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R130",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E199",
+      "name": "吴星程",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R131",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E200",
+      "name": "赵宝平",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R131",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E201",
+      "name": "钟海",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R132",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E202",
+      "name": "钟练江",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R133",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E203",
+      "name": "刘洪军",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R133",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E204",
+      "name": "张略",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R134",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E205",
+      "name": "曾晓安",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R134",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E206",
+      "name": "囊善国",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R135",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E207",
+      "name": "覃文培",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R135",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E208",
+      "name": "于文聪",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R135",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E209",
+      "name": "段世湘",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R136",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E210",
+      "name": "刘美娟",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R136",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E211",
+      "name": "徐及入",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R137",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E212",
+      "name": "蒋国辉",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R137",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E213",
+      "name": "深圳MES系统三人",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R138",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E214",
+      "name": "深圳MES系统三人",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R138",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E215",
+      "name": "深圳MES系统三人",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R138",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E216",
+      "name": "梁俊槟",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R140",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E217",
+      "name": "张林",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R140",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E218",
+      "name": "陈汝琪",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R143",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E219",
+      "name": "徐文豪",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R144",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E220",
+      "name": "方思雅",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R145",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E221",
+      "name": "王文娴",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R145",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E222",
+      "name": "黄玲瑶",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R145",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E223",
+      "name": "蒋洁兰",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R146",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E224",
+      "name": "邓谊增",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R147",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E225",
+      "name": "惠铁宏",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R149",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E226",
+      "name": "覃乃乐",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R150",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E227",
+      "name": "黎文",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R151",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E228",
+      "name": "郭博超",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R151",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E229",
+      "name": "谢卓峰",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R152",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E230",
+      "name": "王宇浩",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R152",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E231",
+      "name": "何傲",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R154",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E232",
+      "name": "曾博文",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R154",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E233",
+      "name": "黄一帆",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R155",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E234",
+      "name": "李志康",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R155",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E235",
+      "name": "杨兵兵",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R155",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E236",
+      "name": "姜建春",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R156",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E237",
+      "name": "李有彬",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R156",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E238",
+      "name": "汤国鹏",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R157",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E239",
+      "name": "毛德荣",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R157",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E240",
+      "name": "刘惠亮",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R157",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E241",
+      "name": "方贻萱",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R157",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E242",
+      "name": "陈东鹊",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R158",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E243",
+      "name": "林中杰",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R159",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E244",
+      "name": "刘文轩",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R159",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E245",
+      "name": "柯勇成",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R160",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E246",
+      "name": "周建忠",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R160",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E247",
+      "name": "吴宝山",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R161",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E248",
+      "name": "曾文波",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R161",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E249",
+      "name": "尹长青",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R162",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E250",
+      "name": "黄彩军",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R162",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E251",
+      "name": "熊达玉",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R163",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E252",
+      "name": "翟云飞",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R163",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E253",
+      "name": "何在锋",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R163",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E254",
+      "name": "梁家辉",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R164",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E255",
+      "name": "何茂松",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R164",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E256",
+      "name": "孙文",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R164",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E257",
+      "name": "唐列兴",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R165",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E258",
+      "name": "陈茂钰",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R165",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E259",
+      "name": "刘镇川",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R165",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E260",
+      "name": "朱佳宁",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R166",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E261",
+      "name": "胡学勋",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R166",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E262",
+      "name": "解智鹏",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R167",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E263",
+      "name": "李乾南",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R167",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E264",
+      "name": "李日冬",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R167",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E265",
+      "name": "罗光华",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R168",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E266",
+      "name": "陈紫芳",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R168",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E267",
+      "name": "朱河",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R168",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E268",
+      "name": "袁嘉琪",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R169",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E269",
+      "name": "雷丽嫦",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R169",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E270",
+      "name": "蓝宇环",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R170",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E271",
+      "name": "魏鲜",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R171",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E272",
+      "name": "刘伟",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R171",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E273",
+      "name": "邢宗山",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R172",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E274",
+      "name": "申承淼",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R172",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E275",
+      "name": "何威",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R172",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E276",
+      "name": "徐良宗",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R172",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E277",
+      "name": "向涛",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R173",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E278",
+      "name": "万龙波",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R173",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E279",
+      "name": "石春福",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R173",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E280",
+      "name": "彭鹏",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R174",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E281",
+      "name": "陈浩",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R174",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E282",
+      "name": "蒋徐存",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R174",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E283",
+      "name": "李志",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R175",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E284",
+      "name": "翁捷周",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R176",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E285",
+      "name": "张龙君",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R176",
+      "gender": "",
+      "entryDate": ""
+    },
+    {
+      "_id": "E286",
+      "name": "张三",
+      "department": "",
+      "phone": "",
+      "role": "employee",
+      "currentRoomId": "R176",
+      "gender": "",
+      "entryDate": ""
+    }
+  ]
+}

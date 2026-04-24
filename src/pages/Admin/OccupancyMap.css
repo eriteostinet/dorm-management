@@ -1,0 +1,387 @@
+.occupancy-map-page {
+  padding-bottom: 20px;
+}
+
+/* 小区选择 */
+.community-tabs {
+  display: flex;
+  gap: 8px;
+  padding: 12px;
+  overflow-x: auto;
+  background: #fff;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.community-tab {
+  padding: 8px 16px;
+  border: 1px solid #d9d9d9;
+  border-radius: 16px;
+  background: #fff;
+  white-space: nowrap;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.community-tab.active {
+  background: #1677ff;
+  color: #fff;
+  border-color: #1677ff;
+}
+
+/* 楼栋选择 */
+.building-tabs {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px;
+  background: #fafafa;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.tab-label {
+  font-size: 14px;
+  color: #666;
+}
+
+.building-tab {
+  padding: 6px 14px;
+  border: 1px solid #d9d9d9;
+  border-radius: 4px;
+  background: #fff;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.building-tab.active {
+  background: #1677ff;
+  color: #fff;
+  border-color: #1677ff;
+}
+
+/* 楼层导航 */
+.floor-nav {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  padding: 12px;
+  background: #fff;
+}
+
+.floor-indicator {
+  font-size: 16px;
+  font-weight: 500;
+  min-width: 60px;
+  text-align: center;
+}
+
+/* 部门筛选 */
+.dept-filter {
+  padding: 12px;
+  background: #fff;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.filter-label {
+  display: block;
+  font-size: 13px;
+  color: #666;
+  margin-bottom: 8px;
+}
+
+/* 统计卡片 */
+.stats-card {
+  margin: 12px;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  padding: 16px 0;
+}
+
+.stat-item {
+  text-align: center;
+}
+
+.stat-item .stat-value {
+  display: block;
+  font-size: 24px;
+  font-weight: 600;
+  color: #333;
+}
+
+.stat-item .stat-label {
+  font-size: 12px;
+  color: #666;
+}
+
+.stat-item.occupied .stat-value {
+  color: #52c41a;
+}
+
+.stat-item.vacant .stat-value {
+  color: #d9d9d9;
+}
+
+/* 图例 */
+.legend-bar {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  padding: 12px 0;
+  border-top: 1px solid #f0f0f0;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: #666;
+}
+
+.legend-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+}
+
+/* 楼层平面图 */
+.floor-map {
+  padding: 12px;
+}
+
+.empty-floor {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 60px 20px;
+  color: #999;
+}
+
+.empty-floor p {
+  margin-top: 16px;
+}
+
+/* 宿舍区域 */
+.dorm-section {
+  margin-bottom: 20px;
+}
+
+.dorm-title {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #333;
+  margin-bottom: 12px;
+  padding: 8px 0;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+/* 房间网格 */
+.rooms-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 12px;
+}
+
+.room-card {
+  border: 2px solid;
+  border-radius: 8px;
+  padding: 10px;
+  cursor: pointer;
+  transition: all 0.3s;
+  min-height: 120px;
+  display: flex;
+  flex-direction: column;
+  background-color: #f5f5f5; /* 默认灰色，会被内联样式覆盖 */
+  border-color: #d9d9d9;
+}
+
+.room-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+/* 住满 - 红色 */
+.room-card-full {
+  background-color: #ffccc7 !important;
+  border-color: #ff4d4f !important;
+}
+
+/* 未住满 - 蓝色 */
+.room-card-partial {
+  background-color: #d6e4ff !important;
+  border-color: #1677ff !important;
+}
+
+.room-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.room-no {
+  font-weight: 600;
+  font-size: 15px;
+}
+
+.room-capacity {
+  font-size: 11px;
+  color: #666;
+  background: #f5f5f5;
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+.room-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+/* 床位行 */
+.bed-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 0;
+  border-bottom: 1px dashed #e8e8e8;
+  font-size: 12px;
+}
+
+.bed-row:last-child {
+  border-bottom: none;
+}
+
+.bed-no {
+  font-size: 11px;
+  color: #999;
+  background: #f5f5f5;
+  padding: 1px 4px;
+  border-radius: 3px;
+  min-width: 28px;
+  text-align: center;
+}
+
+.bed-occupant {
+  flex: 1;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 4px;
+}
+
+.bed-dept {
+  font-size: 10px;
+  color: #1677ff;
+  background: #e6f7ff;
+  padding: 0 4px;
+  border-radius: 3px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 50px;
+}
+
+.bed-empty {
+  color: #d9d9d9;
+  font-style: italic;
+}
+
+/* 旧样式兼容 */
+.occupants-list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.occupant-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 3px 0;
+  border-bottom: 1px dashed #f0f0f0;
+}
+
+.occupant-row:last-child {
+  border-bottom: none;
+}
+
+.occupant-name {
+  font-weight: 500;
+  font-size: 13px;
+  color: #333;
+}
+
+.occupant-dept-badge {
+  font-size: 10px;
+  color: #1677ff;
+  background: #e6f7ff;
+  padding: 1px 6px;
+  border-radius: 4px;
+  white-space: nowrap;
+  max-width: 60px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.more-occupants {
+  font-size: 11px;
+  color: #999;
+  text-align: center;
+  padding: 4px 0;
+}
+
+.occupant-dept {
+  font-size: 12px;
+  color: #666;
+  margin-bottom: 4px;
+}
+
+.tenure {
+  font-size: 11px;
+  color: #999;
+}
+
+.room-status-text {
+  font-size: 13px;
+  color: #999;
+  text-align: center;
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.room-status-text.vacant {
+  color: #bfbfbf;
+}
+
+/* 房间详情 */
+.room-detail {
+  max-height: 60vh;
+  overflow-y: auto;
+}
+
+.detail-section {
+  margin-bottom: 16px;
+}
+
+.detail-section h4 {
+  font-size: 14px;
+  font-weight: 500;
+  color: #333;
+  margin-bottom: 8px;
+  padding-left: 8px;
+  border-left: 3px solid #1677ff;
+}

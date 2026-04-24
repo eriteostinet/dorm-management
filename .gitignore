@@ -1,0 +1,24 @@
+# 环境变量（不提交敏感信息）
+.env
+.env.local
+
+# 依赖
+node_modules/
+venv_deploy/
+
+# 构建产物
+dist/
+
+# 日志
+*.log
+
+# IDE
+.vscode/
+.idea/
+
+# 系统文件
+.DS_Store
+
+# 临时文件
+*.tmp
+*.swp

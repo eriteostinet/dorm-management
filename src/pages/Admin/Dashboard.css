@@ -1,0 +1,280 @@
+/* 数据看板样式 */
+.dashboard-page {
+  padding-bottom: 20px;
+}
+
+.dashboard-tabs .adm-tabs-header {
+  background: #fff;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+/* 统计卡片网格 */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  padding: 12px;
+}
+
+.stat-card {
+  display: flex;
+  align-items: center;
+  padding: 16px;
+  border-radius: 12px;
+  gap: 12px;
+}
+
+.stat-card.blue {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+}
+
+.stat-card.green {
+  background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+  color: white;
+}
+
+.stat-card.orange {
+  background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+  color: white;
+}
+
+.stat-card.purple {
+  background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+  color: white;
+}
+
+.stat-icon {
+  opacity: 0.9;
+}
+
+.stat-info {
+  flex: 1;
+}
+
+.stat-value {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 2px;
+}
+
+.stat-label {
+  font-size: 12px;
+  opacity: 0.9;
+}
+
+/* 旧版统计框兼容 */
+.stat-box {
+  text-align: center;
+  padding: 12px 8px;
+  border-radius: 8px;
+}
+
+.stat-box.blue { background: #e6f7ff; }
+.stat-box.green { background: #f6ffed; }
+.stat-box.orange { background: #fff7e6; }
+.stat-box.red { background: #fff1f0; }
+
+/* 热力图 */
+.heatmap-container {
+  padding: 12px 0;
+}
+
+.heatmap-row {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+  gap: 10px;
+}
+
+.heatmap-label {
+  width: 100px;
+  font-size: 12px;
+  color: #666;
+  flex-shrink: 0;
+}
+
+.heatmap-bar-container {
+  flex: 1;
+  height: 16px;
+  background: #f0f0f0;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.heatmap-bar {
+  height: 100%;
+  border-radius: 8px;
+  transition: width 0.3s;
+}
+
+.heatmap-value {
+  width: 50px;
+  font-size: 12px;
+  color: #666;
+  text-align: right;
+}
+
+/* 小区统计 */
+.community-stat {
+  margin-bottom: 16px;
+}
+
+.community-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 6px;
+}
+
+.community-name {
+  font-weight: 500;
+  color: #333;
+}
+
+.community-rate {
+  font-size: 14px;
+  color: #1890ff;
+  font-weight: bold;
+}
+
+.progress-bar {
+  height: 8px;
+  background: #f0f0f0;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  border-radius: 4px;
+  transition: width 0.3s;
+}
+
+.community-detail {
+  font-size: 12px;
+  color: #999;
+  margin-top: 4px;
+}
+
+/* 维修统计 */
+.repair-stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+  padding: 12px 0;
+}
+
+.repair-item {
+  text-align: center;
+  padding: 12px 8px;
+  background: #f5f5f5;
+  border-radius: 8px;
+}
+
+.repair-label {
+  display: block;
+  font-size: 12px;
+  color: #666;
+  margin-bottom: 4px;
+}
+
+.repair-value {
+  font-size: 20px;
+  font-weight: bold;
+  color: #333;
+}
+
+.repair-value.warning { color: #faad14; }
+.repair-value.info { color: #1890ff; }
+.repair-value.success { color: #52c41a; }
+
+/* 费用统计 */
+.fee-stats {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  padding: 12px 0;
+}
+
+.fee-item {
+  text-align: center;
+  padding: 16px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 12px;
+  color: white;
+}
+
+.fee-label {
+  font-size: 12px;
+  opacity: 0.9;
+  margin-bottom: 8px;
+}
+
+.fee-value {
+  font-size: 22px;
+  font-weight: bold;
+  margin-bottom: 4px;
+}
+
+.fee-desc {
+  font-size: 11px;
+  opacity: 0.8;
+}
+
+/* 快捷导航 */
+.quick-nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 12px 8px;
+  background: #f5f5f5;
+  border-radius: 8px;
+  gap: 6px;
+  color: #666;
+  font-size: 12px;
+}
+
+.quick-nav-item:active {
+  background: #e8e8e8;
+}
+
+/* 菜单 */
+.admin-menu {
+  padding: 8px 0;
+}
+
+.menu-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 16px;
+  border-bottom: 1px solid #f0f0f0;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.menu-item:last-child {
+  border-bottom: none;
+}
+
+.menu-item:active {
+  background: #f5f5f5;
+}
+
+.menu-item .arrow {
+  color: #ccc;
+  font-size: 18px;
+}
+
+/* 图表卡片 */
+.adm-card {
+  margin: 12px;
+  border-radius: 12px;
+}
+
+.adm-card-header {
+  font-weight: 600;
+  color: #333;
+}

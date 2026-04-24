@@ -1,0 +1,18 @@
+{
+    "envId": "dorm-system-5g5k2k8k-1byd118ff42",
+    "version": "2.0",
+    "$schema": "https://framework-1258016615.tcloudbaseapp.com/schema/latest.json",
+    "functionRoot": "./functions",
+    "functions": [],
+    "framework": {
+        "name": "dorm-management",
+        "plugins": {
+            "website": {
+                "use": "@cloudbase/framework-plugin-website",
+                "inputs": {
+                    "outputPath": "./dist"
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>云端数据检查</title>
+    <script src="https://cdn.jsdelivr.net/npm/@cloudbase/js-sdk@1.7.2/dist/cloudbase.full.js"></script>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+        .card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 16px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        .status {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 12px;
+        }
+        .status.online {
+            background: #e8f5e9;
+            color: #2e7d32;
+        }
+        .status.offline {
+            background: #ffebee;
+            color: #c62828;
+        }
+        .status.loading {
+            background: #e3f2fd;
+            color: #1565c0;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 12px;
+        }
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        th {
+            background: #f5f5f5;
+            font-weight: 600;
+            color: #555;
+        }
+        .count {
+            font-size: 24px;
+            font-weight: bold;
+            color: #1976d2;
+        }
+        .empty {
+            color: #999;
+            font-style: italic;
+        }
+        .error {
+            color: #c62828;
+            background: #ffebee;
+            padding: 12px;
+            border-radius: 8px;
+            margin-top: 12px;
+        }
+        button {
+            background: #1976d2;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            width: 100%;
+        }
+        button:hover {
+            background: #1565c0;
+        }
+        button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+        .spinner {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 2px solid #1976d2;
+            border-top-color: transparent;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <h1>☁️ 云端数据检查</h1>
+    
+    <div class="card">
+        <div id="connectionStatus" class="status loading">
+            <span class="spinner"></span>
+            <span>正在连接云端...</span>
+        </div>
+        <button id="checkBtn" onclick="checkCloudData()" disabled>检查云端数据</button>
+    </div>
+
+    <div id="results" class="card" style="display: none;">
+        <h3>📊 云端数据统计</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>数据类型</th>
+                    <th>云端记录数</th>
+                    <th>状态</th>
+                </tr>
+            </thead>
+            <tbody id="dataTable">
+            </tbody>
+        </table>
+    </div>
+
+    <div id="errorMsg" class="error" style="display: none;"></div>
+
+    <script>
+        const app = cloudbase.init({
+            env: 'dorm-system-5g5k2k8k-1byd118ff42'
+        });
+        const auth = app.auth();
+        const db = app.database();
+
+        // 初始化
+        async function init() {
+            try {
+                const loginState = await auth.getLoginState();
+                if (!loginState) {
+                    await auth.anonymousAuthProvider().signIn();
+                }
+                document.getElementById('connectionStatus').className = 'status online';
+                document.getElementById('connectionStatus').innerHTML = '✅ 已连接到云端';
+                document.getElementById('checkBtn').disabled = false;
+            } catch (err) {
+                document.getElementById('connectionStatus').className = 'status offline';
+                document.getElementById('connectionStatus').innerHTML = '❌ 连接失败: ' + err.message;
+            }
+        }
+
+        async function checkCloudData() {
+            const btn = document.getElementById('checkBtn');
+            const results = document.getElementById('results');
+            const errorMsg = document.getElementById('errorMsg');
+            const table = document.getElementById('dataTable');
+
+            btn.disabled = true;
+            btn.textContent = '检查中...';
+            results.style.display = 'none';
+            errorMsg.style.display = 'none';
+
+            const collections = [
+                { name: 'communities', label: '小区' },
+                { name: 'dorms', label: '楼栋' },
+                { name: 'rooms', label: '房间' },
+                { name: 'employees', label: '员工' },
+                { name: 'dormAssets', label: '资材' },
+                { name: 'repairTickets', label: '维修单' },
+                { name: 'payments', label: '缴费记录' }
+            ];
+
+            table.innerHTML = '';
+            let hasData = false;
+
+            for (const col of collections) {
+                try {
+                    const result = await db.collection(col.name).get();
+                    const count = result.data ? result.data.length : 0;
+                    if (count > 0) hasData = true;
+                    
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${col.label}</td>
+                        <td class="count">${count}</td>
+                        <td>${count > 0 ? '✅ 有数据' : '<span class="empty">空</span>'}</td>
+                    `;
+                    table.appendChild(row);
+                } catch (err) {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${col.label}</td>
+                        <td>-</td>
+                        <td class="error">❌ ${err.message}</td>
+                    `;
+                    table.appendChild(row);
+                }
+            }
+
+            results.style.display = 'block';
+            btn.disabled = false;
+            btn.textContent = '重新检查';
+
+            if (!hasData) {
+                errorMsg.style.display = 'block';
+                errorMsg.textContent = '⚠️ 云端暂无数据，请先在原设备上执行「备份」操作';
+            }
+        }
+
+        init();
+    </script>
+</body>
+</html>

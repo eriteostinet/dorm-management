@@ -1,0 +1,65 @@
+.export-type {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 0;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.export-type:last-child {
+  border-bottom: none;
+}
+
+.export-info {
+  flex: 1;
+}
+
+.export-name {
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.export-desc {
+  font-size: 12px;
+  color: #666;
+  margin-top: 4px;
+}
+
+.task-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 0;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.task-name {
+  font-size: 14px;
+}
+
+.task-status {
+  font-size: 12px;
+  padding: 2px 8px;
+  border-radius: 4px;
+}
+
+.task-status.pending {
+  background: #f0f0f0;
+  color: #666;
+}
+
+.task-status.processing {
+  background: #e6f7ff;
+  color: #1890ff;
+}
+
+.task-status.done {
+  background: #f6ffed;
+  color: #52c41a;
+}
+
+.no-task {
+  text-align: center;
+  color: #999;
+  padding: 24px;
+}

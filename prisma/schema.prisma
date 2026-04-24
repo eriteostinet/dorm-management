@@ -1,0 +1,137 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Community {
+  id          String   @id @default(uuid())
+  name        String
+  address     String
+  manager     String
+  managerPhone String
+  sortOrder   Int      @default(0)
+  status      String   @default("active")
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  dorms       Dorm[]
+  
+  @@map("communities")
+}
+
+model Dorm {
+  id               String   @id @default(uuid())
+  communityId      String
+  building         String
+  floor            Int
+  roomNumber       String
+  layout           Int      @default(4)
+  status           String   @default("normal")
+  currentOccupants Int      @default(0)
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  community        Community @relation(fields: [communityId], references: [id])
+  rooms            Room[]
+  
+  @@map("dorms")
+}
+
+model Room {
+  id            String    @id @default(uuid())
+  dormId        String
+  communityId   String
+  roomNumber    String
+  bedNumber     Int
+  status        String    @default("vacant")
+  occupantId    String?
+  occupantName  String?
+  occupantDept  String?
+  checkInDate   DateTime?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  dorm          Dorm      @relation(fields: [dormId], references: [id])
+  
+  @@map("rooms")
+}
+
+model Employee {
+  id                  String   @id @default(uuid())
+  name                String
+  department          String
+  entryDate           DateTime
+  phone               String
+  avatar              String?
+  currentCommunityId  String?
+  currentDormId       String?
+  currentRoomId       String?
+  role                String   @default("employee")
+  status              String   @default("active")
+  password            String
+  isMaintainer        Boolean  @default(false)
+  maintainerType      String?
+  maintainerCommunities String?
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+
+  @@map("employees")
+}
+
+model RepairTicket {
+  id              String   @id @default(uuid())
+  ticketType      String   @default("facility")
+  communityId     String
+  dormId          String
+  roomId          String?
+  reporterId      String
+  reporterName    String
+  category        String
+  subCategory     String
+  description     String
+  images          String?
+  urgency         String   @default("normal")
+  status          String   @default("reported")
+  assignedTo      String?
+  assignedName    String?
+  assignedTime    DateTime?
+  estimatedTime   DateTime?
+  solution        String?
+  materials       String?
+  laborCost       Float?
+  totalCost       Float?
+  processImages   String?
+  completedDate   DateTime?
+  confirmStatus   String   @default("pending")
+  confirmRemark   String?
+  rating          Int?
+  comment         String?
+  reportedAt      DateTime @default(now())
+  startedAt       DateTime?
+  confirmedAt     DateTime?
+  isRecurrent     Boolean  @default(false)
+  relatedTicketId String?
+  updatedAt       DateTime @updatedAt
+
+  @@map("repair_tickets")
+}
+
+model DormAsset {
+  id          String   @id @default(uuid())
+  dormId      String
+  category    String
+  name        String
+  quantity    Int
+  status      String   @default("good")
+  lastCheck   DateTime?
+  nextCheck   DateTime?
+  notes       String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("dorm_assets")
+}
