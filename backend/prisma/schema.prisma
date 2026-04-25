@@ -1,0 +1,217 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String   @id @default(uuid())
+  username      String   @unique
+  passwordHash  String   @map("password_hash")
+  role          Role     @default(STAFF)
+  realName      String   @map("real_name")
+  phone         String?
+  department    String?
+  avatar        String?
+  isFirstLogin  Boolean  @default(true) @map("is_first_login")
+  status        Status   @default(ACTIVE)
+  createdAt     DateTime @default(now()) @map("created_at")
+  updatedAt     DateTime @updatedAt @map("updated_at")
+
+  // Relations
+  reportedTickets   RepairTicket[] @relation("Reporter")
+  assignedTickets   RepairTicket[] @relation("AssignedTo")
+  approvedTickets   RepairTicket[] @relation("ApprovedBy")
+  payments          Payment[]      @relation("EmployeePayments")
+  rooms             Room[]         @relation("RoomOccupant")
+
+  @@map("users")
+}
+
+model Community {
+  id        String   @id @default(uuid())
+  name      String
+  address   String
+  adminId   String?  @map("admin_id")
+  status    Status   @default(ACTIVE)
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  buildings Building[]
+  rooms     Room[]
+
+  @@map("communities")
+}
+
+model Building {
+  id          String @id @default(uuid())
+  communityId String @map("community_id")
+  name        String
+  floors      Int
+  units       Int
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  community Community @relation(fields: [communityId], references: [id], onDelete: Cascade)
+  rooms     Room[]
+
+  @@map("buildings")
+}
+
+model Room {
+  id            String    @id @default(uuid())
+  buildingId    String    @map("building_id")
+  communityId   String    @map("community_id")
+  roomNumber    String    @map("room_number")
+  floor         Int
+  area          Float?
+  bedCount      Int       @default(1) @map("bed_count")
+  pricePerMonth Float?    @map("price_per_month")
+  status        RoomStatus @default(VACANT)
+  occupantId    String?   @map("occupant_id")
+  occupantName  String?   @map("occupant_name")
+  checkInDate   DateTime? @map("check_in_date")
+  createdAt     DateTime  @default(now()) @map("created_at")
+  updatedAt     DateTime  @updatedAt @map("updated_at")
+
+  building      Building     @relation(fields: [buildingId], references: [id], onDelete: Cascade)
+  community     Community    @relation(fields: [communityId], references: [id], onDelete: Cascade)
+  occupant      User?        @relation("RoomOccupant", fields: [occupantId], references: [id])
+  assets        Asset[]
+  tickets       RepairTicket[]
+  payments      Payment[]
+
+  @@map("rooms")
+}
+
+model Asset {
+  id           String   @id @default(uuid())
+  roomId       String   @map("room_id")
+  name         String
+  category     String
+  status       AssetStatus @default(GOOD)
+  purchaseDate DateTime?   @map("purchase_date")
+  price        Float?
+  notes        String?
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+
+  room Room @relation(fields: [roomId], references: [id], onDelete: Cascade)
+
+  @@map("assets")
+}
+
+model RepairTicket {
+  id            String      @id @default(uuid())
+  roomId        String      @map("room_id")
+  reporterId    String      @map("reporter_id")
+  category      String
+  description   String
+  images        String?     // JSON array of image URLs
+  urgency       Urgency     @default(NORMAL)
+  status        TicketStatus @default(PENDING)
+  assignedTo    String?     @map("assigned_to")
+  approvedBy    String?     @map("approved_by")
+  solution      String?
+  processImages String?     @map("process_images")
+  laborCost     Float?      @map("labor_cost")
+  materialCost  Float?      @map("material_cost")
+  totalCost     Float?      @map("total_cost")
+  rating        Int?
+  comment       String?
+  reportedAt    DateTime    @default(now()) @map("reported_at")
+  approvedAt    DateTime?   @map("approved_at")
+  startedAt     DateTime?   @map("started_at")
+  completedAt   DateTime?   @map("completed_at")
+  verifiedAt    DateTime?   @map("verified_at")
+  createdAt     DateTime    @default(now()) @map("created_at")
+  updatedAt     DateTime    @updatedAt @map("updated_at")
+
+  room     Room     @relation(fields: [roomId], references: [id], onDelete: Cascade)
+  reporter User     @relation("Reporter", fields: [reporterId], references: [id])
+  assignee User?    @relation("AssignedTo", fields: [assignedTo], references: [id])
+  approver User?    @relation("ApprovedBy", fields: [approvedBy], references: [id])
+
+  @@map("repair_tickets")
+}
+
+model Payment {
+  id          String        @id @default(uuid())
+  roomId      String        @map("room_id")
+  employeeId  String        @map("employee_id")
+  type        PaymentType
+  amount      Float
+  period      String        // YYYY-MM
+  dueDate     DateTime      @map("due_date")
+  paidAt      DateTime?     @map("paid_at")
+  paidBy      String?       @map("paid_by")
+  paymentMethod String?     @map("payment_method")
+  status      PaymentStatus @default(UNPAID)
+  remark      String?
+  createdAt   DateTime      @default(now()) @map("created_at")
+  updatedAt   DateTime      @updatedAt @map("updated_at")
+
+  room     Room @relation(fields: [roomId], references: [id], onDelete: Cascade)
+  employee User @relation("EmployeePayments", fields: [employeeId], references: [id])
+
+  @@map("payments")
+}
+
+enum Role {
+  ADMIN
+  STAFF
+  MAINTENANCE
+}
+
+enum Status {
+  ACTIVE
+  INACTIVE
+  DELETED
+}
+
+enum RoomStatus {
+  VACANT
+  OCCUPIED
+  MAINTENANCE
+  RESERVED
+}
+
+enum AssetStatus {
+  GOOD
+  FAIR
+  BROKEN
+  DISPOSED
+}
+
+enum Urgency {
+  LOW
+  NORMAL
+  HIGH
+  URGENT
+}
+
+enum TicketStatus {
+  PENDING
+  APPROVED
+  PROCESSING
+  DONE
+  CONFIRMED
+  CANCELLED
+}
+
+enum PaymentType {
+  RENT
+  WATER
+  ELECTRICITY
+  OTHER
+}
+
+enum PaymentStatus {
+  UNPAID
+  PAID
+  OVERDUE
+  CANCELLED
+}

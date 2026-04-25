@@ -8,6 +8,10 @@ import { api } from '../api/client';
 export type { PaymentType, PaymentStatus } from '../types';
 
 // ========== 小区 ==========
+export async function getAllCommunities() {
+  return api.getCommunities();
+}
+
 export async function getCommunities() {
   return api.getCommunities();
 }
@@ -26,6 +30,10 @@ export async function updateCommunity(id: string, data: any) {
 }
 
 // ========== 楼栋 ==========
+export async function getAllDorms() {
+  return api.getDorms();
+}
+
 export async function getDorms(communityId?: string) {
   return api.getDorms(communityId);
 }
@@ -40,6 +48,10 @@ export async function createDorm(data: any) {
 }
 
 // ========== 房间 ==========
+export async function getAllRooms() {
+  return api.getRooms();
+}
+
 export async function getRooms(params?: { communityId?: string; dormId?: string; status?: string }) {
   return api.getRooms(params);
 }
@@ -65,6 +77,10 @@ export async function transfer(oldRoomId: string, newRoomId: string, occupantId:
 }
 
 // ========== 员工/用户 ==========
+export async function getAllEmployees() {
+  return api.getUsers();
+}
+
 export async function getEmployees() {
   return api.getUsers();
 }
@@ -78,6 +94,10 @@ export async function createEmployee(data: any) {
 }
 
 // ========== 报修 ==========
+export async function getAllRepairTickets() {
+  return api.getTickets();
+}
+
 export async function getRepairTickets(params?: { status?: string; reporterId?: string }) {
   return api.getTickets(params);
 }
@@ -92,12 +112,12 @@ export async function createRepairTicket(data: any) {
 
 // 同意报修（进入处理中）
 export async function approveTicket(id: string) {
-  return api.updateTicket(id, { status: 'processing' });
+  return api.updateTicket(id, { status: 'APPROVED' });
 }
 
 // 完成维修
 export async function completeRepair(id: string) {
-  return api.updateTicket(id, { status: 'done', completedAt: new Date() });
+  return api.updateTicket(id, { status: 'DONE', completedAt: new Date() });
 }
 
 // 用户验收（兼容旧名）
@@ -221,6 +241,10 @@ export async function getRoomPaymentHistory(roomId: string) {
 }
 
 // ========== 导出任务（简化版）==========
+export async function getAllExportTasks() {
+  return [];
+}
+
 export async function getExportTasks() {
   return [];
 }

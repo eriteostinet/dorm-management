@@ -22,11 +22,9 @@ export default function Communities({ onBack }: CommunitiesProps) {
 
   const handleAdd = async (values: any) => {
     await createCommunity({
-      _id: values.code.toUpperCase(),
       name: values.name,
       address: values.address,
-      manager: values.manager,
-      managerPhone: values.managerPhone,
+      adminId: 'admin', // 默认管理员
     });
     const result = await getAllCommunities();
     setCommunities(result);
@@ -35,11 +33,11 @@ export default function Communities({ onBack }: CommunitiesProps) {
   };
 
   const handleToggleStatus = async (id: string, currentStatus: string) => {
-    const newStatus = currentStatus === 'active' ? 'inactive' : 'active';
-    await updateCommunity(id, { status: newStatus as any });
+    const newStatus = currentStatus === 'ACTIVE' ? 'INACTIVE' : 'ACTIVE';
+    await updateCommunity(id, { status: newStatus });
     const result = await getAllCommunities();
     setCommunities(result);
-    Toast.show({ icon: 'success', content: currentStatus === 'active' ? '已停用' : '已启用' });
+    Toast.show({ icon: 'success', content: currentStatus === 'ACTIVE' ? '已停用' : '已启用' });
   };
 
   return (
@@ -49,19 +47,19 @@ export default function Communities({ onBack }: CommunitiesProps) {
       </NavBar>
 
       <List>
-        {communities.map(c => (
+        {communities.map((c: any) => (
           <List.Item
-            key={c._id}
+            key={c.id}
             title={c.name}
-            description={`${c.address} | 负责人：${c.manager}`}
+            description={`${c.address || ''} | 管理员：${c.admin?.realName || '未分配'}`}
             extra={
-              <Tag color={c.status === 'active' ? 'success' : 'default'}>
-                {c.status === 'active' ? '启用' : '停用'}
+              <Tag color={c.status === 'ACTIVE' ? 'success' : 'default'}>
+                {c.status === 'ACTIVE' ? '启用' : '停用'}
               </Tag>
             }
-            onClick={() => handleToggleStatus(c._id, c.status)}
+            onClick={() => handleToggleStatus(c.id, c.status)}
           >
-            {c._id}
+            {c.id}
           </List.Item>
         ))}
       </List>

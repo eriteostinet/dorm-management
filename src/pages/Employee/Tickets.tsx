@@ -38,14 +38,14 @@ export default function Tickets({ onBack }: TicketsProps) {
     Toast.show({ icon: 'success', content: '刷新成功' });
   };
 
-  const handleConfirm = (ticket: RepairTicket) => {
+  const handleConfirm = (ticket: any) => {
     Dialog.confirm({
       title: '验收确认',
       content: '维修是否已完成？',
       confirmText: '通过',
       cancelText: '不通过',
-      onConfirm: () => showRatingDialog(ticket._id, 'passed'),
-      onCancel: () => showRatingDialog(ticket._id, 'failed'),
+      onConfirm: () => showRatingDialog(ticket.id, 'passed'),
+      onCancel: () => showRatingDialog(ticket.id, 'failed'),
     });
   };
 
@@ -95,12 +95,12 @@ export default function Tickets({ onBack }: TicketsProps) {
 
   const filterTickets = (status: string) => {
     if (status === 'processing') {
-      return tickets.filter(t => ['reported', 'assigned', 'processing'].includes(t.status));
+      return tickets.filter((t: any) => ['PENDING', 'APPROVED', 'PROCESSING'].includes(t.status));
     }
     if (status === 'pending') {
-      return tickets.filter(t => t.status === 'done');
+      return tickets.filter((t: any) => t.status === 'DONE');
     }
-    return tickets.filter(t => t.status === 'confirmed');
+    return tickets.filter((t: any) => t.status === 'CONFIRMED');
   };
 
   const renderTicketCard = (ticket: RepairTicket) => {
@@ -108,28 +108,28 @@ export default function Tickets({ onBack }: TicketsProps) {
     const urgencyInfo = getUrgencyInfo(ticket.urgency);
 
     return (
-      <Card key={ticket._id} className="ticket-card">
+      <Card key={ticket.id} className="ticket-card">
         <div className="ticket-header">
-          <span className="ticket-id">{ticket._id}</span>
+          <span className="ticket-id">{ticket.id}</span>
           <Tag color={statusInfo.color}>{statusInfo.text}</Tag>
         </div>
 
         <div className="ticket-info">
-          <p><strong>位置：</strong>{ticket.dormId} {ticket.roomId ? `· ${ticket.roomId.slice(-1)}房` : ''}</p>
-          <p><strong>类别：</strong>{ticket.category} · {ticket.subCategory}</p>
+          <p><strong>位置：</strong>{ticket.room?.roomNumber || ticket.roomId}</p>
+          <p><strong>类别：</strong>{ticket.category} · {ticket.description || ''}</p>
           <p><strong>紧急度：</strong>
             <span style={{ color: urgencyInfo.color }}>{urgencyInfo.text}</span>
           </p>
-          <p><strong>提交时间：</strong>{formatDateTime(ticket.reportedAt)}</p>
-          {ticket.assignedName && (
-            <p><strong>维修工：</strong>{ticket.assignedName}</p>
+          <p><strong>提交时间：</strong>{formatDateTime(ticket.createdAt)}</p>
+          {ticket.assignedTo && (
+            <p><strong>维修工：</strong>{ticket.assignedTo}</p>
           )}
           {ticket.solution && (
             <p><strong>解决方案：</strong>{ticket.solution}</p>
           )}
         </div>
 
-        {ticket.status === 'done' && (
+        {ticket.status === 'DONE' && (
           <div style={{ marginTop: 10, textAlign: 'right' }}>
             <Button size="small" color="primary" onClick={() => handleConfirm(ticket)}>
               验收

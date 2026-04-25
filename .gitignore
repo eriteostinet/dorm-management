@@ -1,24 +1,43 @@
-# 环境变量（不提交敏感信息）
-.env
-.env.local
-
-# 依赖
+# Dependencies
 node_modules/
-venv_deploy/
-
-# 构建产物
-dist/
-
-# 日志
+backend/node_modules/
 *.log
 
+# Build
+dist/
+dist-ssr/
+backend/dist/
+*.local
+
+# Environment
+.env
+.env.*
+!.env.example
+backend/.env
+
 # IDE
-.vscode/
+.vscode/*
+!.vscode/extensions.json
 .idea/
 
-# 系统文件
+# OS
 .DS_Store
+Thumbs.db
 
-# 临时文件
-*.tmp
-*.swp
+# Database
+*.db
+*.sqlite
+
+# Uploads
+uploads/
+backend/uploads/
+
+# Test
+coverage/
+*.test.ts
+
+# Prisma
+backend/prisma/migrations/
+
+# Docker
+.dockerignore

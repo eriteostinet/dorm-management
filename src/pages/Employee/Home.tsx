@@ -27,7 +27,7 @@ export default function EmployeeHome({ onNavigate }: EmployeeHomeProps) {
         
         if (emp.currentRoomId) {
           const rooms = await getRooms({ dormId: emp.currentDormId || '' });
-          const myRoom = rooms.find((r: Room) => r._id === emp.currentRoomId);
+          const myRoom = rooms.find((r: any) => r.id === emp.currentRoomId);
           setRoom(myRoom || null);
           setRoommates(rooms.filter((r: Room) => r._id !== emp.currentRoomId && r.occupantId));
         }

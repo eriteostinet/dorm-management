@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Card, Selector, NavBar, Button, Dialog, Toast, Tabs, Space } from 'antd-mobile';
-import { db, initDefaultData } from '../../db/db';
-import type { Room, Community, Dorm } from '../../types';
+import { getAllCommunities, getAllDorms, getAllRooms, getAllEmployees, checkIn, checkOut } from '../../services/dataService';
 import './Dorms.css';
 
 interface DormsProps {
@@ -9,10 +8,10 @@ interface DormsProps {
 }
 
 export default function Dorms({ onBack }: DormsProps) {
-  const [communities, setCommunities] = useState<Community[]>([]);
+  const [communities, setCommunities] = useState<any[]>([]);
   const [selectedCommunity, setSelectedCommunity] = useState<string>('');
-  const [dorms, setDorms] = useState<Dorm[]>([]);
-  const [rooms, setRooms] = useState<Room[]>([]);
+  const [dorms, setDorms] = useState<any[]>([]);
+  const [rooms, setRooms] = useState<any[]>([]);
   const [employees, setEmployees] = useState<any[]>([]);
   const [selectedBuilding, setSelectedBuilding] = useState<string>('');
   const [selectedRooms, setSelectedRooms] = useState<Set<string>>(new Set());
@@ -20,19 +19,6 @@ export default function Dorms({ onBack }: DormsProps) {
 
   useEffect(() => {
     loadInitialData();
-    
-    // 监听数据更新事件（从数据管理页面导入后会触发）
-    const handleDataUpdate = () => {
-      loadInitialData();
-      if (selectedCommunity) {
-        loadCommunityData();
-      }
-    };
-    window.addEventListener('dorm-data-updated', handleDataUpdate);
-    
-    return () => {
-      window.removeEventListener('dorm-data-updated', handleDataUpdate);
-    };
   }, []);
 
   useEffect(() => {
@@ -42,57 +28,65 @@ export default function Dorms({ onBack }: DormsProps) {
   }, [selectedCommunity]);
 
   const loadInitialData = async () => {
-    await initDefaultData();
-    const list = await db.communities.where('status').equals('active').sortBy('sortOrder').toArray();
-    setCommunities(list);
-    if (list.length > 0) {
-      setSelectedCommunity(list[0]._id);
+    try {
+      const list = await getAllCommunities();
+      const activeCommunities = list.filter((c: any) => c.status === 'ACTIVE');
+      setCommunities(activeCommunities);
+      if (activeCommunities.length > 0) {
+        setSelectedCommunity(activeCommunities[0].id);
+      }
+    } catch (err) {
+      console.error('加载小区失败:', err);
     }
   };
 
   const loadCommunityData = async () => {
-    const [dormList, roomList, empList] = await Promise.all([
-      db.dorms.where('communityId').equals(selectedCommunity).toArray(),
-      db.rooms.where('communityId').equals(selectedCommunity).toArray(),
-      db.employees.toArray(),
-    ]);
-    setDorms(dormList);
-    setRooms(roomList);
-    setEmployees(empList);
+    try {
+      const [dormList, roomList, empList] = await Promise.all([
+        getAllDorms(),
+        getAllRooms(),
+        getAllEmployees(),
+      ]);
+      const communityDorms = dormList.filter((d: any) => d.communityId === selectedCommunity);
+      const communityRooms = roomList.filter((r: any) => r.communityId === selectedCommunity);
+      setDorms(communityDorms);
+      setRooms(communityRooms);
+      setEmployees(empList);
 
-    // 默认选中第一个楼栋
-    const buildings = [...new Set(dormList.map(d => d.building))].sort();
-    if (buildings.length > 0 && !selectedBuilding) {
-      setSelectedBuilding(buildings[0]);
+      const buildings = [...new Set(communityDorms.map((d: any) => d.name))].sort();
+      if (buildings.length > 0 && !selectedBuilding) {
+        setSelectedBuilding(buildings[0]);
+      }
+    } catch (err) {
+      console.error('加载数据失败:', err);
     }
   };
 
-  // 按楼栋和楼层组织房间
   const getFloorMap = () => {
-    const buildingDorms = dorms.filter(d => d.building === selectedBuilding);
-    const floors = [...new Set(buildingDorms.map(d => d.floor))].sort((a, b) => b - a);
+    const buildingDorms = dorms.filter((d: any) => d.name === selectedBuilding);
+    const floors = [...new Set(buildingDorms.map((d: any) => d.floor || 1))].sort((a, b) => b - a);
     
-    return floors.map(floor => {
-      const floorDorms = buildingDorms.filter(d => d.floor === floor);
+    return floors.map((floor: any) => {
+      const floorDorms = buildingDorms.filter((d: any) => (d.floor || 1) === floor);
       return {
         floor,
-        dorms: floorDorms.map(dorm => ({
+        dorms: floorDorms.map((dorm: any) => ({
           ...dorm,
-          rooms: rooms.filter(r => r.dormId === dorm._id).sort((a, b) => a.roomNo.localeCompare(b.roomNo)),
+          rooms: rooms.filter((r: any) => r.buildingId === dorm.id).sort((a: any, b: any) => a.roomNumber.localeCompare(b.roomNumber)),
         })),
       };
     });
   };
 
-  const handleCheckIn = async (room: Room) => {
-    const availableEmployees = employees.filter(e => !e.currentRoomId && e.role === 'employee');
+  const handleCheckIn = async (room: any) => {
+    const availableEmployees = employees.filter((e: any) => !e.currentRoomId && e.role === 'STAFF');
     
     Dialog.confirm({
       title: '选择入住员工',
       content: (
         <select id="emp-select" style={{ width: '100%', padding: '10px', fontSize: '14px' }}>
-          {availableEmployees.map(e => (
-            <option key={e._id} value={e._id}>{e.name} ({e.department})</option>
+          {availableEmployees.map((e: any) => (
+            <option key={e.id} value={e.id}>{e.realName || e.name} ({e.department})</option>
           ))}
         </select>
       ),
@@ -100,69 +94,34 @@ export default function Dorms({ onBack }: DormsProps) {
         const select = document.getElementById('emp-select') as HTMLSelectElement;
         const empId = select?.value;
         if (empId) {
-          const employee = employees.find(e => e._id === empId);
-          if (employee) {
-            await db.rooms.update(room._id, {
-              occupantId: empId,
-              occupantName: employee.name,
-              occupantDept: employee.department,
-              checkInDate: new Date(),
-              status: 'occupied',
-            });
-            await db.employees.update(empId, {
-              currentCommunityId: room.communityId,
-              currentDormId: room.dormId,
-              currentRoomId: room._id,
-            });
+          try {
+            await checkIn(room.id, empId);
             Toast.show({ icon: 'success', content: '入住成功' });
             loadCommunityData();
+          } catch (err: any) {
+            Toast.show({ icon: 'fail', content: err.message || '入住失败' });
           }
         }
       },
     });
   };
 
-  const handleCheckOut = async (room: Room) => {
+  const handleCheckOut = async (room: any) => {
     Dialog.confirm({
       title: '确认退宿',
-      content: `员工：${room.occupantName}，房间：${room._id}`,
+      content: `员工：${room.occupantName}，房间：${room.roomNumber}`,
       onConfirm: async () => {
-        if (room.occupantId) {
-          const employee = employees.find(e => e._id === room.occupantId);
-          if (employee) {
-            // 添加到历史
-            const history = employee.history || [];
-            history.push({
-              communityId: room.communityId,
-              dormId: room.dormId,
-              roomId: room._id,
-              checkIn: room.checkInDate,
-              checkOut: new Date(),
-              reason: '正常退宿',
-            });
-            await db.employees.update(room.occupantId, {
-              currentCommunityId: null,
-              currentDormId: null,
-              currentRoomId: null,
-              history,
-            });
-          }
-          // 清空房间
-          await db.rooms.update(room._id, {
-            occupantId: null,
-            occupantName: null,
-            occupantDept: null,
-            checkInDate: null,
-            status: 'vacant',
-          });
+        try {
+          await checkOut(room.id);
           Toast.show({ icon: 'success', content: '退宿成功' });
           loadCommunityData();
+        } catch (err: any) {
+          Toast.show({ icon: 'fail', content: err.message || '退宿失败' });
         }
       },
     });
   };
 
-  // 批量选择
   const toggleRoomSelection = (roomId: string) => {
     const newSet = new Set(selectedRooms);
     if (newSet.has(roomId)) {
@@ -173,9 +132,8 @@ export default function Dorms({ onBack }: DormsProps) {
     setSelectedRooms(newSet);
   };
 
-  // 批量入住
   const handleBatchCheckIn = async () => {
-    const availableEmployees = employees.filter(e => !e.currentRoomId && e.role === 'employee');
+    const availableEmployees = employees.filter((e: any) => !e.currentRoomId && e.role === 'STAFF');
     if (selectedRooms.size > availableEmployees.length) {
       Toast.show({ icon: 'fail', content: '可用员工不足' });
       return;
@@ -187,22 +145,15 @@ export default function Dorms({ onBack }: DormsProps) {
       onConfirm: async () => {
         let idx = 0;
         for (const roomId of selectedRooms) {
-          const room = rooms.find(r => r._id === roomId);
+          const room = rooms.find((r: any) => r.id === roomId);
           const employee = availableEmployees[idx];
-          if (room && employee && room.status === 'vacant') {
-            await db.rooms.update(room._id, {
-              occupantId: employee._id,
-              occupantName: employee.name,
-              occupantDept: employee.department,
-              checkInDate: new Date(),
-              status: 'occupied',
-            });
-            await db.employees.update(employee._id, {
-              currentCommunityId: room.communityId,
-              currentDormId: room.dormId,
-              currentRoomId: room._id,
-            });
-            idx++;
+          if (room && employee && room.status === 'VACANT') {
+            try {
+              await checkIn(room.id, employee.id);
+              idx++;
+            } catch {
+              // continue
+            }
           }
         }
         Toast.show({ icon: 'success', content: `成功入住 ${idx} 人` });
@@ -213,7 +164,6 @@ export default function Dorms({ onBack }: DormsProps) {
     });
   };
 
-  // 批量退宿
   const handleBatchCheckOut = async () => {
     Dialog.confirm({
       title: `批量退宿 ${selectedRooms.size} 个房间`,
@@ -221,34 +171,14 @@ export default function Dorms({ onBack }: DormsProps) {
       onConfirm: async () => {
         let count = 0;
         for (const roomId of selectedRooms) {
-          const room = rooms.find(r => r._id === roomId);
+          const room = rooms.find((r: any) => r.id === roomId);
           if (room?.occupantId) {
-            const employee = employees.find(e => e._id === room.occupantId);
-            if (employee) {
-              const history = employee.history || [];
-              history.push({
-                communityId: room.communityId,
-                dormId: room.dormId,
-                roomId: room._id,
-                checkIn: room.checkInDate,
-                checkOut: new Date(),
-                reason: '批量退宿',
-              });
-              await db.employees.update(room.occupantId, {
-                currentCommunityId: null,
-                currentDormId: null,
-                currentRoomId: null,
-                history,
-              });
+            try {
+              await checkOut(room.id);
+              count++;
+            } catch {
+              // continue
             }
-            await db.rooms.update(room._id, {
-              occupantId: null,
-              occupantName: null,
-              occupantDept: null,
-              checkInDate: null,
-              status: 'vacant',
-            });
-            count++;
           }
         }
         Toast.show({ icon: 'success', content: `成功退宿 ${count} 人` });
@@ -260,16 +190,15 @@ export default function Dorms({ onBack }: DormsProps) {
   };
 
   const floorMap = getFloorMap();
-  const buildings = [...new Set(dorms.map(d => d.building))].sort();
+  const buildings = [...new Set(dorms.map((d: any) => d.name))].sort();
 
   return (
     <div className="page-container">
       <NavBar onBack={onBack}>宿舍管理</NavBar>
 
-      {/* 小区选择 */}
       <Card>
         <Selector
-          options={communities.map(c => ({ label: c.name, value: c._id }))}
+          options={communities.map((c: any) => ({ label: c.name, value: c.id }))}
           value={[selectedCommunity]}
           onChange={(val) => {
             setSelectedCommunity(val[0]);
@@ -279,7 +208,6 @@ export default function Dorms({ onBack }: DormsProps) {
         />
       </Card>
 
-      {/* 批量操作栏 */}
       {batchMode && (
         <Card style={{ background: '#fffbe6' }}>
           <Space>
@@ -291,15 +219,10 @@ export default function Dorms({ onBack }: DormsProps) {
         </Card>
       )}
 
-      {/* 楼栋切换 */}
       {buildings.length > 0 && (
         <Card>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-            <Tabs
-              activeKey={selectedBuilding}
-              onChange={setSelectedBuilding}
-              style={{ flex: 1 }}
-            >
+            <Tabs activeKey={selectedBuilding} onChange={setSelectedBuilding} style={{ flex: 1 }}>
               {buildings.map(b => (
                 <Tabs.Tab title={`${b}栋`} key={b} />
               ))}
@@ -311,41 +234,40 @@ export default function Dorms({ onBack }: DormsProps) {
         </Card>
       )}
 
-      {/* 楼层平面图 */}
       <div className="floor-plans">
         {floorMap.map(({ floor, dorms: floorDorms }) => (
           <Card key={floor} title={`${floor}层`} className="floor-card">
             <div className="dorms-row">
-              {floorDorms.map(dorm => (
-                <div key={dorm._id} className="dorm-unit">
-                  <div className="dorm-title">{dorm._id.split('-').pop()}</div>
+              {floorDorms.map((dorm: any) => (
+                <div key={dorm.id} className="dorm-unit">
+                  <div className="dorm-title">{dorm.name}</div>
                   <div className="rooms-grid">
-                    {dorm.rooms.map((room: Room) => {
-                      const isSelected = selectedRooms.has(room._id);
+                    {dorm.rooms.map((room: any) => {
+                      const isSelected = selectedRooms.has(room.id);
                       return (
                         <div
-                          key={room._id}
-                          className={`room-cell ${room.status} ${isSelected ? 'selected' : ''} ${batchMode ? 'selectable' : ''}`}
+                          key={room.id}
+                          className={`room-cell ${(room.status || '').toLowerCase()} ${isSelected ? 'selected' : ''} ${batchMode ? 'selectable' : ''}`}
                           onClick={() => {
                             if (batchMode) {
-                              toggleRoomSelection(room._id);
-                            } else if (room.status === 'vacant') {
+                              toggleRoomSelection(room.id);
+                            } else if (room.status === 'VACANT') {
                               handleCheckIn(room);
-                            } else if (room.status === 'occupied') {
+                            } else if (room.status === 'OCCUPIED') {
                               handleCheckOut(room);
                             }
                           }}
                         >
                           {batchMode && isSelected && <div className="select-badge">✓</div>}
-                          <div className="room-no">{room.roomNo}</div>
-                          {room.status === 'occupied' ? (
+                          <div className="room-no">{room.roomNumber}</div>
+                          {room.status === 'OCCUPIED' ? (
                             <>
                               <div className="room-name">{room.occupantName}</div>
-                              <div className="room-dept">{room.occupantDept}</div>
+                              <div className="room-dept">{room.occupant?.department || ''}</div>
                             </>
                           ) : (
                             <div className="room-status">
-                              {room.status === 'vacant' ? '空置' : '维修'}
+                              {room.status === 'VACANT' ? '空置' : '维修'}
                             </div>
                           )}
                         </div>
@@ -359,7 +281,6 @@ export default function Dorms({ onBack }: DormsProps) {
         ))}
       </div>
 
-      {/* 图例 */}
       <Card>
         <div className="legend">
           <div className="legend-item"><span className="dot vacant"></span> 空置</div>

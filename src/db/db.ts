@@ -190,14 +190,3 @@ export function getCloudDB() {
   console.log('[db.ts] CloudBase 已废弃');
   return {};
 }
-
-// 兼容旧代码的 CloudBase 初始化
-export function initCloudBase() {
-  console.log('[db.ts] CloudBase 已废弃');
-  return {};
-}
-
-export function getCloudDB() {
-  console.log('[db.ts] CloudBase 已废弃');
-  return {};
-}

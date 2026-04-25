@@ -11,16 +11,16 @@ interface RepairsProps {
 
 // 状态文本
 const statusText: Record<string, string> = {
-  reported: '待同意', processing: '处理中', done: '待验收', confirmed: '已完成'
+  PENDING: '待同意', APPROVED: '已同意', PROCESSING: '处理中', DONE: '待验收', CONFIRMED: '已完成'
 };
 const statusColor: Record<string, string> = {
-  reported: 'warning', processing: 'primary', done: 'success', confirmed: 'default'
+  PENDING: 'warning', APPROVED: 'primary', PROCESSING: 'primary', DONE: 'success', CONFIRMED: 'default'
 };
 const urgencyText: Record<string, string> = {
-  urgent: '紧急', normal: '一般', low: '低'
+  HIGH: '紧急', NORMAL: '一般', LOW: '低'
 };
 const urgencyColor: Record<string, string> = {
-  urgent: 'danger', normal: 'primary', low: 'success'
+  HIGH: 'danger', NORMAL: 'primary', LOW: 'success'
 };
 
 function fmtDate(d: Date | string): string {
@@ -30,7 +30,7 @@ function fmtDate(d: Date | string): string {
 
 export default function Repairs({ onBack }: RepairsProps) {
   const [tickets, setTickets] = useState<RepairTicket[]>([]);
-  const [activeKey, setActiveKey] = useState('reported');
+  const [activeKey, setActiveKey] = useState('PENDING');
   const [loading, setLoading] = useState(false);
   const [cloudReady, setCloudReady] = useState(false);
 
@@ -41,16 +41,14 @@ export default function Repairs({ onBack }: RepairsProps) {
   async function loadData() {
     setLoading(true);
     try {
-      // 使用云函数 API 获取工单（多端互通）
       const list = await getRepairTickets();
       setTickets(list);
       setCloudReady(true);
-      setLoading(false);
     } catch (err) {
       console.error('加载失败:', err);
-      setCloudReady(true);
+      Toast.show({ icon: 'fail', content: '加载工单失败' });
+    } finally {
       setLoading(false);
-      Toast.show({ icon: 'fail', content: '云数据库连接失败' });
     }
   }
 
@@ -105,11 +103,11 @@ export default function Repairs({ onBack }: RepairsProps) {
     }
   }
 
-  const filtered = tickets.filter(function(t) {
-    return activeKey === 'reported' ? t.status === 'reported' :
-           activeKey === 'processing' ? t.status === 'processing' :
-           activeKey === 'done' ? t.status === 'done' :
-           activeKey === 'confirmed' ? t.status === 'confirmed' : true;
+  const filtered = tickets.filter(function(t: any) {
+    return activeKey === 'PENDING' ? (t.status === 'PENDING' || t.status === 'APPROVED') :
+           activeKey === 'PROCESSING' ? t.status === 'PROCESSING' :
+           activeKey === 'DONE' ? t.status === 'DONE' :
+           activeKey === 'CONFIRMED' ? t.status === 'CONFIRMED' : true;
   });
 
   return (
@@ -125,10 +123,10 @@ export default function Repairs({ onBack }: RepairsProps) {
       )}
 
       <Tabs activeKey={activeKey} onChange={setActiveKey}>
-        <Tabs.Tab title="待同意" key="reported" />
-        <Tabs.Tab title="处理中" key="processing" />
-        <Tabs.Tab title="待验收" key="done" />
-        <Tabs.Tab title="已完成" key="confirmed" />
+        <Tabs.Tab title="待同意" key="PENDING" />
+        <Tabs.Tab title="处理中" key="PROCESSING" />
+        <Tabs.Tab title="待验收" key="DONE" />
+        <Tabs.Tab title="已完成" key="CONFIRMED" />
       </Tabs>
 
       <PullToRefresh onRefresh={doRefresh}>
@@ -140,24 +138,24 @@ export default function Repairs({ onBack }: RepairsProps) {
               {cloudReady ? '暂无数据' : '正在连接云数据库...'}
             </div>
           ) : (
-            filtered.map(function(t) {
+            filtered.map(function(t: any) {
               return (
-                <Card key={t._id} className="repair-card">
+                <Card key={t.id} className="repair-card">
                   <div className="repair-header">
-                    <span className="repair-id">{t._id}</span>
+                    <span className="repair-id">{t.id}</span>
                     <div>
                       <Tag color={urgencyColor[t.urgency] || 'default'}>{urgencyText[t.urgency] || t.urgency}</Tag>
                       <Tag color={statusColor[t.status] || 'default'}>{statusText[t.status] || t.status}</Tag>
                     </div>
                   </div>
                   <div className="repair-info">
-                    <p><strong>位置：</strong>{t.dormId}</p>
-                    <p><strong>问题：</strong>{t.category} - {t.subCategory}</p>
-                    <p><strong>报修人：</strong>{t.reporterName}</p>
-                    <p><strong>时间：</strong>{fmtDate(t.reportedAt)}</p>
+                    <p><strong>位置：</strong>{t.room?.roomNumber || t.roomId}</p>
+                    <p><strong>问题：</strong>{t.category} - {t.description}</p>
+                    <p><strong>报修人：</strong>{t.reporter?.realName || t.reporterName}</p>
+                    <p><strong>时间：</strong>{fmtDate(t.createdAt)}</p>
                   </div>
                   <div className="repair-actions">
-                    {t.status === 'reported' && (
+                    {(t.status === 'PENDING' || t.status === 'APPROVED') && (
                       <Button 
                         size="small" 
                         color="primary" 
@@ -166,11 +164,11 @@ export default function Repairs({ onBack }: RepairsProps) {
                         同意
                       </Button>
                     )}
-                    {t.status === 'processing' && (
+                    {t.status === 'PROCESSING' && (
                       <Button 
                         size="small" 
                         color="success" 
-                        onClick={function() { doComplete(t._id); }}
+                        onClick={function() { doComplete(t.id); }}
                       >
                         完成
                       </Button>

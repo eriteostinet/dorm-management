@@ -1,43 +1,57 @@
-name: Deploy to Server
+name: Deploy to Production
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
+  workflow_dispatch:
 
 jobs:
-  deploy:
+  build-and-deploy:
     runs-on: ubuntu-latest
+    
     steps:
-      - uses: actions/checkout@v4
-      
-      - name: Setup Node
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '20'
-          
-      - name: Build
-        run: |
-          npm ci
-          npm run build
-          
-      - name: Deploy to Server
-        uses: appleboy/scp-action@master
+          cache: 'npm'
+
+      - name: Install frontend dependencies
+        run: npm ci
+
+      - name: Build frontend
+        run: npm run build
+
+      - name: Deploy frontend to server
+        uses: appleboy/scp-action@v0.1.7
         with:
           host: ${{ secrets.SERVER_IP }}
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
-          source: "dist/*"
+          source: "dist/"
           target: "/usr/share/nginx/html/"
           strip_components: 1
-          rm: true
-          
-      - name: Fix index.html
-        uses: appleboy/ssh-action@master
+          overwrite: true
+
+      - name: Deploy backend and restart
+        uses: appleboy/ssh-action@v1.0.0
         with:
           host: ${{ secrets.SERVER_IP }}
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
-            cd /usr/share/nginx/html
-            [ -L index.html ] && rm -f index.html
-            ls -la
+            cd /opt/dorm-management || (
+              git clone https://github.com/eriteostinet/dorm-management.git /opt/dorm-management
+            )
+            cd /opt/dorm-management
+            git pull origin main
+            cd backend
+            npm ci
+            npx prisma migrate deploy
+            npx prisma db seed || true
+            npm run build
+            pm2 restart dorm-backend || pm2 start dist/index.js --name dorm-backend
+            echo "部署完成"
