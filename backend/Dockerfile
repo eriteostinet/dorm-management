@@ -16,6 +16,9 @@ RUN npm run build
 # Production image
 FROM node:20-alpine
 
+# Install curl for healthcheck
+RUN apk add --no-cache curl
+
 WORKDIR /app
 
 # Install dependencies (包括 prisma CLI 用于迁移)
