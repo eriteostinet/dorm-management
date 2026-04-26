@@ -65,13 +65,12 @@ export default function Repairs({ onBack }: RepairsProps) {
     
     setLoading(true);
     try {
-      // 使用云函数 API（多端互通）
       const result = await approveTicket(ticket.id);
-      if (result.success) {
+      if (result && result.id) {
         Toast.show({ icon: 'success', content: '已同意，进入处理中' });
         loadData();
       } else {
-        Toast.show({ icon: 'fail', content: result.message || '更新失败' });
+        Toast.show({ icon: 'fail', content: '更新失败' });
       }
     } catch (err) {
       console.error('同意操作失败:', err);
@@ -88,11 +87,11 @@ export default function Repairs({ onBack }: RepairsProps) {
     setLoading(true);
     try {
       const result = await completeRepair(ticket.id, solution);
-      if (result.success !== false) {
+      if (result && result.id) {
         Toast.show({ icon: 'success', content: '已完成' });
         loadData();
       } else {
-        Toast.show({ icon: 'fail', content: result.message || '更新失败' });
+        Toast.show({ icon: 'fail', content: '更新失败' });
       }
     } catch (err) {
       console.error('完成操作失败:', err);

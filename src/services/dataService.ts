@@ -110,15 +110,12 @@ export async function createRepairTicket(data: any) {
   return api.createTicket(data);
 }
 
-// 同意报修（调用后端审批接口）
+// 同意报修（调用后端审批接口，直接进入处理中）
 export async function approveTicket(id: string, assignedTo?: string) {
-  if (assignedTo) {
-    return api.rawRequest(`/tickets/${id}/approve`, {
-      method: 'POST',
-      body: JSON.stringify({ assignedTo }),
-    });
-  }
-  return api.updateTicket(id, { status: 'APPROVED' });
+  return api.rawRequest(`/tickets/${id}/approve`, {
+    method: 'POST',
+    body: JSON.stringify(assignedTo ? { assignedTo } : {}),
+  });
 }
 
 // 开始维修
@@ -210,7 +207,7 @@ export async function updatePayment(id: string, data: any) {
 }
 
 export async function cancelPayment(id: string, reason: string) {
-  return api.updatePayment(id, { status: 'cancelled', remark: reason });
+  return api.updatePayment(id, { status: 'CANCELLED', remark: reason });
 }
 
 export async function deletePayment(id: string) {

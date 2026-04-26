@@ -145,26 +145,28 @@ router.post('/',
   }
 );
 
-// 审批工单（管理员指派维修工）
+// 审批工单（管理员同意，直接进入处理中）
 router.post('/:id/approve',
   authenticate,
   requireRole('ADMIN'),
-  [
-    body('assignedTo').notEmpty().withMessage('必须指定维修工'),
-  ],
   async (req: AuthRequest, res, next) => {
     try {
       const { id } = req.params;
       const { assignedTo } = req.body;
 
+      const updateData: any = {
+        status: 'PROCESSING',
+        approvedBy: req.user!.userId,
+        approvedAt: new Date(),
+        startedAt: new Date(),
+      };
+      if (assignedTo) {
+        updateData.assignedTo = assignedTo;
+      }
+
       const ticket = await prisma.repairTicket.update({
         where: { id },
-        data: {
-          status: 'APPROVED',
-          assignedTo,
-          approvedBy: req.user!.userId,
-          approvedAt: new Date(),
-        },
+        data: updateData,
         include: {
           room: true,
           reporter: { select: { id: true, realName: true } },
@@ -172,8 +174,10 @@ router.post('/:id/approve',
         },
       });
 
-      // 通知维修工
-      io.to(`user:${assignedTo}`).emit('ticket:assigned', ticket);
+      // 通知维修工（如有）
+      if (assignedTo) {
+        io.to(`user:${assignedTo}`).emit('ticket:assigned', ticket);
+      }
       io.to(`user:${ticket.reporterId}`).emit('ticket:approved', ticket);
 
       res.json(ticket);
@@ -299,7 +303,6 @@ router.post('/:id/confirm',
           status,
           rating: rating || null,
           comment: comment || null,
-          confirmStatus: confirmStatus || 'pass',
           verifiedAt: new Date(),
         },
         include: {
