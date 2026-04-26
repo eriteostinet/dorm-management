@@ -1,138 +1,175 @@
-# 宿舍管理系统 - 部署指南
+# 宿舍管理系统 - 阿里云部署指南
 
-## 当前状态
+## 快速开始（一键部署）
 
-### ✅ 已完成
-- **后端** (Node.js + Express + TypeScript + Prisma + PostgreSQL)
-  - 完整 REST API（认证、小区、楼栋、房间、员工、工单、缴费、资产、看板、导出）
-  - JWT 认证（access + refresh token）
-  - 角色权限控制（ADMIN/STAFF/MAINTENANCE）
-  - WebSocket 实时通知
-  - Docker Compose 一键部署配置
-  - 种子数据（默认账号）
-
-- **前端适配页面**
-  - Login.tsx ✅
-  - Dashboard.tsx ✅
-  - Communities.tsx ✅
-  - Dorms.tsx ✅（入住/退房/批量操作）
-  - Employees.tsx ✅（列表/新增）
-  - Repairs.tsx ✅（管理员端工单处理）
-  - Assets.tsx ✅（简化版台账）
-  - Employee/Home.tsx ✅
-  - Employee/Repair.tsx ✅
-  - Employee/Tickets.tsx ✅（验收）
-  - Employee/Profile.tsx ✅
-
-### ⚠️ 待完善
-- Payments.tsx（已用 services，可能有字段映射问题）
-- Exports.tsx
-- DataManage.tsx
-- OccupancyMap.tsx
-- Analytics.tsx
-- ExcelImport.tsx
-
-## 部署方式
-
-### 方式一：阿里云 Workbench 手动部署（最快）
-
-在阿里云 Workbench 中连接服务器 `8.163.105.42`，然后执行：
+在阿里云 ECS 服务器上执行：
 
 ```bash
-# 1. 安装 Docker（如未安装）
+curl -fsSL https://raw.githubusercontent.com/eriteostinet/dorm-management/main/deploy.sh | sudo bash
+```
+
+或手动下载执行：
+
+```bash
+wget https://raw.githubusercontent.com/eriteostinet/dorm-management/main/deploy.sh
+chmod +x deploy.sh
+sudo ./deploy.sh
+```
+
+部署完成后访问：`http://你的服务器IP`
+
+---
+
+## 手动部署步骤
+
+### 1. 环境要求
+
+- 阿里云 ECS（CentOS 7/8 或 Ubuntu 20.04+）
+- 公网 IP
+- 安全组开放 **80 端口**
+- 内存建议 ≥ 2GB
+
+### 2. 安装 Docker
+
+```bash
 curl -fsSL https://get.docker.com | sh
+sudo usermod -aG docker $(whoami)
+```
 
-# 2. 安装 Docker Compose
-sudo curl -L "https://github.com/docker/compose/releases/download/v2.24.0/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
-sudo chmod +x /usr/local/bin/docker-compose
+### 3. 克隆代码
 
-# 3. 克隆代码
-cd /opt
+```bash
 git clone https://github.com/eriteostinet/dorm-management.git
 cd dorm-management
-
-# 4. 启动所有服务
-docker-compose up -d
-
-# 5. 查看日志
-docker-compose logs -f backend
 ```
 
-等待约 30 秒后，访问 `http://8.163.105.42` 即可使用。
-
-**默认账号：**
-- 管理员：admin / admin123（首次登录需改密码）
-- 员工：E001 / 123456
-- 维修工：M001 / 123456
-
-### 方式二：GitHub Actions 自动部署
-
-1. 在 GitHub 仓库 Settings > Secrets > Actions 中添加：
-   - `SERVER_IP` = `8.163.105.42`
-   - `SERVER_USER` = `root`
-   - `SSH_PRIVATE_KEY` = 服务器私钥（执行 `cat ~/.ssh/id_rsa` 获取）
-
-2. 每次 push 到 main 分支会自动部署
-
-### 方式三：前端单独部署
-
-如果只需要更新前端：
+### 4. 配置环境变量
 
 ```bash
-cd /root/.openclaw/workspace/dorm-management
-npm run build
-# 将 dist/ 目录上传到服务器的 /usr/share/nginx/html/
-```
-
-## 前端构建
-
-```bash
-cd /root/.openclaw/workspace/dorm-management
-npm install
-npm run build
-```
-
-## 后端本地开发
-
-```bash
-cd /root/.openclaw/workspace/dorm-management/backend
-npm install
 cp .env.example .env
-npx prisma migrate dev
-npx prisma db seed
-npm run dev
+# 编辑 .env，修改以下关键配置：
+# - POSTGRES_PASSWORD: 数据库强密码
+# - JWT_SECRET: 至少32位随机字符串
+# - FRONTEND_URL: 你的服务器IP或域名
 ```
 
-## 环境变量
+### 5. 启动服务
 
-### 后端 (.env)
-```
-DATABASE_URL=postgresql://postgres:postgres@localhost:5432/dorm_management
-JWT_SECRET=your-secret
-JWT_REFRESH_SECRET=your-refresh-secret
-PORT=3000
+```bash
+docker-compose up -d
 ```
 
-### 前端 (.env)
+### 6. 查看日志
+
+```bash
+docker-compose logs -f
 ```
-VITE_API_URL=/api
+
+---
+
+## 默认账号
+
+| 角色 | 账号 | 密码 |
+|------|------|------|
+| 管理员 | admin | admin123 |
+| 员工 | 见种子数据 | 123456 |
+
+**⚠️ 首次登录后请立即修改默认密码！**
+
+---
+
+## 配置 HTTPS（可选）
+
+1. 申请 SSL 证书（阿里云免费证书）
+2. 将证书放入项目目录：
+   ```
+   ssl/
+   ├── cert.pem
+   └── key.pem
+   ```
+3. 取消 `nginx.conf` 和 `docker-compose.yml` 中 HTTPS 配置的注释
+4. 重启：
+   ```bash
+   docker-compose restart frontend
+   ```
+
+---
+
+## 常用命令
+
+```bash
+# 查看日志
+docker-compose logs -f
+
+# 重启服务
+docker-compose restart
+
+# 停止服务
+docker-compose down
+
+# 更新代码并重新部署
+git pull
+docker-compose up -d --build
+
+# 进入数据库
+docker-compose exec db psql -U postgres -d dorm_management
+
+# 备份数据库
+docker-compose exec db pg_dump -U postgres dorm_management > backup.sql
 ```
 
-## API 地址
+---
 
-- 前端: http://localhost:80
-- 后端 API: http://localhost:3000
-- API 路径前缀: /api
+## 更新代码
 
-## 已知问题
+```bash
+cd /opt/dorm-management  # 或你的安装目录
+git pull
+docker-compose up -d --build
+```
 
-1. 部分页面（缴费、导出、数据管理、地图、分析、Excel导入）可能有字段映射问题
-2. 前端状态值已全部改为大写（VACANT/OCCUPIED/PENDING/PROCESSING/DONE/CONFIRMED）
-3. `_id` 已统一改为 `id`
+---
 
-## 下一步
+## 问题排查
 
-1. 部署并测试核心功能
-2. 修复剩余页面的字段映射
-3. 添加 HTTPS / 域名绑定
-4. 设置定时数据库备份
+### 端口被占用
+
+```bash
+# 查看 80 端口占用
+sudo lsof -i :80
+# 或停止现有服务
+sudo systemctl stop nginx
+```
+
+### 容器启动失败
+
+```bash
+# 查看详细日志
+docker-compose logs backend
+docker-compose logs frontend
+docker-compose logs db
+```
+
+### 数据库连接失败
+
+```bash
+# 检查数据库容器状态
+docker-compose ps
+# 手动运行迁移
+docker-compose exec backend npx prisma db push
+```
+
+---
+
+## 技术栈
+
+- **前端**: React 19 + Vite + Tailwind CSS + Ant Design Mobile
+- **后端**: Node.js + Express + Prisma + PostgreSQL
+- **实时通信**: Socket.io
+- **部署**: Docker + Docker Compose + Nginx
+
+---
+
+## 开源协议
+
+MIT License
