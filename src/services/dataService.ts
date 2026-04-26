@@ -156,7 +156,7 @@ export async function createPayment(data: any) {
 
 export async function batchCreatePayments(communityId: string, type: string, period: string, configs: any) {
   // 获取小区下所有已入住房间
-  const rooms = await api.getRooms({ communityId, status: 'occupied' });
+  const rooms = await api.getRooms({ communityId, status: 'OCCUPIED' });
   
   let created = 0;
   let failed = 0;
@@ -229,7 +229,7 @@ export async function getPaymentStats(params?: { communityId?: string; period?: 
 }
 
 export async function getOverduePayments() {
-  const payments = await api.getPayments({ status: 'pending' });
+  const payments = await api.getPayments({ status: 'OVERDUE' });
   const now = new Date();
   return payments
     .filter((p: any) => new Date(p.dueDate) < now)

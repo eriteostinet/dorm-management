@@ -31,9 +31,9 @@ const subCategories: Record<string, string[]> = {
 };
 
 const urgencyOptions = [
-  { label: '紧急', value: 'urgent' },
-  { label: '一般', value: 'normal' },
-  { label: '低', value: 'low' },
+  { label: '紧急', value: 'HIGH' },
+  { label: '一般', value: 'NORMAL' },
+  { label: '低', value: 'LOW' },
 ];
 
 export default function Repair({ onBack }: RepairProps) {

@@ -40,10 +40,10 @@ class ApiClient {
   }
 
   // ========== 认证 ==========
-  login = (employeeId: string, password: string) =>
+  login = (username: string, password: string) =>
     this.request<{ token: string; user: any }>('/auth/login', {
       method: 'POST',
-      body: JSON.stringify({ employeeId, password }),
+      body: JSON.stringify({ username, password }),
     });
 
   register = (data: any) =>
@@ -96,20 +96,20 @@ class ApiClient {
   deleteCommunity = (id: string) =>
     this.request<{ success: boolean }>(`/communities/${id}`, { method: 'DELETE' });
 
-  // ========== 楼栋 ==========
+  // ========== 楼栋（buildings）=========
   getDorms = (communityId?: string) => {
     const query = communityId ? `?communityId=${communityId}` : '';
-    return this.request<any[]>(`/dorms${query}`);
+    return this.request<any[]>(`/buildings${query}`);
   };
 
   createDorm = (data: any) =>
-    this.request<any>('/dorms', {
+    this.request<any>('/buildings', {
       method: 'POST',
       body: JSON.stringify(data),
     });
 
   deleteDorm = (id: string) =>
-    this.request<{ success: boolean }>(`/dorms/${id}`, { method: 'DELETE' });
+    this.request<{ success: boolean }>(`/buildings/${id}`, { method: 'DELETE' });
 
   // ========== 房间 ==========
   getRooms = (params?: { communityId?: string; dormId?: string; status?: string }) => {

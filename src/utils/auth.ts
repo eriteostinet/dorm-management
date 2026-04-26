@@ -3,10 +3,12 @@
 
 interface UserInfo {
   id: string;
-  employeeId: string;
-  name: string;
+  username: string;
+  realName?: string;
+  name?: string; // 兼容旧代码
   role: string;
   department?: string;
+  isFirstLogin?: boolean;
 }
 
 const TOKEN_KEY = 'token';
@@ -19,9 +21,19 @@ export const auth = {
   },
 
   // 保存登录信息
-  setAuth(token: string, user: UserInfo): void {
+  setAuth(token: string, user: any): void {
+    // 兼容后端返回的字段名
+    const normalizedUser: UserInfo = {
+      id: user.id || user._id,
+      username: user.username || user.employeeId,
+      realName: user.realName || user.name,
+      name: user.realName || user.name,
+      role: user.role,
+      department: user.department,
+      isFirstLogin: user.isFirstLogin,
+    };
     localStorage.setItem(TOKEN_KEY, token);
-    localStorage.setItem(USER_KEY, JSON.stringify(user));
+    localStorage.setItem(USER_KEY, JSON.stringify(normalizedUser));
   },
 
   // 获取当前用户
@@ -63,9 +75,10 @@ export const auth = {
     return this.getCurrentUser()?.id || null;
   },
 
-  // 获取员工ID
+  // 获取员工ID（username 即工号）
   getEmployeeId(): string | null {
-    return this.getCurrentUser()?.employeeId || null;
+    const user = this.getCurrentUser();
+    return user?.username || user?.id || null;
   },
 
   // 获取角色

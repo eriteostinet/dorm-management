@@ -60,7 +60,7 @@ function App() {
   }, []);
 
   const handleLogin = (role: string) => {
-    setPage(role === 'employee' ? 'employee-home' : 'admin-dashboard');
+    setPage(role === 'STAFF' || role === 'MAINTENANCE' ? 'employee-home' : 'admin-dashboard');
   };
 
   const handleLogout = () => {

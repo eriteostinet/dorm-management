@@ -2,8 +2,7 @@ import { useEffect, useState } from 'react';
 import { Card, NavBar } from 'antd-mobile';
 import { getEmployeeById, getRooms, getRepairTickets } from '../../services/dataService';
 import { auth } from '../../utils/auth';
-import { calculateTenure, formatDate, getCommunityColor } from '../../utils';
-import type { Employee, Room } from '../../types';
+import { calculateTenure, formatDate } from '../../utils';
 import './Home.css';
 
 interface EmployeeHomeProps {
@@ -11,9 +10,9 @@ interface EmployeeHomeProps {
 }
 
 export default function EmployeeHome({ onNavigate }: EmployeeHomeProps) {
-  const [employee, setEmployee] = useState<Employee | null>(null);
-  const [room, setRoom] = useState<Room | null>(null);
-  const [roommates, setRoommates] = useState<Room[]>([]);
+  const [employee, setEmployee] = useState<any | null>(null);
+  const [room, setRoom] = useState<any | null>(null);
+  const [roommates, setRoommates] = useState<any[]>([]);
   const [pendingTickets, setPendingTickets] = useState(0);
 
   useEffect(() => {
@@ -21,19 +20,23 @@ export default function EmployeeHome({ onNavigate }: EmployeeHomeProps) {
       const userId = auth.getUserId();
       if (!userId) return;
       
-      const emp = await getEmployeeById(userId);
-      if (emp) {
-        setEmployee(emp);
-        
-        if (emp.currentRoomId) {
-          const rooms = await getRooms({ dormId: emp.currentDormId || '' });
-          const myRoom = rooms.find((r: any) => r.id === emp.currentRoomId);
-          setRoom(myRoom || null);
-          setRoommates(rooms.filter((r: Room) => r._id !== emp.currentRoomId && r.occupantId));
+      try {
+        const emp = await getEmployeeById(userId);
+        if (emp) {
+          setEmployee(emp);
+          
+          if (emp.currentRoomId) {
+            const rooms = await getRooms({ buildingId: emp.currentDormId || '' });
+            const myRoom = rooms.find((r: any) => r.id === emp.currentRoomId);
+            setRoom(myRoom || null);
+            setRoommates(rooms.filter((r: any) => r.id !== emp.currentRoomId && r.occupantId));
+          }
+          
+          const tickets = await getRepairTickets({ reporterId: userId });
+          setPendingTickets(tickets.filter((t: any) => ['PENDING', 'APPROVED', 'PROCESSING', 'DONE'].includes(t.status)).length);
         }
-        
-        const tickets = await getRepairTickets({ reporterId: userId });
-        setPendingTickets(tickets.filter((t: any) => ['reported', 'assigned', 'done'].includes(t.status)).length);
+      } catch (err) {
+        console.error('加载失败:', err);
       }
     };
     loadData();
@@ -41,14 +44,18 @@ export default function EmployeeHome({ onNavigate }: EmployeeHomeProps) {
 
   if (!employee) return null;
 
+  const name = employee.realName || employee.name || '未知';
+  const entryDate = employee.createdAt || employee.entryDate;
+  const communityName = room?.building?.community?.name || room?.communityId || '';
+
   return (
     <div className="page-container">
       <NavBar back={null} className="navbar">员工首页</NavBar>
       
       <Card className="info-card">
         <div className="welcome">
-          <h3>欢迎，{employee.name}</h3>
-          <p className="dept">{employee.department} · 入职{calculateTenure(employee.entryDate)}</p>
+          <h3>欢迎，{name}</h3>
+          <p className="dept">{employee.department || '未分配'} · 入职{entryDate ? calculateTenure(entryDate) : '未知'}</p>
         </div>
         
         {room ? (
@@ -58,13 +65,13 @@ export default function EmployeeHome({ onNavigate }: EmployeeHomeProps) {
                 display: 'inline-block',
                 padding: '2px 8px',
                 borderRadius: '4px',
-                background: getCommunityColor(room.communityId),
+                background: '#1890ff',
                 color: 'white',
                 marginRight: '8px'
               }}>
-                {room.communityId === 'JW' ? '金湾' : room.communityId === 'TY' ? '天悦' : '黄鱼涌'}
+                {communityName || '未知小区'}
               </span>
-              <span className="dorm-number">{room.dormId} · {room.roomNo}房</span>
+              <span className="dorm-number">{room.building?.name || room.buildingId || ''} · {room.roomNumber || ''}房</span>
             </div>
             <div className="dorm-detail">
               <p>入住日期：{formatDate(room.checkInDate)}</p>
@@ -74,9 +81,9 @@ export default function EmployeeHome({ onNavigate }: EmployeeHomeProps) {
               <div className="roommates">
                 <p className="label">同宿舍室友：</p>
                 <div className="roommate-list">
-                  {roommates.map(mate => (
-                    <div key={mate._id} className="roommate-tag">
-                      {mate.occupantName} ({mate.occupantDept})
+                  {roommates.map((mate: any) => (
+                    <div key={mate.id} className="roommate-tag">
+                      {mate.occupantName || mate.occupant?.realName || '未知'} ({mate.occupant?.department || ''})
                     </div>
                   ))}
                 </div>

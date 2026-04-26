@@ -1,88 +1,53 @@
-import { useState, useEffect, useMemo } from 'react';
-import './Payments.css';
-import { 
-  getPayments, 
-  createPayment, 
-  payPayment, 
-  cancelPayment, 
-  deletePayment,
-  batchCreatePayments,
-  getPaymentStats,
-  getOverduePayments,
-  PAYMENT_TYPE_CONFIG,
-  getCommunities,
-  getRooms,
+import { useState, useEffect } from 'react';
+import { Card, NavBar, Button, Toast, Tabs, Tag, Space, List, Modal, Form, Input, Selector } from 'antd-mobile';
+import { Plus, CreditCard, AlertTriangle } from 'lucide-react';
+import {
+  getPayments, createPayment, payPayment, getPaymentStats, getOverduePayments,
+  getCommunities, getRooms
 } from '../../services/dataService';
-import type { Payment, PaymentType, PaymentStatus, Community, Room } from '../../types';
+import './Payments.css';
 
 interface PaymentsProps {
   onBack: () => void;
 }
 
-export default function Payments({ onBack }: PaymentsProps) {
-  const [payments, setPayments] = useState<Payment[]>([]);
-  const [communities, setCommunities] = useState<Community[]>([]);
-  const [rooms, setRooms] = useState<Room[]>([]);
-  const [stats, setStats] = useState<{
-    totalAmount: number;
-    paidAmount: number;
-    pendingAmount: number;
-    overdueAmount: number;
-    collectionRate: number;
-    byType?: Record<string, { total: number; paid: number; pending: number }>;
-  }>({
-    totalAmount: 0,
-    paidAmount: 0,
-    pendingAmount: 0,
-    overdueAmount: 0,
-    collectionRate: 0,
-  });
-  const [overdueList, setOverdueList] = useState<Payment[]>([]);
-  const [loading, setLoading] = useState(false);
-  const [activeTab, setActiveTab] = useState<'list' | 'stats' | 'overdue'>('list');
-  
-  // 筛选状态
-  const [filters, setFilters] = useState({
-    communityId: '',
-    type: '' as PaymentType | '',
-    status: '' as PaymentStatus | '',
-    period: new Date().toISOString().slice(0, 7),
-  });
-  
-  // 弹窗状态
-  const [showCreateModal, setShowCreateModal] = useState(false);
-  const [showBatchModal, setShowBatchModal] = useState(false);
-  const [showPayModal, setShowPayModal] = useState(false);
-  const [selectedPayment, setSelectedPayment] = useState<Payment | null>(null);
-  
-  // 表单状态
-  const [createForm, setCreateForm] = useState({
-    roomId: '',
-    type: 'water' as PaymentType,
-    period: new Date().toISOString().slice(0, 7),
-    amount: 0,
-    unitPrice: 0,
-    quantity: 0,
-    previousReading: 0,
-    currentReading: 0,
-    dueDate: new Date(Date.now() + 15 * 24 * 60 * 60 * 1000).toISOString().slice(0, 10),
-    remark: '',
-  });
-  
-  const [batchForm, setBatchForm] = useState({
-    communityId: '',
-    type: 'water' as PaymentType,
-    period: new Date().toISOString().slice(0, 7),
-    unitPrice: 0,
-    defaultAmount: 0,
-  });
-  
-  const [payForm, setPayForm] = useState({
-    paidBy: '',
-    paymentMethod: 'wechat' as 'cash' | 'wechat' | 'alipay' | 'bank',
-  });
+const typeOptions = [
+  { label: '房租', value: 'RENT' },
+  { label: '水费', value: 'WATER' },
+  { label: '电费', value: 'ELECTRICITY' },
+  { label: '其他', value: 'OTHER' },
+];
 
-  // 初始化加载
+const statusOptions = [
+  { label: '全部', value: '' },
+  { label: '未缴', value: 'UNPAID' },
+  { label: '已缴', value: 'PAID' },
+  { label: '逾期', value: 'OVERDUE' },
+];
+
+const methodOptions = [
+  { label: '现金', value: 'cash' },
+  { label: '微信', value: 'wechat' },
+  { label: '支付宝', value: 'alipay' },
+  { label: '银行转账', value: 'bank' },
+];
+
+export default function Payments({ onBack }: PaymentsProps) {
+  const [payments, setPayments] = useState<any[]>([]);
+  const [communities, setCommunities] = useState<any[]>([]);
+  const [rooms, setRooms] = useState<any[]>([]);
+  const [stats, setStats] = useState<any>(null);
+  const [overdue, setOverdue] = useState<any[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [activeTab, setActiveTab] = useState('list');
+  const [filters, setFilters] = useState({ communityId: '', type: '', status: '', period: new Date().toISOString().slice(0, 7) });
+
+  const [showCreate, setShowCreate] = useState(false);
+  const [showPay, setShowPay] = useState(false);
+  const [selectedPayment, setSelectedPayment] = useState<any | null>(null);
+  const [createForm, setCreateForm] = useState({ roomId: '', type: 'RENT', period: filters.period, amount: 0, dueDate: new Date(Date.now() + 15 * 24 * 60 * 60 * 1000).toISOString().slice(0, 10) });
+  const [payForm, setPayForm] = useState({ paymentMethod: 'wechat' });
+
   useEffect(() => {
     loadData();
     loadCommunities();
@@ -99,673 +64,246 @@ export default function Payments({ onBack }: PaymentsProps) {
         period: filters.period,
       });
       setPayments(data);
-      
-      // 加载统计
-      const statsData = await getPaymentStats({
-        communityId: filters.communityId || undefined,
-        period: filters.period,
-      });
-      setStats(statsData);
-    } catch (error) {
-      console.error('加载缴费数据失败:', error);
+      const s = await getPaymentStats({ communityId: filters.communityId || undefined, period: filters.period });
+      setStats(s);
+    } catch (err) {
+      console.error('加载缴费失败:', err);
     } finally {
       setLoading(false);
     }
   };
 
   const loadCommunities = async () => {
-    const data = await getCommunities();
-    setCommunities(data);
-  };
-
-  const loadRooms = async (communityId: string) => {
-    const data = await getRooms({ communityId, status: 'occupied' });
-    setRooms(data);
+    const list = await getCommunities();
+    setCommunities(list.filter((c: any) => c.status === 'ACTIVE'));
   };
 
   const loadOverdue = async () => {
-    const data = await getOverduePayments();
-    setOverdueList(data);
+    try {
+      const list = await getOverduePayments();
+      setOverdue(list);
+    } catch (err) {
+      console.error('加载逾期失败:', err);
+    }
   };
 
-  // 创建单个账单
+  const loadRooms = async (communityId: string) => {
+    const list = await getRooms({ communityId, status: 'OCCUPIED' });
+    setRooms(list);
+  };
+
   const handleCreate = async () => {
-    const room = rooms.find(r => r._id === createForm.roomId);
-    if (!room) {
-      alert('请选择房间');
-      return;
-    }
-
-    const typeConfig = PAYMENT_TYPE_CONFIG[createForm.type];
-    let amount = createForm.amount;
-    
-    // 如果是水电费，自动计算金额
-    if (typeConfig.hasReading && createForm.quantity) {
-      amount = createForm.quantity * createForm.unitPrice;
-    }
-
-    const result = await createPayment({
-      ...createForm,
-      amount,
-      dueDate: new Date(createForm.dueDate),
-      communityId: room.communityId,
-      communityName: communities.find(c => c._id === room.communityId)?.name || '',
-      building: room.dormId,
-    });
-
-    if (result.success) {
-      alert('账单创建成功');
-      setShowCreateModal(false);
+    try {
+      await createPayment({
+        roomId: createForm.roomId,
+        type: createForm.type,
+        amount: Number(createForm.amount),
+        period: createForm.period,
+        dueDate: new Date(createForm.dueDate),
+      });
+      Toast.show({ icon: 'success', content: '创建成功' });
+      setShowCreate(false);
       loadData();
-    } else {
-      alert(result.message || '创建失败');
+    } catch (err: any) {
+      Toast.show({ icon: 'fail', content: err.message || '创建失败' });
     }
   };
 
-  // 批量创建
-  const handleBatchCreate = async () => {
-    if (!batchForm.communityId) {
-      alert('请选择小区');
-      return;
-    }
-
-    const result = await batchCreatePayments(
-      batchForm.communityId,
-      batchForm.type,
-      batchForm.period,
-      {
-        unitPrice: batchForm.unitPrice,
-        defaultAmount: batchForm.defaultAmount,
-      }
-    );
-
-    alert(result.message);
-    if (result.success) {
-      setShowBatchModal(false);
-      loadData();
-    }
-  };
-
-  // 缴费
   const handlePay = async () => {
     if (!selectedPayment) return;
-    
-    const result = await payPayment(selectedPayment._id, payForm);
-    if (result.success) {
-      alert('缴费成功');
-      setShowPayModal(false);
-      setSelectedPayment(null);
+    try {
+      await payPayment(selectedPayment.id, { paidBy: '', paymentMethod: payForm.paymentMethod });
+      Toast.show({ icon: 'success', content: '缴费成功' });
+      setShowPay(false);
       loadData();
       loadOverdue();
-    } else {
-      alert(result.message || '缴费失败');
+    } catch (err: any) {
+      Toast.show({ icon: 'fail', content: err.message || '缴费失败' });
     }
   };
 
-  // 取消账单
-  const handleCancel = async (payment: Payment) => {
-    const reason = prompt('请输入取消原因:');
-    if (!reason) return;
-    
-    const result = await cancelPayment(payment._id, reason);
-    if (result.success) {
-      alert('账单已取消');
-      loadData();
-    } else {
-      alert(result.message || '取消失败');
+  const getStatusTag = (status: string) => {
+    switch (status) {
+      case 'PAID': return <Tag color="success">已缴</Tag>;
+      case 'UNPAID': return <Tag color="warning">未缴</Tag>;
+      case 'OVERDUE': return <Tag color="danger">逾期</Tag>;
+      default: return <Tag>{status}</Tag>;
     }
   };
 
-  // 删除账单
-  const handleDelete = async (payment: Payment) => {
-    if (!confirm('确定删除该账单吗？')) return;
-    
-    const result = await deletePayment(payment._id);
-    if (result.success) {
-      alert('账单已删除');
-      loadData();
-    } else {
-      alert('删除失败');
-    }
+  const getTypeName = (type: string) => {
+    const map: Record<string, string> = { RENT: '房租', WATER: '水费', ELECTRICITY: '电费', OTHER: '其他' };
+    return map[type] || type;
   };
-
-  // 获取状态显示
-  const getStatusDisplay = (status: PaymentStatus) => {
-    const map: Record<PaymentStatus, { text: string; class: string }> = {
-      pending: { text: '待缴费', class: 'status-pending' },
-      paid: { text: '已缴费', class: 'status-paid' },
-      overdue: { text: '已逾期', class: 'status-overdue' },
-      cancelled: { text: '已取消', class: 'status-cancelled' },
-    };
-    return map[status];
-  };
-
-  // 判断是否逾期
-  const isOverdue = (payment: Payment) => {
-    return payment.status === 'pending' && new Date(payment.dueDate) < new Date();
-  };
-
-  // 过滤后的数据
-  const filteredPayments = useMemo(() => {
-    return payments.filter(p => {
-      if (filters.status && p.status !== filters.status) return false;
-      if (filters.type && p.type !== filters.type) return false;
-      return true;
-    });
-  }, [payments, filters]);
 
   return (
-    <div className="payments-page">
-      <div className="payments-header">
-        <div className="header-left">
-          <button className="btn-back" onClick={onBack}>← 返回</button>
-          <h1>缴费管理</h1>
-        </div>
-        <div className="header-actions">
-          <button className="btn-primary" onClick={() => setShowCreateModal(true)}>
-            + 创建账单
-          </button>
-          <button className="btn-secondary" onClick={() => setShowBatchModal(true)}>
-            批量生成
-          </button>
-        </div>
-      </div>
+    <div className="page-container">
+      <NavBar onBack={onBack} right={
+        <Button size="small" color="primary" onClick={() => setShowCreate(true)}>
+          <Plus size={16} />
+        </Button>
+      }>缴费管理</NavBar>
 
-      {/* 统计卡片 */}
-      <div className="stats-grid">
-        <div className="stat-card">
-          <div className="stat-title">应收总额</div>
-          <div className="stat-value">¥{stats.totalAmount.toFixed(2)}</div>
-        </div>
-        <div className="stat-card success">
-          <div className="stat-title">已收金额</div>
-          <div className="stat-value">¥{stats.paidAmount.toFixed(2)}</div>
-        </div>
-        <div className="stat-card warning">
-          <div className="stat-title">待收金额</div>
-          <div className="stat-value">¥{stats.pendingAmount.toFixed(2)}</div>
-        </div>
-        <div className="stat-card danger">
-          <div className="stat-title">逾期金额</div>
-          <div className="stat-value">¥{stats.overdueAmount.toFixed(2)}</div>
-        </div>
-        <div className="stat-card info">
-          <div className="stat-title">收缴率</div>
-          <div className="stat-value">{stats.collectionRate}%</div>
-        </div>
-      </div>
-
-      {/* 标签页 */}
-      <div className="payments-tabs">
-        <button
-          className={activeTab === 'list' ? 'active' : ''}
-          onClick={() => setActiveTab('list')}
-        >
-          账单列表
-        </button>
-        <button
-          className={activeTab === 'stats' ? 'active' : ''}
-          onClick={() => setActiveTab('stats')}
-        >
-          缴费统计
-        </button>
-        <button
-          className={activeTab === 'overdue' ? 'active' : ''}
-          onClick={() => setActiveTab('overdue')}
-        >
-          欠费管理
-          {overdueList.length > 0 && <span className="badge">{overdueList.length}</span>}
-        </button>
-      </div>
-
-      {/* 筛选栏 */}
-      {activeTab === 'list' && (
-        <div className="filter-bar">
-          <select 
-            value={filters.communityId} 
-            onChange={e => setFilters({ ...filters, communityId: e.target.value })}
-          >
-            <option value="">全部小区</option>
-            {communities.map(c => (
-              <option key={c._id} value={c._id}>{c.name}</option>
-            ))}
-          </select>
-          
-          <select 
-            value={filters.type} 
-            onChange={e => setFilters({ ...filters, type: e.target.value as PaymentType })}
-          >
-            <option value="">全部类型</option>
-            <option value="water">水费</option>
-            <option value="electricity">电费</option>
-            <option value="rent">房租</option>
-            <option value="other">其他</option>
-          </select>
-
-          <select
-            value={filters.status}
-            onChange={e => setFilters({ ...filters, status: e.target.value as PaymentStatus })}
-          >
-            <option value="">全部状态</option>
-            <option value="pending">待缴费</option>
-            <option value="paid">已缴费</option>
-            <option value="overdue">已逾期</option>
-            <option value="cancelled">已取消</option>
-          </select>
-          
-          <input 
-            type="month" 
-            value={filters.period}
-            onChange={e => setFilters({ ...filters, period: e.target.value })}
+      <Card>
+        <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+          <Selector
+            options={[{ label: '全部小区', value: '' }, ...communities.map((c: any) => ({ label: c.name, value: c.id }))]}
+            value={[filters.communityId]}
+            onChange={v => setFilters({ ...filters, communityId: v[0] })}
           />
-          
-          <button className="btn" onClick={loadData}>刷新</button>
+          <Selector
+            options={[{ label: '全部类型', value: '' }, ...typeOptions]}
+            value={[filters.type]}
+            onChange={v => setFilters({ ...filters, type: v[0] })}
+          />
+          <Selector
+            options={statusOptions}
+            value={[filters.status]}
+            onChange={v => setFilters({ ...filters, status: v[0] })}
+          />
         </div>
+      </Card>
+
+      {stats && (
+        <Card>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
+            <div style={{ textAlign: 'center' }}>
+              <div style={{ fontSize: 20, fontWeight: 'bold', color: '#1890ff' }}>¥{stats.totalAmount?.toFixed(2) || 0}</div>
+              <div style={{ fontSize: 12, color: '#999' }}>总额</div>
+            </div>
+            <div style={{ textAlign: 'center' }}>
+              <div style={{ fontSize: 20, fontWeight: 'bold', color: '#52c41a' }}>¥{stats.paidAmount?.toFixed(2) || 0}</div>
+              <div style={{ fontSize: 12, color: '#999' }}>已收</div>
+            </div>
+          </div>
+        </Card>
       )}
 
-      {/* 账单列表 */}
+      <Tabs activeKey={activeTab} onChange={setActiveTab}>
+        <Tabs.Tab title="账单列表" key="list" />
+        <Tabs.Tab title={`逾期 (${overdue.length})`} key="overdue" />
+      </Tabs>
+
       {activeTab === 'list' && (
-        <div className="payments-table-container">
-          <table className="payments-table">
-            <thead>
-              <tr>
-                <th>账单号</th>
-                <th>小区</th>
-                <th>房间</th>
-                <th>住户</th>
-                <th>类型</th>
-                <th>周期</th>
-                <th>金额</th>
-                <th>状态</th>
-                <th>截止日期</th>
-                <th>操作</th>
-              </tr>
-            </thead>
-            <tbody>
-              {loading ? (
-                <tr><td colSpan={10} className="loading">加载中...</td></tr>
-              ) : filteredPayments.length === 0 ? (
-                <tr><td colSpan={10} className="empty">暂无数据</td></tr>
-              ) : (
-                filteredPayments.map(payment => (
-                  <tr key={payment._id} className={isOverdue(payment) ? 'overdue-row' : ''}>
-                    <td>{payment._id.slice(-8)}</td>
-                    <td>{payment.communityName}</td>
-                    <td>{payment.roomNo}</td>
-                    <td>{payment.occupantName || '-'}</td>
-                    <td>{payment.typeName}</td>
-                    <td>{payment.period}</td>
-                    <td className="amount">¥{payment.amount.toFixed(2)}</td>
-                    <td>
-                      <span className={`status-tag ${getStatusDisplay(payment.status).class}`}>
-                        {isOverdue(payment) ? '已逾期' : getStatusDisplay(payment.status).text}
-                      </span>
-                    </td>
-                    <td>{new Date(payment.dueDate).toLocaleDateString()}</td>
-                    <td className="actions">
-                      {payment.status === 'pending' && (
-                        <>
-                          <button 
-                            className="btn-pay"
-                            onClick={() => {
-                              setSelectedPayment(payment);
-                              setShowPayModal(true);
-                            }}
-                          >
-                            缴费
-                          </button>
-                          <button 
-                            className="btn-cancel"
-                            onClick={() => handleCancel(payment)}
-                          >
-                            取消
-                          </button>
-                          <button 
-                            className="btn-delete"
-                            onClick={() => handleDelete(payment)}
-                          >
-                            删除
-                          </button>
-                        </>
-                      )}
-                      {payment.status === 'paid' && (
-                        <span className="paid-info">
-                          {payment.paymentMethod === 'wechat' && '微信'}
-                          {payment.paymentMethod === 'alipay' && '支付宝'}
-                          {payment.paymentMethod === 'cash' && '现金'}
-                          {payment.paymentMethod === 'bank' && '银行'}
-                          {' · '}
-                          {new Date(payment.paidAt!).toLocaleDateString()}
-                        </span>
-                      )}
-                    </td>
-                  </tr>
-                ))
-              )}
-            </tbody>
-          </table>
-        </div>
+        <List>
+          {payments.map((p: any) => (
+            <List.Item
+              key={p.id}
+              title={
+                <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                  <span>{getTypeName(p.type)} ¥{p.amount}</span>
+                  {getStatusTag(p.status)}
+                </div>
+              }
+              description={
+                <div>
+                  {p.room?.roomNumber} · {p.period} · 截止{p.dueDate?.slice(0, 10)}
+                </div>
+              }
+              extra={
+                p.status !== 'PAID' && (
+                  <Button size="small" color="primary" onClick={() => { setSelectedPayment(p); setShowPay(true); }}>缴费</Button>
+                )
+              }
+            />
+          ))}
+          {payments.length === 0 && <div style={{ textAlign: 'center', padding: 20, color: '#999' }}>暂无账单</div>}
+        </List>
       )}
 
-      {/* 缴费统计 */}
-      {activeTab === 'stats' && (
-        <div className="stats-panel">
-          <h3>费用类型统计</h3>
-          <div className="stats-by-type">
-            {Object.entries(stats.byType || {}).map(([type, data]: [string, any]) => (
-              <div key={type} className="type-stat-card">
-                <div className="type-name">
-                  {type === 'water' && '水费'}
-                  {type === 'electricity' && '电费'}
-                  {type === 'rent' && '房租'}
-                  {type === 'other' && '其他'}
-                </div>
-                <div className="type-amounts">
-                  <div>应收: ¥{data.total.toFixed(2)}</div>
-                  <div>已收: ¥{data.paid.toFixed(2)}</div>
-                  <div>待收: ¥{data.pending.toFixed(2)}</div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
-
-      {/* 欠费管理 */}
       {activeTab === 'overdue' && (
-        <div className="overdue-panel">
-          <h3>逾期账单列表</h3>
-          {overdueList.length === 0 ? (
-            <div className="empty">暂无逾期账单</div>
-          ) : (
-            <table className="payments-table">
-              <thead>
-                <tr>
-                  <th>账单号</th>
-                  <th>小区</th>
-                  <th>房间</th>
-                  <th>住户</th>
-                  <th>类型</th>
-                  <th>金额</th>
-                  <th>逾期天数</th>
-                  <th>操作</th>
-                </tr>
-              </thead>
-              <tbody>
-                {overdueList.map(payment => {
-                  const overdueDays = Math.floor((Date.now() - new Date(payment.dueDate).getTime()) / (1000 * 60 * 60 * 24));
-                  return (
-                    <tr key={payment._id} className="overdue-row">
-                      <td>{payment._id.slice(-8)}</td>
-                      <td>{payment.communityName}</td>
-                      <td>{payment.roomNo}</td>
-                      <td>{payment.occupantName || '-'}</td>
-                      <td>{payment.typeName}</td>
-                      <td className="amount">¥{payment.amount.toFixed(2)}</td>
-                      <td className="overdue-days">{overdueDays}天</td>
-                      <td>
-                        <button 
-                          className="btn-pay"
-                          onClick={() => {
-                            setSelectedPayment(payment);
-                            setShowPayModal(true);
-                          }}
-                        >
-                          立即缴费
-                        </button>
-                      </td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
-          )}
-        </div>
-      )}
-
-      {/* 创建账单弹窗 */}
-      {showCreateModal && (
-        <div className="modal-overlay">
-          <div className="modal">
-            <h3>创建账单</h3>
-            <div className="form-group">
-              <label>小区</label>
-              <select 
-                value={communities.find(c => rooms.find(r => r._id === createForm.roomId)?.communityId === c._id)?._id || ''}
-                onChange={e => loadRooms(e.target.value)}
-              >
-                <option value="">请选择</option>
-                {communities.map(c => (
-                  <option key={c._id} value={c._id}>{c.name}</option>
-                ))}
-              </select>
-            </div>
-            <div className="form-group">
-              <label>房间</label>
-              <select 
-                value={createForm.roomId}
-                onChange={e => setCreateForm({ ...createForm, roomId: e.target.value })}
-              >
-                <option value="">请选择</option>
-                {rooms.map(r => (
-                  <option key={r._id} value={r._id}>{r.roomNo} - {r.occupantName || '空房'}</option>
-                ))}
-              </select>
-            </div>
-            <div className="form-group">
-              <label>费用类型</label>
-              <select 
-                value={createForm.type}
-                onChange={e => setCreateForm({ ...createForm, type: e.target.value as PaymentType })}
-              >
-                <option value="water">水费</option>
-                <option value="electricity">电费</option>
-                <option value="rent">房租</option>
-                <option value="other">其他</option>
-              </select>
-            </div>
-            <div className="form-group">
-              <label>计费周期</label>
-              <input 
-                type="month"
-                value={createForm.period}
-                onChange={e => setCreateForm({ ...createForm, period: e.target.value })}
-              />
-            </div>
-            
-            {PAYMENT_TYPE_CONFIG[createForm.type].hasReading && (
-              <>
-                <div className="form-row">
-                  <div className="form-group">
-                    <label>上期读数</label>
-                    <input 
-                      type="number"
-                      value={createForm.previousReading}
-                      onChange={e => setCreateForm({ ...createForm, previousReading: Number(e.target.value) })}
-                    />
-                  </div>
-                  <div className="form-group">
-                    <label>本期读数</label>
-                    <input 
-                      type="number"
-                      value={createForm.currentReading}
-                      onChange={e => {
-                        const current = Number(e.target.value);
-                        const quantity = current - createForm.previousReading;
-                        setCreateForm({ 
-                          ...createForm, 
-                          currentReading: current,
-                          quantity,
-                          amount: quantity * createForm.unitPrice
-                        });
-                      }}
-                    />
-                  </div>
+        <List>
+          {overdue.map((p: any) => (
+            <List.Item
+              key={p.id}
+              title={
+                <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                  <span>{getTypeName(p.type)} ¥{p.amount}</span>
+                  <Tag color="danger">逾期</Tag>
                 </div>
-                <div className="form-row">
-                  <div className="form-group">
-                    <label>用量 ({PAYMENT_TYPE_CONFIG[createForm.type].unit})</label>
-                    <input type="number" value={createForm.quantity} readOnly />
-                  </div>
-                  <div className="form-group">
-                    <label>单价</label>
-                    <input 
-                      type="number"
-                      step="0.01"
-                      value={createForm.unitPrice}
-                      onChange={e => {
-                        const price = Number(e.target.value);
-                        setCreateForm({ 
-                          ...createForm, 
-                          unitPrice: price,
-                          amount: createForm.quantity * price
-                        });
-                      }}
-                    />
-                  </div>
+              }
+              description={
+                <div>
+                  {p.room?.roomNumber} · {p.period} · 截止{p.dueDate?.slice(0, 10)}
                 </div>
-              </>
-            )}
-            
-            <div className="form-group">
-              <label>金额 (元)</label>
-              <input 
-                type="number"
-                step="0.01"
-                value={createForm.amount}
-                onChange={e => setCreateForm({ ...createForm, amount: Number(e.target.value) })}
-              />
-            </div>
-            <div className="form-group">
-              <label>截止日期</label>
-              <input 
-                type="date"
-                value={createForm.dueDate}
-                onChange={e => setCreateForm({ ...createForm, dueDate: e.target.value })}
-              />
-            </div>
-            <div className="form-group">
-              <label>备注</label>
-              <textarea 
-                value={createForm.remark}
-                onChange={e => setCreateForm({ ...createForm, remark: e.target.value })}
-                rows={3}
-              />
-            </div>
-            <div className="modal-actions">
-              <button className="btn" onClick={() => setShowCreateModal(false)}>取消</button>
-              <button className="btn-primary" onClick={handleCreate}>创建</button>
-            </div>
-          </div>
-        </div>
+              }
+              extra={
+                <Button size="small" color="primary" onClick={() => { setSelectedPayment(p); setShowPay(true); }}>缴费</Button>
+              }
+            />
+          ))}
+          {overdue.length === 0 && <div style={{ textAlign: 'center', padding: 20, color: '#999' }}>暂无逾期账单</div>}
+        </List>
       )}
 
-      {/* 批量创建弹窗 */}
-      {showBatchModal && (
-        <div className="modal-overlay">
-          <div className="modal">
-            <h3>批量生成账单</h3>
-            <p className="tip">为小区所有已入住房间创建账单</p>
-            <div className="form-group">
-              <label>小区</label>
-              <select 
-                value={batchForm.communityId}
-                onChange={e => setBatchForm({ ...batchForm, communityId: e.target.value })}
-              >
-                <option value="">请选择</option>
-                {communities.map(c => (
-                  <option key={c._id} value={c._id}>{c.name}</option>
-                ))}
-              </select>
-            </div>
-            <div className="form-group">
-              <label>费用类型</label>
-              <select 
-                value={batchForm.type}
-                onChange={e => setBatchForm({ ...batchForm, type: e.target.value as PaymentType })}
-              >
-                <option value="water">水费</option>
-                <option value="electricity">电费</option>
-                <option value="rent">房租</option>
-                <option value="other">其他</option>
-              </select>
-            </div>
-            <div className="form-group">
-              <label>计费周期</label>
-              <input 
-                type="month"
-                value={batchForm.period}
-                onChange={e => setBatchForm({ ...batchForm, period: e.target.value })}
+      <Modal
+        visible={showCreate}
+        title="创建账单"
+        content={
+          <Form layout="vertical">
+            <Form.Item label="小区">
+              <Selector
+                options={communities.map((c: any) => ({ label: c.name, value: c.id }))}
+                value={[createForm.roomId ? communities.find((c: any) => rooms.some((r: any) => r.id === createForm.roomId && r.communityId === c.id))?.id || '' : '']}
+                onChange={v => { loadRooms(v[0]); setCreateForm({ ...createForm, roomId: '' }); }}
               />
-            </div>
-            {PAYMENT_TYPE_CONFIG[batchForm.type].hasReading && (
-              <div className="form-group">
-                <label>单价</label>
-                <input 
-                  type="number"
-                  step="0.01"
-                  value={batchForm.unitPrice}
-                  onChange={e => setBatchForm({ ...batchForm, unitPrice: Number(e.target.value) })}
-                />
-              </div>
-            )}
-            <div className="form-group">
-              <label>默认金额 (元)</label>
-              <input 
-                type="number"
-                step="0.01"
-                value={batchForm.defaultAmount}
-                onChange={e => setBatchForm({ ...batchForm, defaultAmount: Number(e.target.value) })}
+            </Form.Item>
+            <Form.Item label="房间">
+              <Selector
+                options={rooms.map((r: any) => ({ label: r.roomNumber, value: r.id }))}
+                value={[createForm.roomId]}
+                onChange={v => setCreateForm({ ...createForm, roomId: v[0] })}
               />
-            </div>
-            <div className="modal-actions">
-              <button className="btn" onClick={() => setShowBatchModal(false)}>取消</button>
-              <button className="btn-primary" onClick={handleBatchCreate}>开始生成</button>
-            </div>
-          </div>
-        </div>
-      )}
+            </Form.Item>
+            <Form.Item label="类型">
+              <Selector
+                options={typeOptions}
+                value={[createForm.type]}
+                onChange={v => setCreateForm({ ...createForm, type: v[0] })}
+              />
+            </Form.Item>
+            <Form.Item label="金额">
+              <Input type="number" value={String(createForm.amount)} onChange={v => setCreateForm({ ...createForm, amount: Number(v) })} />
+            </Form.Item>
+            <Form.Item label="周期">
+              <Input value={createForm.period} onChange={v => setCreateForm({ ...createForm, period: v })} />
+            </Form.Item>
+            <Form.Item label="截止日期">
+              <Input type="date" value={createForm.dueDate} onChange={v => setCreateForm({ ...createForm, dueDate: v })} />
+            </Form.Item>
+          </Form>
+        }
+        closeOnAction
+        onClose={() => setShowCreate(false)}
+        actions={[
+          { key: 'cancel', text: '取消' },
+          { key: 'save', text: '保存', primary: true, onClick: handleCreate },
+        ]}
+      />
 
-      {/* 缴费弹窗 */}
-      {showPayModal && selectedPayment && (
-        <div className="modal-overlay">
-          <div className="modal">
-            <h3>确认缴费</h3>
-            <div className="payment-info">
-              <p><strong>账单号:</strong> {selectedPayment._id.slice(-8)}</p>
-              <p><strong>房间:</strong> {selectedPayment.roomNo}</p>
-              <p><strong>住户:</strong> {selectedPayment.occupantName || '-'}</p>
-              <p><strong>类型:</strong> {selectedPayment.typeName}</p>
-              <p><strong>金额:</strong> <span className="amount-large">¥{selectedPayment.amount.toFixed(2)}</span></p>
-            </div>
-            <div className="form-group">
-              <label>缴费方式</label>
-              <select 
-                value={payForm.paymentMethod}
-                onChange={e => setPayForm({ ...payForm, paymentMethod: e.target.value as any })}
-              >
-                <option value="wechat">微信支付</option>
-                <option value="alipay">支付宝</option>
-                <option value="cash">现金</option>
-                <option value="bank">银行转账</option>
-              </select>
-            </div>
-            <div className="form-group">
-              <label>缴费人</label>
-              <input 
-                type="text"
-                value={payForm.paidBy}
-                onChange={e => setPayForm({ ...payForm, paidBy: e.target.value })}
-                placeholder="请输入缴费人姓名"
+      <Modal
+        visible={showPay}
+        title="缴费确认"
+        content={
+          selectedPayment && (
+            <div>
+              <p>{getTypeName(selectedPayment.type)} ¥{selectedPayment.amount}</p>
+              <p>房间: {selectedPayment.room?.roomNumber}</p>
+              <Selector
+                options={methodOptions}
+                value={[payForm.paymentMethod]}
+                onChange={v => setPayForm({ paymentMethod: v[0] })}
               />
             </div>
-            <div className="modal-actions">
-              <button className="btn" onClick={() => setShowPayModal(false)}>取消</button>
-              <button className="btn-primary" onClick={handlePay}>确认缴费</button>
-            </div>
-          </div>
-        </div>
-      )}
+          )
+        }
+        closeOnAction
+        onClose={() => setShowPay(false)}
+        actions={[
+          { key: 'cancel', text: '取消' },
+          { key: 'pay', text: '确认缴费', primary: true, onClick: handlePay },
+        ]}
+      />
     </div>
   );
 }
