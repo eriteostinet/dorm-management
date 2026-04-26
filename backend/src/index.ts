@@ -7,6 +7,7 @@ import { createServer } from 'http';
 import { Server as SocketServer } from 'socket.io';
 
 import { errorHandler } from './middleware/error';
+import { prisma } from './lib/prisma';
 import { authRouter } from './routes/auth';
 import { userRouter } from './routes/users';
 import { communityRouter } from './routes/communities';

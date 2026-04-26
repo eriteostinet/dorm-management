@@ -18,9 +18,9 @@ FROM node:20-alpine
 
 WORKDIR /app
 
-# Install dependencies
+# Install dependencies (包括 prisma CLI 用于迁移)
 COPY package*.json ./
-RUN npm ci --only=production
+RUN npm ci
 
 # Copy built files
 COPY --from=builder /app/dist ./dist
