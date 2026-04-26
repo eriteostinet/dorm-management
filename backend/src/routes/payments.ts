@@ -165,15 +165,14 @@ router.post('/batch',
         },
       });
 
-      const payments = [];
-      let created = 0;
-      let failed = 0;
+      const createdPayments = [];
 
-      for (const room of rooms) {
-        try {
+      // 事务批量创建
+      await prisma.$transaction(async (tx) => {
+        for (const room of rooms) {
           if (!room.occupantId) continue;
 
-          const payment = await prisma.payment.create({
+          const payment = await tx.payment.create({
             data: {
               roomId: room.id,
               employeeId: room.occupantId,
@@ -184,18 +183,15 @@ router.post('/batch',
               status: 'UNPAID',
             },
           });
-          payments.push(payment);
-          created++;
-        } catch {
-          failed++;
+          createdPayments.push(payment);
         }
-      }
+      });
 
       res.json({
         success: true,
-        created,
-        failed,
-        payments,
+        created: createdPayments.length,
+        failed: rooms.filter((r: any) => r.occupantId).length - createdPayments.length,
+        payments: createdPayments,
       });
     } catch (error) {
       next(error);
@@ -214,6 +210,10 @@ router.post('/:id/pay',
     try {
       const { id } = req.params;
       const { paymentMethod, paidBy } = req.body;
+
+      const existing = await prisma.payment.findUnique({ where: { id } });
+      if (!existing) throw new AppError(404, '账单不存在');
+      if (existing.status === 'PAID') throw new AppError(400, '账单已缴，无需重复缴费');
 
       const payment = await prisma.payment.update({
         where: { id },

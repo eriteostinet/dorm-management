@@ -117,9 +117,17 @@ router.delete('/:id',
     try {
       const { id } = req.params;
 
-      await prisma.building.delete({
+      const building = await prisma.building.findUnique({
         where: { id },
+        include: {
+          _count: { select: { rooms: true } },
+        },
       });
+
+      if (!building) throw new AppError(404, '楼栋不存在');
+      if (building._count.rooms > 0) throw new AppError(400, '楼栋下存在房间，无法删除');
+
+      await prisma.building.delete({ where: { id } });
 
       res.json({ success: true, message: '楼栋已删除' });
     } catch (error) {

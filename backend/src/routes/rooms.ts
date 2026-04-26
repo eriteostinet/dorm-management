@@ -8,11 +8,17 @@ import { io } from '../index';
 const router = Router();
 
 // 获取房间列表
-router.get('/', authenticate, async (req, res, next) => {
+router.get('/', authenticate, async (req: AuthRequest, res, next) => {
   try {
     const { communityId, buildingId, status, floor, search } = req.query;
 
     const where: any = {};
+
+    // 员工只能看自己入住的房间
+    if (req.user?.role === 'STAFF') {
+      where.occupantId = req.user.userId;
+    }
+
     if (communityId) where.communityId = communityId as string;
     if (buildingId) where.buildingId = buildingId as string;
     if (status) where.status = status as string;
@@ -336,9 +342,22 @@ router.delete('/:id',
     try {
       const { id } = req.params;
 
-      await prisma.room.delete({
+      const room = await prisma.room.findUnique({
         where: { id },
+        include: {
+          _count: {
+            select: { tickets: true, assets: true, payments: true },
+          },
+        },
       });
+
+      if (!room) throw new AppError(404, '房间不存在');
+      if (room.status === 'OCCUPIED') throw new AppError(400, '房间已入住，无法删除');
+      if (room._count.tickets > 0) throw new AppError(400, '房间存在关联工单，无法删除');
+      if (room._count.assets > 0) throw new AppError(400, '房间存在关联资产，无法删除');
+      if (room._count.payments > 0) throw new AppError(400, '房间存在关联账单，无法删除');
+
+      await prisma.room.delete({ where: { id } });
 
       res.json({ success: true, message: '房间已删除' });
     } catch (error) {

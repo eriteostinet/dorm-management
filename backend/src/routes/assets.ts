@@ -157,9 +157,10 @@ router.delete('/:id',
     try {
       const { id } = req.params;
 
-      await prisma.asset.delete({
-        where: { id },
-      });
+      const asset = await prisma.asset.findUnique({ where: { id } });
+      if (!asset) throw new AppError(404, '资产不存在');
+
+      await prisma.asset.delete({ where: { id } });
 
       res.json({ success: true, message: '资产已删除' });
     } catch (error) {

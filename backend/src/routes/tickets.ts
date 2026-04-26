@@ -154,6 +154,10 @@ router.post('/:id/approve',
       const { id } = req.params;
       const { assignedTo } = req.body;
 
+      const ticket = await prisma.repairTicket.findUnique({ where: { id } });
+      if (!ticket) throw new AppError(404, '工单不存在');
+      if (ticket.status !== 'PENDING') throw new AppError(400, '工单不是待同意状态');
+
       const updateData: any = {
         status: 'PROCESSING',
         approvedBy: req.user!.userId,
@@ -164,7 +168,7 @@ router.post('/:id/approve',
         updateData.assignedTo = assignedTo;
       }
 
-      const ticket = await prisma.repairTicket.update({
+      const updated = await prisma.repairTicket.update({
         where: { id },
         data: updateData,
         include: {
@@ -174,13 +178,12 @@ router.post('/:id/approve',
         },
       });
 
-      // 通知维修工（如有）
       if (assignedTo) {
-        io.to(`user:${assignedTo}`).emit('ticket:assigned', ticket);
+        io.to(`user:${assignedTo}`).emit('ticket:assigned', updated);
       }
-      io.to(`user:${ticket.reporterId}`).emit('ticket:approved', ticket);
+      io.to(`user:${updated.reporterId}`).emit('ticket:approved', updated);
 
-      res.json(ticket);
+      res.json(updated);
     } catch (error) {
       next(error);
     }
@@ -201,6 +204,10 @@ router.post('/:id/start',
       // 维修工只能处理分配给自己的
       if (req.user?.role === 'MAINTENANCE' && ticket.assignedTo !== req.user.userId) {
         throw new AppError(403, '权限不足');
+      }
+
+      if (ticket.status !== 'APPROVED' && ticket.status !== 'PROCESSING') {
+        throw new AppError(400, '工单不在可开始处理的状态');
       }
 
       const updated = await prisma.repairTicket.update({
@@ -241,6 +248,10 @@ router.post('/:id/complete',
 
       if (req.user?.role === 'MAINTENANCE' && ticket.assignedTo !== req.user.userId) {
         throw new AppError(403, '权限不足');
+      }
+
+      if (ticket.status !== 'PROCESSING') {
+        throw new AppError(400, '工单不在处理中状态，无法完成');
       }
 
       const totalCost = (laborCost || 0) + (materialCost || 0);
@@ -329,9 +340,10 @@ router.delete('/:id',
     try {
       const { id } = req.params;
 
-      await prisma.repairTicket.delete({
-        where: { id },
-      });
+      const ticket = await prisma.repairTicket.findUnique({ where: { id } });
+      if (!ticket) throw new AppError(404, '工单不存在');
+
+      await prisma.repairTicket.delete({ where: { id } });
 
       res.json({ success: true, message: '工单已删除' });
     } catch (error) {
