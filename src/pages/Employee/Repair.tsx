@@ -129,14 +129,14 @@ export default function Repair({ onBack }: RepairProps) {
         
         <Form.Item name="communityId" label="选择小区" rules={[{ required: true }]}>
           <Selector
-            options={communities.map(c => ({ label: c.name, value: c._id }))}
+            options={communities.map(c => ({ label: c.name, value: c.id }))}
             onChange={handleCommunityChange}
           />
         </Form.Item>
         
         <Form.Item name="dormId" label="选择宿舍" rules={[{ required: true }]}>
           <Selector
-            options={dorms.map(d => ({ label: d._id, value: d._id }))}
+            options={dorms.map(d => ({ label: d.name, value: d.id }))}
           />
         </Form.Item>
         
