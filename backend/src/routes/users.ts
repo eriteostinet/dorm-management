@@ -27,26 +27,41 @@ router.get('/',
         ];
       }
 
-      const users = await prisma.user.findMany({
-        where,
-        select: {
-          id: true,
-          username: true,
-          realName: true,
-          role: true,
-          phone: true,
-          department: true,
-          avatar: true,
-          status: true,
-          createdAt: true,
-          _count: {
-            select: { rooms: true },
-          },
-        },
-        orderBy: { createdAt: 'desc' },
-      });
+      const page = Math.max(1, parseInt(req.query.page as string) || 1);
+      const limit = Math.min(100, parseInt(req.query.limit as string) || 50);
+      const skip = (page - 1) * limit;
 
-      res.json(users);
+      const [users, total] = await Promise.all([
+        prisma.user.findMany({
+          where,
+          select: {
+            id: true,
+            username: true,
+            realName: true,
+            role: true,
+            phone: true,
+            department: true,
+            avatar: true,
+            status: true,
+            createdAt: true,
+            _count: {
+              select: { rooms: true },
+            },
+          },
+          orderBy: { createdAt: 'desc' },
+          skip,
+          take: limit,
+        }),
+        prisma.user.count({ where }),
+      ]);
+
+      res.json({
+        data: users,
+        total,
+        page,
+        limit,
+        totalPages: Math.ceil(total / limit),
+      });
     } catch (error) {
       next(error);
     }

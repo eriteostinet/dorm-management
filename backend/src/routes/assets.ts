@@ -16,19 +16,34 @@ router.get('/', authenticate, async (req, res, next) => {
     if (category) where.category = category as string;
     if (status) where.status = status as string;
 
-    const assets = await prisma.asset.findMany({
-      where,
-      include: {
-        room: {
-          include: {
-            building: { include: { community: true } },
+    const page = Math.max(1, parseInt(req.query.page as string) || 1);
+    const limit = Math.min(100, parseInt(req.query.limit as string) || 50);
+    const skip = (page - 1) * limit;
+
+    const [assets, total] = await Promise.all([
+      prisma.asset.findMany({
+        where,
+        include: {
+          room: {
+            include: {
+              building: { include: { community: true } },
+            },
           },
         },
-      },
-      orderBy: { createdAt: 'desc' },
-    });
+        orderBy: { createdAt: 'desc' },
+        skip,
+        take: limit,
+      }),
+      prisma.asset.count({ where }),
+    ]);
 
-    res.json(assets);
+    res.json({
+      data: assets,
+      total,
+      page,
+      limit,
+      totalPages: Math.ceil(total / limit),
+    });
   } catch (error) {
     next(error);
   }

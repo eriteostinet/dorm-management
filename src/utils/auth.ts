@@ -1,6 +1,8 @@
 // 前端认证工具 - JWT Token 版本
 // 替代原来的 mock 登录，对接后端真实认证
 
+import { api } from '../api/client';
+
 interface UserInfo {
   id: string;
   username: string;
@@ -84,5 +86,19 @@ export const auth = {
   // 获取角色
   getRole(): string | null {
     return this.getCurrentUser()?.role || null;
+  },
+
+  // 刷新用户信息
+  async refreshUserInfo(): Promise<boolean> {
+    try {
+      const user = await api.getMe();
+      const token = this.getToken();
+      if (token && user) {
+        this.setAuth(token, user);
+      }
+      return true;
+    } catch {
+      return false;
+    }
   },
 };

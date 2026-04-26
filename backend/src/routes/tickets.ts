@@ -29,22 +29,37 @@ router.get('/', authenticate, async (req: AuthRequest, res, next) => {
     if (assignedTo && req.user?.role === 'ADMIN') where.assignedTo = assignedTo as string;
     if (urgency) where.urgency = urgency as string;
 
-    const tickets = await prisma.repairTicket.findMany({
-      where,
-      include: {
-        room: {
-          include: {
-            building: { include: { community: true } },
-          },
-        },
-        reporter: { select: { id: true, realName: true, phone: true } },
-        assignee: { select: { id: true, realName: true, phone: true } },
-        approver: { select: { id: true, realName: true } },
-      },
-      orderBy: { createdAt: 'desc' },
-    });
+    const page = Math.max(1, parseInt(req.query.page as string) || 1);
+    const limit = Math.min(100, parseInt(req.query.limit as string) || 50);
+    const skip = (page - 1) * limit;
 
-    res.json(tickets);
+    const [tickets, total] = await Promise.all([
+      prisma.repairTicket.findMany({
+        where,
+        include: {
+          room: {
+            include: {
+              building: { include: { community: true } },
+            },
+          },
+          reporter: { select: { id: true, realName: true, phone: true } },
+          assignee: { select: { id: true, realName: true, phone: true } },
+          approver: { select: { id: true, realName: true } },
+        },
+        orderBy: { createdAt: 'desc' },
+        skip,
+        take: limit,
+      }),
+      prisma.repairTicket.count({ where }),
+    ]);
+
+    res.json({
+      data: tickets,
+      total,
+      page,
+      limit,
+      totalPages: Math.ceil(total / limit),
+    });
   } catch (error) {
     next(error);
   }

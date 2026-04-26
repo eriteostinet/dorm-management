@@ -24,7 +24,12 @@ router.get('/', authenticate, async (req, res, next) => {
       ];
     }
 
-    const rooms = await prisma.room.findMany({
+  const page = Math.max(1, parseInt(req.query.page as string) || 1);
+  const limit = Math.min(100, parseInt(req.query.limit as string) || 50);
+  const skip = (page - 1) * limit;
+
+  const [rooms, total] = await Promise.all([
+    prisma.room.findMany({
       where,
       include: {
         building: {
@@ -35,9 +40,19 @@ router.get('/', authenticate, async (req, res, next) => {
         },
       },
       orderBy: [{ building: { name: 'asc' } }, { floor: 'asc' }, { roomNumber: 'asc' }],
-    });
+      skip,
+      take: limit,
+    }),
+    prisma.room.count({ where }),
+  ]);
 
-    res.json(rooms);
+  res.json({
+    data: rooms,
+    total,
+    page,
+    limit,
+    totalPages: Math.ceil(total / limit),
+  });
   } catch (error) {
     next(error);
   }

@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import { auth } from './utils/auth';
-import { syncFromCloud } from './db/db';
 import Login from './pages/Login/Login';
 import EmployeeHome from './pages/Employee/Home';
 import Repair from './pages/Employee/Repair';
@@ -29,34 +28,22 @@ type Page =
 
 function App() {
   const [page, setPage] = useState<Page>(auth.isLoggedIn() ? (auth.isAdmin() ? 'admin-dashboard' : 'employee-home') : 'login');
-  const [syncing, setSyncing] = useState(false);
+  const [loading, setLoading] = useState(true);
 
-  // 应用启动时自动同步数据
   useEffect(() => {
-    const initSync = async () => {
-      setSyncing(true);
-      try {
-        // 尝试从云端拉取数据（最多等待5秒）
-        const syncPromise = syncFromCloud();
-        const timeoutPromise = new Promise<boolean>((_, reject) => 
-          setTimeout(() => reject(new Error('同步超时')), 5000)
-        );
-        
-        const success = await Promise.race([syncPromise, timeoutPromise]).catch(() => false);
-        
-        if (success) {
-          console.log('云端数据同步完成');
-        } else {
-          console.log('使用本地数据');
+    // 验证 token 有效性
+    const init = async () => {
+      if (auth.isLoggedIn()) {
+        try {
+          await auth.refreshUserInfo();
+        } catch {
+          auth.logout();
+          setPage('login');
         }
-      } catch (err) {
-        console.error('同步失败，使用本地数据:', err);
-      } finally {
-        setSyncing(false);
       }
+      setLoading(false);
     };
-
-    initSync();
+    init();
   }, []);
 
   const handleLogin = (role: string) => {
@@ -94,7 +81,7 @@ function App() {
     }
   };
 
-  if (syncing) {
+  if (loading) {
     return (
       <div style={{
         display: 'flex',
@@ -118,7 +105,7 @@ function App() {
             100% { transform: rotate(360deg); }
           }
         `}</style>
-        <p style={{ marginTop: 16, color: '#666' }}>正在同步数据...请稍候</p>
+        <p style={{ marginTop: 16, color: '#666' }}>正在加载...</p>
       </div>
     );
   }

@@ -25,20 +25,35 @@ router.get('/', authenticate, async (req: AuthRequest, res, next) => {
     if (status) where.status = status as string;
     if (period) where.period = period as string;
 
-    const payments = await prisma.payment.findMany({
-      where,
-      include: {
-        room: {
-          include: {
-            building: { include: { community: true } },
-          },
-        },
-        employee: { select: { id: true, realName: true } },
-      },
-      orderBy: { createdAt: 'desc' },
-    });
+    const page = Math.max(1, parseInt(req.query.page as string) || 1);
+    const limit = Math.min(100, parseInt(req.query.limit as string) || 50);
+    const skip = (page - 1) * limit;
 
-    res.json(payments);
+    const [payments, total] = await Promise.all([
+      prisma.payment.findMany({
+        where,
+        include: {
+          room: {
+            include: {
+              building: { include: { community: true } },
+            },
+          },
+          employee: { select: { id: true, realName: true } },
+        },
+        orderBy: { createdAt: 'desc' },
+        skip,
+        take: limit,
+      }),
+      prisma.payment.count({ where }),
+    ]);
+
+    res.json({
+      data: payments,
+      total,
+      page,
+      limit,
+      totalPages: Math.ceil(total / limit),
+    });
   } catch (error) {
     next(error);
   }

@@ -13,16 +13,24 @@
 git clone https://github.com/eriteostinet/dorm-management.git
 cd dorm-management
 
-# 2. 启动所有服务
-docker-compose up -d
+# 2. 配置环境变量
+cp .env.example .env
+# 编辑 .env 填入实际配置
 
-# 3. 等待服务启动（约30秒）
+# 3. 启动所有服务
+docker-compose up -d --build
+
+# 4. 等待服务启动（约3-5分钟）
 docker-compose logs -f backend
 
-# 4. 访问系统
+# 5. 访问系统
 # 前端: http://localhost
 # 后端 API: http://localhost/api
 ```
+
+### 阿里云部署
+
+详细步骤见 [README-ALIYUN.md](./README-ALIYUN.md)。
 
 ### 方式二：本地开发
 
