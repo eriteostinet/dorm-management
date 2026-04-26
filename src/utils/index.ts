@@ -39,12 +39,12 @@ export const formatDateTime = (date: Date | null): string => {
 // 获取工单状态文本和颜色
 export const getTicketStatusInfo = (status: string): { text: string; color: string } => {
   const map: Record<string, { text: string; color: string }> = {
-    reported: { text: '待同意', color: '#faad14' },
-    assigned: { text: '已派单', color: '#1890ff' },
-    processing: { text: '处理中', color: '#722ed1' },
-    done: { text: '待验收', color: '#13c2c2' },
-    confirmed: { text: '已完成', color: '#52c41a' },
-    cancelled: { text: '已取消', color: '#999' },
+    PENDING: { text: '待同意', color: '#faad14' },
+    APPROVED: { text: '已同意', color: '#1890ff' },
+    PROCESSING: { text: '处理中', color: '#722ed1' },
+    DONE: { text: '待验收', color: '#13c2c2' },
+    CONFIRMED: { text: '已完成', color: '#52c41a' },
+    CANCELLED: { text: '已取消', color: '#999' },
   };
   return map[status] || { text: status, color: '#999' };
 };
@@ -52,9 +52,9 @@ export const getTicketStatusInfo = (status: string): { text: string; color: stri
 // 获取紧急度文本和颜色
 export const getUrgencyInfo = (urgency: string): { text: string; color: string } => {
   const map: Record<string, { text: string; color: string }> = {
-    urgent: { text: '紧急', color: '#ff4d4f' },
-    normal: { text: '一般', color: '#faad14' },
-    low: { text: '低', color: '#52c41a' },
+    HIGH: { text: '紧急', color: '#ff4d4f' },
+    NORMAL: { text: '一般', color: '#faad14' },
+    LOW: { text: '低', color: '#52c41a' },
   };
   return map[urgency] || { text: urgency, color: '#999' };
 };

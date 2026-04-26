@@ -81,15 +81,14 @@ export default function Repairs({ onBack }: RepairsProps) {
     }
   }
 
-  async function doComplete(id: string) {
+  async function doComplete(ticket: RepairTicket) {
     const solution = window.prompt('请输入解决方案：');
     if (!solution) return;
     
     setLoading(true);
     try {
-      // 使用云函数 API（多端互通）
-      const result = await completeRepair(id);
-      if (result.success) {
+      const result = await completeRepair(ticket.id, solution);
+      if (result.success !== false) {
         Toast.show({ icon: 'success', content: '已完成' });
         loadData();
       } else {
@@ -168,7 +167,7 @@ export default function Repairs({ onBack }: RepairsProps) {
                       <Button 
                         size="small" 
                         color="success" 
-                        onClick={function() { doComplete(t.id); }}
+                        onClick={function() { doComplete(t); }}
                       >
                         完成
                       </Button>

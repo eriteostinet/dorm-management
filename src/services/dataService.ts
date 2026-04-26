@@ -110,14 +110,28 @@ export async function createRepairTicket(data: any) {
   return api.createTicket(data);
 }
 
-// 同意报修（进入处理中）
-export async function approveTicket(id: string) {
+// 同意报修（调用后端审批接口）
+export async function approveTicket(id: string, assignedTo?: string) {
+  if (assignedTo) {
+    return api.rawRequest(`/tickets/${id}/approve`, {
+      method: 'POST',
+      body: JSON.stringify({ assignedTo }),
+    });
+  }
   return api.updateTicket(id, { status: 'APPROVED' });
 }
 
-// 完成维修
-export async function completeRepair(id: string) {
-  return api.updateTicket(id, { status: 'DONE', completedAt: new Date() });
+// 开始维修
+export async function startRepair(id: string) {
+  return api.rawRequest(`/tickets/${id}/start`, { method: 'POST' });
+}
+
+// 完成维修（调用后端完成接口）
+export async function completeRepair(id: string, solution: string, processImages?: string[], laborCost?: number, materialCost?: number) {
+  return api.rawRequest(`/tickets/${id}/complete`, {
+    method: 'POST',
+    body: JSON.stringify({ solution, processImages, laborCost, materialCost }),
+  });
 }
 
 // 用户验收（兼容旧名）

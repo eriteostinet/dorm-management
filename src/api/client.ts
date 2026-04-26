@@ -39,6 +39,11 @@ class ApiClient {
     return data;
   }
 
+  // Public raw request method for non-standard API calls
+  public async rawRequest<T>(url: string, options?: RequestInit): Promise<T> {
+    return this.request<T>(url, options);
+  }
+
   // ========== 认证 ==========
   login = (username: string, password: string) =>
     this.request<{ token: string; user: any }>('/auth/login', {
