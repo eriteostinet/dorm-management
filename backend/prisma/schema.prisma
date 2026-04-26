@@ -67,9 +67,9 @@ model Room {
   communityId   String    @map("community_id")
   roomNumber    String    @map("room_number")
   floor         Int
-  area          Float?
+  area          Decimal?  @db.Decimal(8, 2)
   bedCount      Int       @default(1) @map("bed_count")
-  pricePerMonth Float?    @map("price_per_month")
+  pricePerMonth Decimal?  @db.Decimal(10, 2) @map("price_per_month")
   status        RoomStatus @default(VACANT)
   occupantId    String?   @map("occupant_id")
   occupantName  String?   @map("occupant_name")
@@ -94,7 +94,7 @@ model Asset {
   category     String
   status       AssetStatus @default(GOOD)
   purchaseDate DateTime?   @map("purchase_date")
-  price        Float?
+  price        Decimal?  @db.Decimal(10, 2)
   notes        String?
   createdAt    DateTime @default(now()) @map("created_at")
   updatedAt    DateTime @updatedAt @map("updated_at")
@@ -117,9 +117,9 @@ model RepairTicket {
   approvedBy    String?     @map("approved_by")
   solution      String?
   processImages String?     @map("process_images")
-  laborCost     Float?      @map("labor_cost")
-  materialCost  Float?      @map("material_cost")
-  totalCost     Float?      @map("total_cost")
+  laborCost     Decimal?  @db.Decimal(10, 2) @map("labor_cost")
+  materialCost  Decimal?  @db.Decimal(10, 2) @map("material_cost")
+  totalCost     Decimal?  @db.Decimal(10, 2) @map("total_cost")
   rating        Int?
   comment       String?
   reportedAt    DateTime    @default(now()) @map("reported_at")
@@ -143,7 +143,7 @@ model Payment {
   roomId      String        @map("room_id")
   employeeId  String        @map("employee_id")
   type        PaymentType
-  amount      Float
+  amount      Decimal  @db.Decimal(10, 2)
   period      String        // YYYY-MM
   dueDate     DateTime      @map("due_date")
   paidAt      DateTime?     @map("paid_at")

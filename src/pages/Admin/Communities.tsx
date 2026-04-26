@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { List, Button, Dialog, Form, Input, NavBar, Tag, Toast } from 'antd-mobile';
 import { getAllCommunities, createCommunity, updateCommunity } from '../../services/dataService';
+import { auth } from '../../utils/auth';
 import type { Community } from '../../types';
 import './Communities.css';
 
@@ -21,10 +22,11 @@ export default function Communities({ onBack }: CommunitiesProps) {
   }, []);
 
   const handleAdd = async (values: any) => {
+    const currentUser = auth.getCurrentUser();
     await createCommunity({
       name: values.name,
       address: values.address,
-      adminId: 'admin', // 默认管理员
+      adminId: currentUser?.id || currentUser?.userId || 'admin',
     });
     const result = await getAllCommunities();
     setCommunities(result);

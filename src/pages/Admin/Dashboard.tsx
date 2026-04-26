@@ -133,7 +133,7 @@ export default function Dashboard({ onNavigate }: DashboardProps) {
       // 楼层统计
       const floorMap = new Map();
       dorms.forEach((dorm: any) => {
-        const key = `${dorm.communityName || '未知'}-${dorm.name || '未知'}`;
+        const key = `${dorm.community?.name || '未知'}-${dorm.name || '未知'}`;
         const dormRooms = rooms.filter((r: any) => r.buildingId === dorm.id);
         const occupied = dormRooms.filter((r: any) => r.status === 'OCCUPIED').length;
         if (!floorMap.has(key)) {

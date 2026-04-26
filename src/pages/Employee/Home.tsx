@@ -25,11 +25,9 @@ export default function EmployeeHome({ onNavigate }: EmployeeHomeProps) {
         if (emp) {
           setEmployee(emp);
           
-          if (emp.currentRoomId) {
-            const rooms = await getRooms({ buildingId: emp.currentDormId || '' });
-            const myRoom = rooms.find((r: any) => r.id === emp.currentRoomId);
+          if (emp.rooms && emp.rooms.length > 0) {
+            const myRoom = emp.rooms[0];
             setRoom(myRoom || null);
-            setRoommates(rooms.filter((r: any) => r.id !== emp.currentRoomId && r.occupantId));
           }
           
           const tickets = await getRepairTickets({ reporterId: userId });

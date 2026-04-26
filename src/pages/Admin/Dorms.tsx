@@ -79,7 +79,7 @@ export default function Dorms({ onBack }: DormsProps) {
   };
 
   const handleCheckIn = async (room: any) => {
-    const availableEmployees = employees.filter((e: any) => !e.currentRoomId && e.role === 'STAFF');
+    const availableEmployees = employees.filter((e: any) => !e._count?.rooms && e.role === 'STAFF');
     
     Dialog.confirm({
       title: '选择入住员工',
@@ -133,7 +133,7 @@ export default function Dorms({ onBack }: DormsProps) {
   };
 
   const handleBatchCheckIn = async () => {
-    const availableEmployees = employees.filter((e: any) => !e.currentRoomId && e.role === 'STAFF');
+    const availableEmployees = employees.filter((e: any) => !e._count?.rooms && e.role === 'STAFF');
     if (selectedRooms.size > availableEmployees.length) {
       Toast.show({ icon: 'fail', content: '可用员工不足' });
       return;

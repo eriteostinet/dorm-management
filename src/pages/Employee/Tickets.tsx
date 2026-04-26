@@ -80,14 +80,14 @@ export default function Tickets({ onBack }: TicketsProps) {
           comment: comment || undefined
         });
 
-        if (result.success) {
+        if (result && result.id) {
           Toast.show({
             icon: 'success',
             content: confirmStatus === 'passed' ? '验收通过' : '已退回维修'
           });
           loadTickets();
         } else {
-          Toast.show({ icon: 'fail', content: result.message || '操作失败' });
+          Toast.show({ icon: 'fail', content: '操作失败' });
         }
       },
     });

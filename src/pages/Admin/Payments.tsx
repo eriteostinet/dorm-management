@@ -94,8 +94,16 @@ export default function Payments({ onBack }: PaymentsProps) {
 
   const handleCreate = async () => {
     try {
+      // 获取选中房间对应的入住员工作为 employeeId
+      const room = rooms.find((r: any) => r.id === createForm.roomId);
+      if (!room?.occupantId) {
+        Toast.show({ icon: 'fail', content: '该房间无入住员工，无法创建账单' });
+        return;
+      }
+      
       await createPayment({
         roomId: createForm.roomId,
+        employeeId: room.occupantId,
         type: createForm.type,
         amount: Number(createForm.amount),
         period: createForm.period,
