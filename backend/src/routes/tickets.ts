@@ -291,7 +291,7 @@ router.post('/:id/confirm',
         throw new AppError(400, '工单未完成，无法验收');
       }
 
-      const status = confirmStatus === 'reject' ? 'PROCESSING' : 'CONFIRMED';
+      const status = confirmStatus === 'reject' || confirmStatus === 'failed' ? 'PROCESSING' : 'CONFIRMED';
 
       const updated = await prisma.repairTicket.update({
         where: { id },

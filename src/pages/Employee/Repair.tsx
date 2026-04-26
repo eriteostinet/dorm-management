@@ -88,7 +88,7 @@ export default function Repair({ onBack }: RepairProps) {
         dormId: values.dormId[0],
         roomId: values.roomId?.[0] || null,
         reporterId: userId,
-        reporterName: employee.name,
+        reporterName: employee.realName || employee.name || '未知',
         category: values.category[0],
         subCategory: values.subCategory[0],
         description: values.description,
@@ -97,7 +97,7 @@ export default function Repair({ onBack }: RepairProps) {
       };
       const ticket = await createRepairTicket(ticketData);
       
-      Toast.show({ icon: 'success', content: `提交成功，工单号：${ticket._id}` });
+      Toast.show({ icon: 'success', content: `提交成功，工单号：${ticket.id}` });
       onBack();
     } catch (error) {
       Toast.show({ icon: 'fail', content: '提交失败' });

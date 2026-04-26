@@ -66,7 +66,7 @@ export default function Repairs({ onBack }: RepairsProps) {
     setLoading(true);
     try {
       // 使用云函数 API（多端互通）
-      const result = await approveTicket(ticket._id);
+      const result = await approveTicket(ticket.id);
       if (result.success) {
         Toast.show({ icon: 'success', content: '已同意，进入处理中' });
         loadData();
