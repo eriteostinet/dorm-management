@@ -1,26 +1,36 @@
+// ============================================================
+// 类型定义 - 兼容前后端
+// 后端 Prisma 使用: id, 大写枚举
+// 前端保留 _id 兼容旧代码，同时支持新字段
+// ============================================================
+
 // 小区
 export interface Community {
-  _id: string;
+  id: string;
+  _id?: string; // 兼容旧代码
   name: string;
   address: string;
   manager: string;
   managerPhone: string;
   sortOrder: number;
-  status: 'active' | 'inactive';
-  createdAt: Date;
-  updatedAt: Date;
+  status: 'active' | 'inactive' | 'ACTIVE' | 'INACTIVE';
+  createdAt: Date | string;
+  updatedAt: Date | string;
 }
 
-// 宿舍
+// 楼栋
 export interface Dorm {
-  _id: string;
+  id: string;
+  _id?: string;
   communityId: string;
   building: string;
+  name?: string;
   floor: number;
+  floors?: number;
   status: 'normal' | 'maintenance' | 'disabled';
   repairCount: number;
-  lastRepairDate: Date | null;
-  createdAt: Date;
+  lastRepairDate: Date | string | null;
+  createdAt: Date | string;
 }
 
 // 房间资产
@@ -28,42 +38,51 @@ export interface RoomAsset {
   assetId: string;
   name: '床' | '桌' | '椅';
   model: string;
-  purchaseDate: Date;
+  purchaseDate: Date | string;
   warrantyYears: number;
   status: 'normal' | 'repairing' | 'damaged';
-  lastMaintenance: Date | null;
+  lastMaintenance: Date | string | null;
 }
 
 // 房间
 export interface Room {
-  _id: string;
+  id: string;
+  _id?: string;
   dormId: string;
+  buildingId?: string;
   communityId: string;
   roomNo: string;
-  layout: 0 | 1 | 3; // 0=家庭房(单人), 1=单人间, 3=3人间
+  roomNumber?: string;
+  layout: 0 | 1 | 3;
   occupantId: string | null;
   occupantName: string | null;
   occupantDept: string | null;
-  checkInDate: Date | null;
-  status: 'vacant' | 'occupied' | 'maintenance';
+  checkInDate: Date | string | null;
+  status: 'vacant' | 'occupied' | 'maintenance' | 'VACANT' | 'OCCUPIED' | 'MAINTENANCE';
   roomAssets: RoomAsset[];
+  bedCount?: number;
+  area?: number;
+  pricePerMonth?: number;
 }
 
 // 员工
 export interface Employee {
-  _id: string;
+  id: string;
+  _id?: string;
   name: string;
+  realName?: string;
+  username?: string;
   department: string;
-  entryDate: Date;
+  entryDate: Date | string;
   phone: string;
   avatar: string | null;
   currentCommunityId: string | null;
   currentDormId: string | null;
   currentRoomId: string | null;
-  bedNo?: number | null; // 床位号（1号床、2号床、3号床）
-  role: 'employee' | 'manager' | 'admin' | 'superAdmin';
-  status: 'active' | 'disabled'; // 账号状态：启用/禁用
-  password: string; // bcrypt加密后的密码
+  bedNo?: number | null;
+  role: 'employee' | 'manager' | 'admin' | 'superAdmin' | 'ADMIN' | 'STAFF' | 'MAINTENANCE';
+  status: 'active' | 'disabled' | 'ACTIVE' | 'INACTIVE' | 'DELETED';
+  password: string;
   isMaintainer: boolean;
   maintainerType: ('水电' | '木工' | '综合')[];
   maintainerCommunities: string[];
@@ -71,34 +90,36 @@ export interface Employee {
     communityId: string;
     dormId: string;
     roomId: string;
-    checkIn: Date;
-    checkOut: Date;
+    checkIn: Date | string;
+    checkOut: Date | string;
     reason: string;
   }[];
-  createdAt: Date;
-  updatedAt: Date;
+  createdAt: Date | string;
+  updatedAt: Date | string;
 }
 
 // 宿舍级资产
 export interface DormAsset {
-  _id: string;
+  id: string;
+  _id?: string;
   communityId: string;
   dormId: string;
   category: '热水器' | '空调' | '洗衣机' | '路由器';
   brand: string;
   model: string;
   serialNo: string;
-  purchaseDate: Date;
+  purchaseDate: Date | string;
   warrantyYears: number;
   location: string;
   status: 'normal' | 'warning' | 'repairing' | 'expired';
-  nextMaintenance?: Date;
+  nextMaintenance?: Date | string;
   maintenanceCount: number;
 }
 
-// 维修工单
+// 维修工单 - 兼容后端 Prisma 大写枚举
 export interface RepairTicket {
-  _id: string;
+  id: string;
+  _id?: string;
   ticketType: 'asset' | 'facility';
   communityId: string;
   dormId: string;
@@ -109,84 +130,74 @@ export interface RepairTicket {
   subCategory: string;
   description: string;
   images: string[];
-  urgency: 'urgent' | 'normal' | 'low';
-  status: 'reported' | 'assigned' | 'processing' | 'done' | 'confirmed' | 'cancelled';
+  urgency: 'urgent' | 'normal' | 'low' | 'HIGH' | 'NORMAL' | 'LOW' | 'URGENT';
+  status: 'reported' | 'assigned' | 'processing' | 'done' | 'confirmed' | 'cancelled' | 'PENDING' | 'APPROVED' | 'PROCESSING' | 'DONE' | 'CONFIRMED' | 'CANCELLED';
   assignedTo: string | null;
   assignedName: string | null;
-  assignedTime: Date | null;
-  estimatedTime: Date | null;
+  assignedTime: Date | string | null;
+  estimatedTime: Date | string | null;
   solution: string | null;
   materials: { name: string; qty: number; price: number }[];
   laborCost: number | null;
+  materialCost: number | null;
   totalCost: number | null;
   processImages: string[];
-  completedDate: Date | null;
+  completedDate: Date | string | null;
   confirmStatus: 'pending' | 'passed' | 'failed';
   confirmRemark: string | null;
   rating: number | null;
   comment: string | null;
-  reportedAt: Date;
-  startedAt: Date | null;
-  confirmedAt: Date | null;
+  reportedAt: Date | string;
+  startedAt: Date | string | null;
+  confirmedAt: Date | string | null;
   isRecurrent: boolean;
   relatedTicketId: string | null;
-  updatedAt?: Date;
+  updatedAt?: Date | string;
 }
 
-// 缴费类型
-export type PaymentType = 'water' | 'electricity' | 'rent' | 'other';
+// 缴费类型 - 兼容后端大写枚举
+export type PaymentType = 'water' | 'electricity' | 'rent' | 'other' | 'RENT' | 'WATER' | 'ELECTRICITY' | 'OTHER';
 
-// 缴费状态
-export type PaymentStatus = 'pending' | 'paid' | 'overdue' | 'cancelled';
+// 缴费状态 - 兼容后端大写枚举
+export type PaymentStatus = 'pending' | 'paid' | 'overdue' | 'cancelled' | 'UNPAID' | 'PAID' | 'OVERDUE' | 'CANCELLED';
 
 // 缴费账单
 export interface Payment {
-  _id: string;
-  // 关联信息
+  id: string;
+  _id?: string;
   communityId: string;
   communityName: string;
   dormId: string;
   building: string;
   roomId: string;
   roomNo: string;
+  roomNumber?: string;
   occupantId: string | null;
   occupantName: string | null;
-  
-  // 费用信息
   type: PaymentType;
-  typeName: string; // 水费、电费、房租、其他
-  period: string; // 计费周期，如 "2026-03" 或 "2026-03-01 ~ 2026-03-31"
-  amount: number; // 金额（元）
-  unitPrice: number | null; // 单价（水电费需要）
-  quantity: number | null; // 用量（水电费需要，度/吨）
-  
-  // 费用明细
-  previousReading: number | null; // 上期读数
-  currentReading: number | null; // 本期读数
-  
-  // 缴费状态
+  typeName: string;
+  period: string;
+  amount: number;
+  unitPrice: number | null;
+  quantity: number | null;
+  previousReading: number | null;
+  currentReading: number | null;
   status: PaymentStatus;
-  dueDate: Date; // 缴费截止日期
-  paidAt: Date | null; // 实际缴费时间
-  paidBy: string | null; // 缴费人
-  paymentMethod: 'cash' | 'wechat' | 'alipay' | 'bank' | null; // 缴费方式
-  
-  // 备注
+  dueDate: Date | string;
+  paidAt: Date | string | null;
+  paidBy: string | null;
+  paymentMethod: 'cash' | 'wechat' | 'alipay' | 'bank' | null;
   remark: string;
-  
-  // 操作记录
-  createdBy: string; // 创建人
-  createdAt: Date;
-  updatedAt: Date;
+  createdBy: string;
+  createdAt: Date | string;
+  updatedAt: Date | string;
 }
 
-// 缴费统计（按月/小区）
+// 缴费统计
 export interface PaymentStats {
-  period: string; // 2026-03
+  period: string;
   communityId: string;
   communityName: string;
-  
-  // 各类型费用统计
   water: {
     totalAmount: number;
     paidAmount: number;
@@ -208,26 +219,25 @@ export interface PaymentStats {
     overdueAmount: number;
     roomCount: number;
   };
-  
-  // 汇总
   totalAmount: number;
   totalPaid: number;
   totalPending: number;
   totalOverdue: number;
-  collectionRate: number; // 收缴率
+  collectionRate: number;
 }
 
 // 导出任务
 export interface ExportTask {
-  _id: string;
+  id: string;
+  _id?: string;
   fileName: string;
   fileUrl: string | null;
   status: 'pending' | 'processing' | 'done' | 'failed';
   type: 'allocation' | 'assets' | 'repair' | 'repairStats' | 'payment' | 'paymentStats';
   params: object;
   creatorId: string;
-  createdAt: Date;
-  completedAt: Date | null;
+  createdAt: Date | string;
+  completedAt: Date | string | null;
 }
 
 // 导入错误
