@@ -3,9 +3,11 @@ import { auth } from './utils/auth';
 import { connectSocket, disconnectSocket } from './services/socket';
 import Login from './pages/Login/Login';
 import EmployeeHome from './pages/Employee/Home';
+import MaintainerHome from './pages/Employee/MaintainerHome';
 import Repair from './pages/Employee/Repair';
 import Tickets from './pages/Employee/Tickets';
 import Profile from './pages/Employee/Profile';
+import EmployeePayments from './pages/Employee/EmployeePayments';
 import Dashboard from './pages/Admin/Dashboard';
 import Communities from './pages/Admin/Communities';
 import Dorms from './pages/Admin/Dorms';
@@ -22,13 +24,22 @@ import './App.css';
 
 type Page = 
   | 'login'
-  | 'employee-home' | 'employee-repair' | 'employee-tickets' | 'employee-profile'
+  | 'employee-home' | 'employee-repair' | 'employee-tickets' | 'employee-profile' | 'employee-payments'
+  | 'maintainer-home'
   | 'admin-dashboard' | 'admin-communities' | 'admin-dorms' | 'admin-repairs'
   | 'admin-employees' | 'admin-assets' | 'admin-exports' | 'admin-data-manage'
   | 'admin-occupancy-map' | 'admin-analytics' | 'admin-excel-import' | 'admin-payments';
 
 function App() {
-  const [page, setPage] = useState<Page>(auth.isLoggedIn() ? (auth.isAdmin() ? 'admin-dashboard' : 'employee-home') : 'login');
+  const getDefaultPage = (): Page => {
+    if (!auth.isLoggedIn()) return 'login';
+    const role = auth.getCurrentUser()?.role;
+    if (role === 'ADMIN') return 'admin-dashboard';
+    if (role === 'MAINTENANCE') return 'maintainer-home';
+    return 'employee-home';
+  };
+
+  const [page, setPage] = useState<Page>(getDefaultPage);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -55,7 +66,13 @@ function App() {
   }, []);
 
   const handleLogin = (role: string) => {
-    setPage(role === 'STAFF' || role === 'MAINTENANCE' ? 'employee-home' : 'admin-dashboard');
+    if (role === 'ADMIN') {
+      setPage('admin-dashboard');
+    } else if (role === 'MAINTENANCE') {
+      setPage('maintainer-home');
+    } else {
+      setPage('employee-home');
+    }
     // 登录成功后连接 WebSocket
     connectSocket();
   };
@@ -69,6 +86,7 @@ function App() {
     switch (target) {
       case 'repair': setPage('employee-repair'); break;
       case 'tickets': setPage('employee-tickets'); break;
+      case 'payments': setPage('employee-payments'); break;
       case 'profile': setPage('employee-profile'); break;
       default: setPage('employee-home');
     }
@@ -131,6 +149,10 @@ function App() {
       return <Repair onBack={() => setPage('employee-home')} />;
     case 'employee-tickets':
       return <Tickets onBack={() => setPage('employee-home')} />;
+    case 'maintainer-home':
+      return <MaintainerHome />;
+    case 'employee-payments':
+      return <EmployeePayments onBack={() => setPage('employee-home')} />;
     case 'employee-profile':
       return <Profile onBack={() => setPage('employee-home')} onLogout={handleLogout} />;
     

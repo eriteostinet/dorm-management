@@ -110,6 +110,11 @@ export default function EmployeeHome({ onNavigate }: EmployeeHomeProps) {
             <span>我的工单</span>
           </div>
           
+          <div className="action-item" onClick={() => onNavigate('payments')}>
+            <div className="action-icon">💰</div>
+            <span>我的缴费</span>
+          </div>
+          
           <div className="action-item" onClick={() => onNavigate('profile')}>
             <div className="action-icon">👤</div>
             <span>个人信息</span>
