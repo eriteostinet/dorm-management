@@ -16,7 +16,7 @@ import { ticketRouter } from './routes/tickets';
 import { paymentRouter } from './routes/payments';
 import { assetRouter } from './routes/assets';
 import { dashboardRouter } from './routes/dashboard';
-import { exportRouter } from './routes/export';
+import { uploadRouter } from './routes/upload';
 
 dotenv.config();
 
@@ -56,6 +56,7 @@ app.use('/api/payments', paymentRouter);
 app.use('/api/assets', assetRouter);
 app.use('/api/dashboard', dashboardRouter);
 app.use('/api/export', exportRouter);
+app.use('/api/upload', uploadRouter);
 
 // Health check
 app.get('/api/health', (_req, res) => {
