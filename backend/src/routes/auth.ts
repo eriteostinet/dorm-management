@@ -61,7 +61,8 @@ router.post('/login',
 
       res.json({
         success: true,
-        ...tokens,
+        token: tokens.accessToken,
+        refreshToken: tokens.refreshToken,
         user: {
           id: user.id,
           username: user.username,
@@ -238,7 +239,7 @@ router.post('/refresh', async (req, res, next) => {
       role: user.role,
     });
 
-    res.json({ success: true, ...tokens });
+    res.json({ success: true, token: tokens.accessToken, refreshToken: tokens.refreshToken });
   } catch (error) {
     next(error);
   }

@@ -66,6 +66,12 @@ class ApiClient {
       body: JSON.stringify({ oldPassword, newPassword }),
     });
 
+  refreshToken = (refreshToken: string) =>
+    this.request<{ token: string; refreshToken: string }>('/auth/refresh', {
+      method: 'POST',
+      body: JSON.stringify({ refreshToken }),
+    });
+
   // ========== 用户 ==========
   getUsers = () =>
     this.request<any[]>('/users');

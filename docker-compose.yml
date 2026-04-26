@@ -53,7 +53,7 @@ services:
       retries: 3
       start_period: 40s
     command: >
-      sh -c "npx prisma migrate deploy &&
+      sh -c "if [ -d prisma/migrations ]; then npx prisma migrate deploy; else npx prisma db push --accept-data-loss; fi &&
              npx prisma db seed || true &&
              node dist/index.js"
 

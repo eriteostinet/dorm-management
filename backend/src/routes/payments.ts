@@ -3,6 +3,7 @@ import { body } from 'express-validator';
 import { prisma } from '../lib/prisma';
 import { authenticate, AuthRequest, requireRole } from '../middleware/auth';
 import { AppError } from '../middleware/error';
+import { io } from '../index';
 
 const router = Router();
 
@@ -280,6 +281,49 @@ router.delete('/:id',
       });
 
       res.json({ success: true, message: '账单已删除' });
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
+// 缴费统计
+router.get('/stats/overview',
+  authenticate,
+  requireRole('ADMIN'),
+  async (req: AuthRequest, res, next) => {
+    try {
+      const { communityId, period } = req.query;
+
+      const where: any = {};
+      if (communityId) {
+        where.room = { communityId: communityId as string };
+      }
+      if (period) where.period = period as string;
+
+      const allPayments = await prisma.payment.findMany({ where });
+
+      const totalAmount = allPayments.reduce((sum: number, p: any) => sum + Number(p.amount), 0);
+      const paidAmount = allPayments
+        .filter((p: any) => p.status === 'PAID')
+        .reduce((sum: number, p: any) => sum + Number(p.amount), 0);
+      const unpaidAmount = allPayments
+        .filter((p: any) => p.status === 'UNPAID')
+        .reduce((sum: number, p: any) => sum + Number(p.amount), 0);
+      const overdueAmount = allPayments
+        .filter((p: any) => p.status === 'OVERDUE')
+        .reduce((sum: number, p: any) => sum + Number(p.amount), 0);
+
+      res.json({
+        totalAmount,
+        paidAmount,
+        unpaidAmount,
+        overdueAmount,
+        totalCount: allPayments.length,
+        paidCount: allPayments.filter((p: any) => p.status === 'PAID').length,
+        unpaidCount: allPayments.filter((p: any) => p.status === 'UNPAID').length,
+        overdueCount: allPayments.filter((p: any) => p.status === 'OVERDUE').length,
+      });
     } catch (error) {
       next(error);
     }

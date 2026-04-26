@@ -48,7 +48,7 @@ export default function EmployeePayments({ onBack }: EmployeePaymentsProps) {
 
   const totalUnpaid = payments
     .filter((p: any) => p.status === 'UNPAID' || p.status === 'OVERDUE')
-    .reduce((sum: number, p: any) => sum + (p.amount || 0), 0);
+    .reduce((sum: number, p: any) => sum + (Number(p.amount) || 0), 0);
 
   return (
     <div className="page-container">
@@ -74,7 +74,7 @@ export default function EmployeePayments({ onBack }: EmployeePaymentsProps) {
               key={p.id}
               title={
                 <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                  <span>{getTypeName(p.type)} ¥{p.amount}</span>
+                  <span>{getTypeName(p.type)} ¥{Number(p.amount).toFixed(2)}</span>
                   {getStatusTag(p.status)}
                 </div>
               }
