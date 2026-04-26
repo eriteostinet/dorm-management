@@ -7,7 +7,11 @@ import { AppError } from '../middleware/error';
 
 const router = Router();
 
-// 登录
+// 登录（带失败次数限制）
+const loginAttempts = new Map<string, { count: number; lockedUntil: number }>();
+const MAX_ATTEMPTS = 5;
+const LOCK_DURATION = 15 * 60 * 1000; // 15分钟
+
 router.post('/login',
   [
     body('username').trim().notEmpty().withMessage('用户名不能为空'),
@@ -16,12 +20,23 @@ router.post('/login',
   async (req, res, next) => {
     try {
       const { username, password } = req.body;
+      const clientIp = req.ip || req.socket.remoteAddress || 'unknown';
+      const key = `${username}:${clientIp}`;
+
+      // 检查是否被锁定
+      const attempt = loginAttempts.get(key);
+      if (attempt && attempt.lockedUntil > Date.now()) {
+        const remaining = Math.ceil((attempt.lockedUntil - Date.now()) / 60000);
+        throw new AppError(429, `登录失败次数过多，请${remaining}分钟后重试`);
+      }
 
       const user = await prisma.user.findUnique({
         where: { username },
       });
 
       if (!user) {
+        // 记录失败
+        recordFailedAttempt(key);
         throw new AppError(401, '用户名或密码错误');
       }
 
@@ -31,8 +46,12 @@ router.post('/login',
 
       const isValid = await comparePassword(password, user.passwordHash);
       if (!isValid) {
+        recordFailedAttempt(key);
         throw new AppError(401, '用户名或密码错误');
       }
+
+      // 登录成功，清除失败记录
+      loginAttempts.delete(key);
 
       const tokens = generateTokens({
         userId: user.id,
@@ -58,6 +77,19 @@ router.post('/login',
     }
   }
 );
+
+function recordFailedAttempt(key: string) {
+  const now = Date.now();
+  const existing = loginAttempts.get(key);
+  if (existing) {
+    existing.count++;
+    if (existing.count >= MAX_ATTEMPTS) {
+      existing.lockedUntil = now + LOCK_DURATION;
+    }
+  } else {
+    loginAttempts.set(key, { count: 1, lockedUntil: 0 });
+  }
+}
 
 // 注册（仅管理员可用）
 router.post('/register',

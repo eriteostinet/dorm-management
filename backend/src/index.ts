@@ -16,6 +16,7 @@ import { ticketRouter } from './routes/tickets';
 import { paymentRouter } from './routes/payments';
 import { assetRouter } from './routes/assets';
 import { dashboardRouter } from './routes/dashboard';
+import { exportRouter } from './routes/export';
 import { uploadRouter } from './routes/upload';
 
 dotenv.config();
@@ -58,9 +59,24 @@ app.use('/api/dashboard', dashboardRouter);
 app.use('/api/export', exportRouter);
 app.use('/api/upload', uploadRouter);
 
-// Health check
-app.get('/api/health', (_req, res) => {
-  res.json({ status: 'ok', timestamp: new Date().toISOString(), env: process.env.NODE_ENV });
+// Health check（含数据库连通状态）
+app.get('/api/health', async (_req, res) => {
+  try {
+    await prisma.$queryRaw`SELECT 1`;
+    res.json({ 
+      status: 'ok', 
+      timestamp: new Date().toISOString(), 
+      env: process.env.NODE_ENV,
+      database: 'connected',
+    });
+  } catch {
+    res.status(503).json({
+      status: 'error',
+      timestamp: new Date().toISOString(),
+      env: process.env.NODE_ENV,
+      database: 'disconnected',
+    });
+  }
 });
 
 // Error handling

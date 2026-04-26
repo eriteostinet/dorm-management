@@ -170,8 +170,31 @@ export default function Repair({ onBack }: RepairProps) {
         
         <Form.Item name="images" label="上传照片">
           <ImageUploader
-            upload={(file) => {
-              return Promise.resolve({ url: URL.createObjectURL(file) });
+            upload={async (file) => {
+              try {
+                // 压缩图片
+                const { compressImage, blobToFile } = await import('../../utils/imageCompress');
+                const compressed = await compressImage(file, { maxWidth: 1280, maxSizeMB: 1 });
+                const compressedFile = blobToFile(compressed, file.name, file.type);
+                
+                // 上传到后端
+                const token = auth.getToken();
+                const formData = new FormData();
+                formData.append('image', compressedFile);
+                
+                const res = await fetch('/api/upload/image', {
+                  method: 'POST',
+                  headers: { Authorization: `Bearer ${token}` },
+                  body: formData,
+                });
+                
+                if (!res.ok) throw new Error('上传失败');
+                const data = await res.json();
+                return { url: data.url };
+              } catch (err) {
+                Toast.show({ icon: 'fail', content: '图片上传失败' });
+                throw err;
+              }
             }}
             multiple
             maxCount={3}

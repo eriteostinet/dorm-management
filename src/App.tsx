@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { auth } from './utils/auth';
+import { connectSocket, disconnectSocket } from './services/socket';
 import Login from './pages/Login/Login';
 import EmployeeHome from './pages/Employee/Home';
 import Repair from './pages/Employee/Repair';
@@ -36,6 +37,8 @@ function App() {
       if (auth.isLoggedIn()) {
         try {
           await auth.refreshUserInfo();
+          // 连接 WebSocket
+          connectSocket();
         } catch {
           auth.logout();
           setPage('login');
@@ -44,10 +47,17 @@ function App() {
       setLoading(false);
     };
     init();
+
+    // 清理 WebSocket
+    return () => {
+      disconnectSocket();
+    };
   }, []);
 
   const handleLogin = (role: string) => {
     setPage(role === 'STAFF' || role === 'MAINTENANCE' ? 'employee-home' : 'admin-dashboard');
+    // 登录成功后连接 WebSocket
+    connectSocket();
   };
 
   const handleLogout = () => {

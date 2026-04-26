@@ -229,6 +229,11 @@ router.post('/:id/pay',
         },
       });
 
+      // 通知员工缴费成功
+      if (payment.employeeId) {
+        io.to(`user:${payment.employeeId}`).emit('payment:paid', payment);
+      }
+
       res.json(payment);
     } catch (error) {
       next(error);

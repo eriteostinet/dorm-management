@@ -3,8 +3,10 @@
 ## 环境要求
 
 - 阿里云 ECS（CentOS 7/8 或 Ubuntu 20.04+）
-- 已安装 Docker 和 Docker Compose（若未安装见下方步骤）
-- 服务器安全组开放端口：**80、443、3000（可选，Nginx已代理）**
+- Docker >= 20.10
+- Docker Compose >= v2.0
+- 浏览器：Chrome / Edge 最新版（员工端需移动端适配）
+- 服务器安全组开放端口：**80、443、22（SSH，建议更换默认端口）**
 
 ---
 
@@ -142,7 +144,109 @@ docker-compose restart frontend
 
 ---
 
-## 五、数据备份
+## 九、数据备份
+
+### 9.1 自动备份脚本
+
+创建备份脚本 `/opt/dorm-management/backup.sh`：
+
+```bash
+#!/bin/bash
+BACKUP_DIR="/opt/backups/dorm-management"
+DATE=$(date +%Y%m%d_%H%M%S)
+mkdir -p $BACKUP_DIR
+
+# 备份数据库
+docker exec dorm-db pg_dump -U postgres dorm_management > $BACKUP_DIR/db_$DATE.sql
+
+# 备份上传文件
+tar czf $BACKUP_DIR/uploads_$DATE.tar.gz -C /opt/dorm-management backend/uploads/
+
+# 保留最近 7 天的备份
+find $BACKUP_DIR -name "*.sql" -mtime +7 -delete
+find $BACKUP_DIR -name "*.tar.gz" -mtime +7 -delete
+
+echo "备份完成: $DATE"
+```
+
+添加执行权限并配置定时任务：
+
+```bash
+chmod +x /opt/dorm-management/backup.sh
+# 每天凌晨 2 点自动备份
+echo "0 2 * * * /opt/dorm-management/backup.sh >> /var/log/dorm-backup.log 2>&1" | sudo crontab -
+```
+
+### 9.2 手动备份
+
+```bash
+# 数据库
+docker exec dorm-db pg_dump -U postgres dorm_management > backup_$(date +%Y%m%d).sql
+
+# 上传文件
+tar czvf uploads_backup_$(date +%Y%m%d).tar.gz -C /opt/dorm-management backend/uploads/
+```
+
+### 9.3 数据恢复
+
+```bash
+# 停止服务
+cd /opt/dorm-management && docker-compose down
+
+# 恢复数据库
+docker exec -i dorm-db psql -U postgres -d dorm_management < backup_20260426.sql
+
+# 恢复上传文件
+tar xzvf uploads_backup_20260426.tar.gz -C /opt/dorm-management
+
+# 重启服务
+docker-compose up -d
+```
+
+---
+
+## 十、系统升级
+
+### 10.1 升级步骤
+
+```bash
+cd /opt/dorm-management
+
+# 1. 备份数据
+./backup.sh
+
+# 2. 拉取最新代码
+git pull origin main
+
+# 3. 重新构建并启动
+docker-compose down
+docker-compose up -d --build
+
+# 4. 查看日志确认正常
+docker-compose logs -f backend
+```
+
+### 10.2 重置管理员密码
+
+如果忘记 admin 密码，进入后端容器执行：
+
+```bash
+# 进入后端容器
+docker exec -it dorm-backend sh
+
+# 执行密码重置脚本
+npx tsx -e "
+import { PrismaClient } from '@prisma/client';
+import bcrypt from 'bcryptjs';
+const prisma = new PrismaClient();
+const hash = await bcrypt.hash('admin123', 12);
+await prisma.user.update({ where: { username: 'admin' }, data: { passwordHash: hash, isFirstLogin: true } });
+console.log('密码已重置为 admin123');
+await prisma.\$disconnect();
+"
+```
+
+---
 
 ### 5.1 数据库备份（容器内 PostgreSQL）
 
@@ -235,10 +339,13 @@ docker-compose up -d --build
 ## 九、安全建议
 
 1. **立即修改默认密码**：首次登录后修改 `admin` 密码
-2. **更换 JWT 密钥**：修改 `.env` 中的 `JWT_SECRET` 和 `JWT_REFRESH_SECRET`
-3. **关闭 3000 端口**：生产环境只开放 80/443，通过 Nginx 反向代理访问 API
-4. **定期备份**：设置定时任务备份数据库和上传文件
-5. **启用防火墙**：使用阿里云安全组限制访问来源
+2. **更换 JWT 密钥**：修改 `.env` 中的 `JWT_SECRET` 和 `JWT_REFRESH_SECRET`（至少 32 位随机字符串）
+3. **数据库密码**：使用强密码，避免使用 `postgres` 等默认值
+4. **关闭 3000 端口**：生产环境只开放 80/443/22，通过 Nginx 反向代理访问 API
+5. **更换 SSH 默认端口**：建议将 SSH 端口从 22 改为其他端口（如 2222），并在安全组中配置
+6. **定期备份**：已配置 crontab 自动备份，备份文件保存在 `/opt/backups/dorm-management/`
+7. **启用防火墙**：使用阿里云安全组限制访问来源，仅允许必要 IP 访问 SSH
+8. ** fail2ban**：建议安装 fail2ban 防止暴力破解 SSH
 
 ---
 
